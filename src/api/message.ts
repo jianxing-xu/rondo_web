@@ -1,0 +1,49 @@
+
+
+/**
+ * 消息api
+ * @auther jason xu
+ * @lastUpdate 2020/7/30
+ */
+
+import instance from "./request";
+
+
+/** 发送消息 */
+interface IAtUser {
+  user_id: string;//: 1,
+  user_name: string;//: "机器人"
+}
+interface ISendParam {
+  room_id: string;//: 888,
+  atUser?: IAtUser;
+  type: string;//: "img",
+  where?: string;//: "channel",
+  msg?: string;//: "hello <script>alert('Xss来了')</script>",
+  resource?: string;//: "/res/bg.png"
+}
+export const send = (data: ISendParam) => {
+  return instance.post("/message/send", data);
+}
+
+
+/** 获取消息列表 */
+export const messageList = (roomId: number) => {
+  return instance.get(`/message/list/${roomId}`);
+}
+
+/** 撤回消息 */
+export const backMessage = (roomId: number, messageId: number) => {
+  return instance.delete(`/message/back/${roomId}/${messageId}`);
+}
+
+/** 摸一摸 */
+interface IMoParam {
+  at: number;
+  room_id: number;
+}
+export const mo = (data: IMoParam) => {
+  return instance.post("/message/mo", data);
+}
+
+
