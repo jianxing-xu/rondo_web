@@ -9,6 +9,6 @@ module.exports = {
       sans: ["Inter", defaultConfig.theme.fontFamily.sans],
     },
   },
-  darkMode: "media",
+  darkMode: "class", // media
   plugins: [formsPlugin],
 };

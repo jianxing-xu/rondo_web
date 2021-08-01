@@ -1,7 +1,9 @@
+import { message } from "antd";
 import { myInfo } from "api/user";
 import { createModel } from "hox";
 import { useEffect, useState } from "react";
-import CST from "utils/CST";
+import { useHistory } from "react-router-dom";
+import CST, { TOKEN_KEY } from "utils/CST";
 import { useSocketModel } from "./socketModel";
 
 interface IUser {
@@ -34,21 +36,44 @@ const userModel = () => {
   const [user, setUser] = useState<IUser>({ ...CST.guestUserInfo });
   const sm = useSocketModel();
 
+  // 初始化userModel获取用户信息并连接websocket
   useEffect(() => {
     getInfo().then(() => {
       sm.fetchUrl();
-    })
+    });
   }, [])
 
   // 获取我的信息
   async function getInfo() {
-    const data = await myInfo()
-    setUser(data);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await myInfo()
+        setUser(data);
+        resolve(data);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  function doSuccessLogin(res: any) {
+    console.log("DO SUCCESS!!!");
+    localStorage.setItem(TOKEN_KEY.ACCESS, res["token"]);
+    getInfo().then(() => {
+      message.success("登录成功！");
+      sm.fetchUrl();
+    });
+  }
+
+  function resetUser() {
+    console.log("reset user");
+    localStorage.removeItem(TOKEN_KEY.ACCESS);
+    setUser({ ...CST.guestUserInfo });
   }
 
 
   return {
-    user, getInfo
+    user, getInfo, resetUser, doSuccessLogin
   }
 }
 

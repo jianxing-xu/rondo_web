@@ -1,3 +1,5 @@
+@import url(./pages/Login/Login.module.css);
+
 @font-face {
   font-family: "Inter";
   font-style: normal;
@@ -34,3 +36,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+:root {
+  --bg: #333;
+}
+.dark {
+  --bg: #eee;
+}
+
+body {
+  background: url("../public/bg.jpg") no-repeat;
+  background-size: cover  ;
+}
+body.dark {
+  background: url("../public/bg_dark.jpg") no-repeat;
+  background-size: cover;
+}
+
+

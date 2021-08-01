@@ -9,3 +9,29 @@ export default {
     user_name: "11",
   },
 }
+export const MT = {
+  ADD_SONG: "addSong", // , "点歌{user,song}"),
+  PLAY_SONG: "playSong",//,,播放歌曲{user,song}"),
+  SYSTEM: "system", //,"系统消息"),
+  TEXT: "text", //"文字消息"),
+  IMG: "img", //,"图片消息"),
+  LINK: "link", // "链接消息"),
+  ONLINE: "online", //,"在线用户列表"),
+  REMOVE_SONG: "remove_song", //"移除歌曲{user,song}"),
+  REMOVE_BAN: "remove_ban", //,"解禁用户"),
+  SHUT_DOWN: "shutdown", //,"禁言用户{user}"),
+  SONG_DOWN: "songdown", //,"禁止点歌{user}"),
+  PASS: "pass", //,"切歌{user}"),
+  BACK: "back", //,"消息撤回"),
+  ROOM_UPDATE: "room_update", //,"房间资料更新{room}"),
+  PRE_LOAD_URL: "preload", //,"预加载url{url}");
+  NOW: "now",  // 正在播放的歌曲
+  JOIN: "join", // 加入房间
+  PUSH: "push",//顶歌
+  CLEAR: "clear",// 清除消息
+  TOUCH: "touch", //摸一摸
+}
+export const TOKEN_KEY = {
+  TEMP: "temp-token",
+  ACCESS: "access-token"
+}

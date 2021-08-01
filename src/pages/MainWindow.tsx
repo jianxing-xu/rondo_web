@@ -1,23 +1,23 @@
-import Head from "components/Head";
+import { Button } from "antd";
 import { useSocketModel } from "models/socketModel";
 import { useUserModel } from "models/userModel";
-import React, { ReactElement } from "react";
-import { Panel } from "rsuite";
+import React, { ReactElement, useEffect } from "react";
 
 
 export default function MainWindow(): ReactElement {
   const { user } = useUserModel();
   const sm = useSocketModel();
 
+  useEffect(() => {
+    console.log("MainWidnow User: ", user);
+  }, [user])
   return (
     <>
-      <Head title="Vitamin" />
       <button>{100}</button>
-      {/* <Button appearance="primary" onClick={() => sm.changeRoom()} >changeRoom</Button> */}
-
-      <Panel>
-        {user.user_name}
-      </Panel>
+      <Button type="dashed" onClick={() => useUserModel.data?.resetUser()} >resetUser</Button>
+      <h2 className="text-5xl">
+        {user?.user_name}
+      </h2>
     </>
   );
 }

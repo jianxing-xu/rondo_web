@@ -2,8 +2,8 @@ import App from "App";
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import 'rsuite/lib/styles/index.less';
 import { registerSW } from "virtual:pwa-register";
+import 'antd/dist/antd.css';
 import "./index.css";
 
 registerSW();

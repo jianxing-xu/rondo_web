@@ -3,28 +3,18 @@ import istanbul from "rollup-plugin-istanbul";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import tsconfigPaths from "vite-tsconfig-paths";
+import vitePluginImp from "vite-plugin-imp";
+import path from 'path';
+
 
 export default defineConfig(({ mode }) => ({
   css: {
     preprocessorOptions: {
       less: {
-        javascriptEnabled: true
+        javascriptEnabled: true,
+        modifyVars: {},
       }
     }
-  },
-  build: {
-    assetsInlineLimit: 8 * 1024,
-    outDir: 'build',
-    assetsDir: 'assets',
-    sourcemap: 'inline'
-  },
-  define: {
-    'process.env.RUN_ENV': JSON.stringify(''),
-    'process.env.NODE_ENV': JSON.stringify('development')
-  },
-  server: {
-    // port: PORT
-    // proxy
   },
   plugins: [
     tsconfigPaths(),
@@ -48,9 +38,23 @@ export default defineConfig(({ mode }) => ({
         ],
       },
     }),
+    vitePluginImp({
+      libList: [
+        {
+          libName: "antd",
+          style: (name) => `antd/lib/${name}/style/index.less`,
+        },
+      ],
+    }),
     mode === "test" &&
     istanbul({
       include: ["src/**/*.tsx"],
     }),
   ],
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "./"),
+      "@": path.resolve(__dirname, "src"),
+    },
+  },
 }));

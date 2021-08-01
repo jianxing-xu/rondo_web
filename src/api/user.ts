@@ -7,11 +7,6 @@
 
 import instance from "./request";
 
-export const tempToken = (): Promise<string> => {
-  return instance.get("/user/tempToken");
-}
-
-
 /** 登录 */
 interface ILoginParam {
   account: string;
