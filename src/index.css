@@ -1,4 +1,11 @@
 @import url(./pages/Login/Login.module.css);
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 
 @font-face {
   font-family: "Inter";
@@ -40,17 +47,21 @@
 
 
 :root {
-  --bg: #333;
+  --bg: #eee;
+  --primary: rgb(226 90 114);
+  --normal-icon: #333;
 }
 .dark {
-  --bg: #eee;
+  --bg: #333;
+  --primary: #ff3300;
+  --normal-icon: #e6e6e6;
 }
 
 body {
   background: url("../public/bg.jpg") no-repeat;
   background-size: cover  ;
 }
-body.dark {
+.dark body {
   background: url("../public/bg_dark.jpg") no-repeat;
   background-size: cover;
 }

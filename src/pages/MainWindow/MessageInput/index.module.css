@@ -1,0 +1,11 @@
+
+.process_inner::after {
+  /* content: " ";
+  position: absolute;
+  right: 0;
+  top: -5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #000; */
+}

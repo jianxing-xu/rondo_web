@@ -8,6 +8,10 @@ module.exports = {
     fontFamily: {
       sans: ["Inter", defaultConfig.theme.fontFamily.sans],
     },
+    backgroundColor: theme => ({
+      ...theme('colors'),
+      'sidebar': '#2e3238'
+    })
   },
   darkMode: "class", // media
   plugins: [formsPlugin],

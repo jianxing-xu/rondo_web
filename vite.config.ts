@@ -12,7 +12,9 @@ export default defineConfig(({ mode }) => ({
     preprocessorOptions: {
       less: {
         javascriptEnabled: true,
-        modifyVars: {},
+        modifyVars: {
+          // "@popover-background": "#2e3238"
+        },
       }
     }
   },

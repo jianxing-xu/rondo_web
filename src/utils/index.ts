@@ -3,6 +3,18 @@
 export function classNames(clz: string, ...clazz: string[]) {
   return clz + " " + clazz.join(" ");
 }
+export const themeChange = (flag?: any) => {
+  if (document.body.parentElement?.classList.contains("dark")) {
+    document.body.parentElement?.classList.remove("dark");
+  } else {
+    document.body.parentElement?.classList.add("dark");
+  }
+}
+export const setDark = () => {
+  if (!document.body.parentElement?.classList.contains("dark")) {
+    document.body.parentElement?.classList.add("dark");
+  }
+}
 
 export // 获取操作系统信息 
   function getOsInfo() {

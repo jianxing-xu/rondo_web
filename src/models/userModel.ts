@@ -56,6 +56,7 @@ const userModel = () => {
     })
   }
 
+  // 成功登录后动作
   function doSuccessLogin(res: any) {
     console.log("DO SUCCESS!!!");
     localStorage.setItem(TOKEN_KEY.ACCESS, res["token"]);
@@ -65,6 +66,7 @@ const userModel = () => {
     });
   }
 
+  // 重置用户信息
   function resetUser() {
     console.log("reset user");
     localStorage.removeItem(TOKEN_KEY.ACCESS);
