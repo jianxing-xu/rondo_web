@@ -11,6 +11,7 @@ import { login } from 'api/user';
 import { useUserModel } from 'models/userModel';
 import { sendMail } from 'api/common';
 import CST from 'utils/CST';
+import { useGlobalModel } from 'models/globalModel';
 
 
 
@@ -18,11 +19,13 @@ import CST from 'utils/CST';
 export default function Login(): ReactElement {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const { doSuccessLogin, user } = useUserModel();
+  const { doSuccessLogin } = useGlobalModel();
+  const { user } = useUserModel();
   const [form] = useForm();
 
   useEffect(() => {
-    if (user.user_id !== CST.guestUserInfo.user_id) {
+    console.log(user);
+    if (user?.user_id !== CST.guestUserInfo.user_id) {
       history.replace("/");
     }
   }, []);

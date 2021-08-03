@@ -46,7 +46,7 @@ export const SideBar: React.FC = () => {
     <div className="w-20 bg-sidebar">
       <div className={classNames(_.innerBar, "h-full w-14 mx-auto flex flex-col justify-between")}>
         <div className="flex flex-col justify-between flex-grow">
-          <div style={{ background: `url('${CST.static_res_host}/${user?.user_head}') no-repeat center center`, backgroundSize: '100% 100%', backgroundColor: "var(--primary)" }} className={classNames("h-12 w-12 rounded-sm mx-auto mt-6", _.head)}></div>
+          <div style={{ background: `url('${CST.server_host}/${user?.user_head}') no-repeat center center`, backgroundSize: '100% 100%', backgroundColor: "var(--primary)" }} className={classNames("h-12 w-12 rounded-sm mx-auto mt-6", _.head)}></div>
           <div className={classNames(_.btns, "flex-1 flex flex-col justify-center space-y-6")}>
             <Btn src={add_song} title="点歌" />
             <Btn src={queue} title="已点" />

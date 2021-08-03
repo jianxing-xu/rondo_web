@@ -53,7 +53,7 @@
 }
 .dark {
   --bg: #333;
-  --primary: #ff3300;
+  --primary: #ed533d;
   --normal-icon: #e6e6e6;
 }
 
@@ -64,6 +64,27 @@ body {
 .dark body {
   background: url("../public/bg_dark.jpg") no-repeat;
   background-size: cover;
+}
+
+
+/* 摸一摸动画 */
+@keyframes head_bounce {
+  0%{
+    transform: rotateZ(-0);
+  }
+  30% {
+    transform: rotateZ(-6deg);
+  }
+  80% {
+    transform: rotateZ(6deg);
+  }
+  100% {
+    transform: rotateZ(0deg);
+  }
+}
+.head_bounce {
+  transform-origin: bottom;
+  animation: head_bounce 0.2s ease 0s 3;
 }
 
 

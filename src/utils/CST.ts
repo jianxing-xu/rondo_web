@@ -8,7 +8,7 @@ export default {
     user_id: -1,
     user_name: "11",
   },
-  static_res_host: "http://localhost:8080/api"
+  server_host: "http://localhost:8080/api"
 }
 export const MT = {
   ADD_SONG: "addSong", // , "点歌{user,song}"),

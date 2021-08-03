@@ -1,0 +1,52 @@
+
+.msglist::-webkit-scrollbar{
+  background-color: transparent;
+  width: 5px;
+}
+.msglist::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: gray;
+  width: 3px;
+}
+.msglist::-webkit-scrollbar-track{
+  background: transparent;
+}
+.me .name {
+  text-align: right;
+}
+.me .msg_item_main{
+  justify-content: flex-end;
+}
+.msg_item_main_info{
+  @apply ml-3;
+}
+.me .msg_item_main_info{
+  @apply mr-3;
+}
+.me .head {
+  order: 1;
+}
+.content::before {
+  content: " ";
+  width: 0px;
+  height: 0px;
+  background-color: var(--bg);
+  position: absolute;
+  left: -3px;
+  top: 13px;
+  border: solid 6px var(--bg);
+  transform: rotateZ(45deg);
+}
+.me .content::before {
+  content: " ";
+  width: 0px;
+  height: 0px;
+  background-color: var(--bg);
+  position: absolute;
+  left: calc(100% - 9px);
+  top: 13px;
+  border: solid 6px var(--bg);
+  transform: rotateZ(45deg);
+}

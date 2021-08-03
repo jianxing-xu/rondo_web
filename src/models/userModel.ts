@@ -34,21 +34,17 @@ interface IUser {
 }
 const userModel = () => {
   const [user, setUser] = useState<IUser>({ ...CST.guestUserInfo });
-  const sm = useSocketModel();
 
-  // 初始化userModel获取用户信息并连接websocket
+  // 初始化userModel获取用户信息
   useEffect(() => {
-    getInfo().then(() => {
-      sm.fetchUrl();
-    });
+    getInfo().then((u: any) => setUser(u));
   }, [])
 
   // 获取我的信息
-  async function getInfo() {
+  function getInfo() {
     return new Promise(async (resolve, reject) => {
       try {
         const data = await myInfo()
-        setUser(data);
         resolve(data);
       } catch (error) {
         reject(error);
@@ -56,15 +52,7 @@ const userModel = () => {
     })
   }
 
-  // 成功登录后动作
-  function doSuccessLogin(res: any) {
-    console.log("DO SUCCESS!!!");
-    localStorage.setItem(TOKEN_KEY.ACCESS, res["token"]);
-    getInfo().then(() => {
-      message.success("登录成功！");
-      sm.fetchUrl();
-    });
-  }
+
 
   // 重置用户信息
   function resetUser() {
@@ -75,7 +63,7 @@ const userModel = () => {
 
 
   return {
-    user, getInfo, resetUser, doSuccessLogin
+    user, getInfo, resetUser, setUser
   }
 }
 

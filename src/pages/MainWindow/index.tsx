@@ -12,19 +12,17 @@ import { MessageList } from "./MessageList";
 
 export default function MainWindow(): ReactElement {
   const { user } = useUserModel();
-  const sm = useSocketModel();
   useEffect(() => {
-    console.log("MainWidnow User: ", user);
   }, [user])
   return (
     <>
       <div className={classNames("h-full", _.main_win)}>
         <div className={classNames("flex h-full mx-auto ", _.main_inner)}>
           <SideBar></SideBar>
-          <div className={classNames("bg-gray-200 dark:bg-gray-600 bg-opacity-80 dark:bg-opacity-80  flex-1 flex flex-col justify-between ", _.right_content)}>
+          <div className={classNames("bg-gray-200 dark:bg-gray-900 bg-opacity-9 0 dark:bg-opacity-80  flex-1 flex flex-col justify-between", _.right_content)}>
             <Head />
             <MessageList />
-            <MessageInput />
+            <MessageInput onEnter={msg => console.log(msg)} />
           </div>
         </div>
       </div>

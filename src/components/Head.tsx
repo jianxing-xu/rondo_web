@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Button } from "antd";
 import { themeChange } from 'utils';
 import { useGlobalModel } from 'models/globalModel';
+import { useSocketModel } from 'models/socketModel';
 
 interface Properties {
   title: string;
 }
 
 export default function Head({ title }: Properties) {
-
-  const { changeSettings } = useGlobalModel();
+  const { changeRoom } = useSocketModel();
 
   useEffect(() => {
     document.title = title;
@@ -17,7 +17,7 @@ export default function Head({ title }: Properties) {
 
   // eslint-disable-next-line unicorn/no-null
   return <div className="fixed text-gray-900 bottom-2 right-2 dark:text-white">
-    < Button type="primary" onClick={() => changeSettings("dark")
-    }> 改变主题</Button >
+    < Button type="primary" onClick={() => changeRoom()
+    }> 改变房间</Button >
   </div >
 }

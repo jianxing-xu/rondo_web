@@ -1,22 +1,45 @@
 import { getWebsocketUrl } from "api/room";
 import Socket from "api/socket";
 import { createModel } from "hox";
-import { useState } from "react";
-import { Alert, message } from "antd";
-import { MT } from "utils/CST";
+import { useEffect, useState } from "react";
+import { Modal, message } from "antd";
+import CST, { MT } from "utils/CST";
+import { player, useAudioModel } from "./audioModel";
 
 export const socket = new Socket();
 const socketModel = () => {
+  const [info, setInfo] = useState<any>();
   const [roomId, setRoomId] = useState(888); // 房间号
   const [messages, setMessages] = useState([]); // 消息列表
+  const { setCurrent } = useAudioModel();
+
+
+  useEffect(() => {
+    fetchUrl();
+  }, []);
+
+  function playerInit() {
+    player.pause();
+    player.currentTime = 0;
+  }
 
   // socket消息控制器
   function messageController(data: any) {
-    console.warn("RECEIVE_TIME: " + new Date(data["timestamp"]));
-    switch (data["type"]) {
-      case MT.NOW: break;
+    const type = data['type'];
+    data = data['data'];
+    switch (type) {
+      case MT.PLAY_SONG:
+      case MT.NOW:
+        playerInit();
+        const song = data['song'];
+        const user = data['user'];
+        player.src = CST.server_host + "/song/playUrl/" + song['mid'];
+        const time = Date.now() / 1000 - data['since'];
+        setCurrent(time);
+        setInfo({ ...song, user });
+        break;
+
       case MT.ONLINE: break;
-      case MT.PLAY_SONG: break;
       case MT.PRE_LOAD_URL: break;
       case MT.SYSTEM: break;
       case MT.TEXT: break;
@@ -43,7 +66,7 @@ const socketModel = () => {
     });
   }
   return {
-    roomId, setRoomId, fetchUrl, changeRoom
+    roomId, setRoomId, fetchUrl, changeRoom, info
   }
 }
 
