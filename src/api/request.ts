@@ -30,10 +30,27 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (response.status == 200 && response.data['code'] == 1000) {
-      return response.data['data'];
+    if (response.status == 200) {
+      const data = response.data;
+      switch (data['code']) {
+        // 需要提示的成功消息
+        case 5005:
+          message.info(data['msg']);
+          return Promise.reject();
+        case 1020:
+          message.info(data['msg'] || "歌曲已经在队列中了！");
+          return Promise.reject(data['msg']);
+        default: break;
+      }
+      if (response.status == 200 && response.data['code'] == 1000) {
+        const data = response.data['data'];
+        if (data && data['token']) {
+          localStorage.setItem(TOKEN_KEY.ACCESS, data['token']);
+        }
+        return data;
+      }
     }
-    const code = response.data["data"]["code"];
+
     return response.data;
   },
   err => {
@@ -45,9 +62,13 @@ instance.interceptors.response.use(
       console.log(status, myStatus, msg);
       switch (status) {
         case 400:
-          message.error(msg || "响应错误"); return Promise.reject(msg);
+          switch (myStatus) {
+            case 1054: return Promise.reject(msg);
+            default:
+              message.error(msg || "响应错误"); return Promise.reject(msg);
+          }
         case 403:
-          message.error(msg || "登录过期");
+          message.error(msg || "请先登录");
           useUserModel.data?.resetUser(); return Promise.reject(msg);
         case 500:
           message.error(msg || "系统错误"); return Promise.reject(msg);;

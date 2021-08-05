@@ -22,7 +22,7 @@ const MsgItem: React.FC<IMsgItem> = ({ isMe = false }) => {
         <div className={classNames(_.msg_item_main_info)}>{ /* 区别 */}
           {isMe ? null : <div className={_.name}><span>willian</span></div>}
           <div className={classNames("max-w-md px-3 py-2 bg-bgc relative rounded-sm", _.content)}>
-            <img src="https://bbbug.hamm.cn/uploads/thumb/image/20210803/1dd99e06af3bc8c9ed54e4e637c54a53.png" alt="" />
+            <img src="https://gitee.com/static/images/logo-black.svg?t=158106664" alt="" />
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@ const NoticeMsg = ({ msg = "default" }: { msg: string | ReactNode }) => {
 }
 export const MessageList: React.FC = () => {
   return (
-    <div className={classNames("flex-grow px-6 py-3 overflow-y-scroll bg-transparent", _.msglist)}>
+    <div className={classNames("flex-grow px-6 py-3 overflow-y-scroll bg-transparent m_scroll", _.msglist)}>
       <MsgItem />
       <MsgItem isMe />
       <MsgItem />

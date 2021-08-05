@@ -1,28 +1,52 @@
 
+import { Drawer } from "antd";
+import MPopover from "components/MPopover";
+import { AddSongPanel } from "components/AddSongPanel";
 import { SideBar } from "components/SideBar";
+import { useCoreModel } from "models/coreModule";
 import { useSocketModel } from "models/socketModel";
 import { useUserModel } from "models/userModel";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { classNames } from "utils";
+import { POPKEY } from "utils/CST";
 import { Head } from "./Head";
 import _ from './index.module.css';
 import { MessageInput } from "./MessageInput";
 import { MessageList } from "./MessageList";
+import { WaitQueuePanel } from "components/WaitQueuePanel";
+import { MySongsPanel } from "components/MySongsPanel";
 
 
 export default function MainWindow(): ReactElement {
-  const { user } = useUserModel();
-  useEffect(() => {
-  }, [user])
+  const { dialog, showDialog, hdieAll } = useCoreModel();
+  const siderClick = useCallback((type: string) => {
+    switch (type) {
+      case "addsong":
+        showDialog(POPKEY.SEARCH);
+        break;
+      case "pointed":
+        showDialog(POPKEY.WAIT_QUEUE);
+        break;
+      case "songlist":
+        showDialog(POPKEY.MY_SONGS);
+        break;
+      case "rooms": break;
+      default: break;
+    }
+  }, [])
+
   return (
     <>
-      <div className={classNames("h-full", _.main_win)}>
+      <div className={classNames("h-full", _.main_win)} onClick={hdieAll}>
         <div className={classNames("flex h-full mx-auto ", _.main_inner)}>
-          <SideBar></SideBar>
-          <div className={classNames("bg-gray-200 dark:bg-gray-900 bg-opacity-9 0 dark:bg-opacity-80  flex-1 flex flex-col justify-between", _.right_content)}>
+          <SideBar click={siderClick} />
+          <div className={classNames("relative bg-gray-200 dark:bg-bgc bg-opacity-80 0 dark:bg-opacity-80  flex-1 flex flex-col justify-between", _.right_content)}>
             <Head />
             <MessageList />
             <MessageInput onEnter={msg => console.log(msg)} />
+            {dialog.SEARCH ? <AddSongPanel /> : null}
+            {dialog.WAIT_QUEUE ? <WaitQueuePanel /> : null}
+            {dialog.MY_SONGS ? <MySongsPanel /> : null}
           </div>
         </div>
       </div>

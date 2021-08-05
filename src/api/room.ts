@@ -32,7 +32,7 @@ export const createRoom = (data: ICreateRoomParam) => {
 }
 
 /** 获取房间信息 */
-export const roomInfo = (roomId: number, room_password: string) => {
+export const getRoomInfo = (roomId: number, room_password: string) => {
   return instance.get(`/room/info/${roomId}?room_password=${room_password}`)
 }
 /** 获取我的房间信息 */

@@ -35,35 +35,21 @@ interface IUser {
 const userModel = () => {
   const [user, setUser] = useState<IUser>({ ...CST.guestUserInfo });
 
-  // 初始化userModel获取用户信息
-  useEffect(() => {
-    getInfo().then((u: any) => setUser(u));
-  }, [])
-
   // 获取我的信息
-  function getInfo() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const data = await myInfo()
-        resolve(data);
-      } catch (error) {
-        reject(error);
-      }
-    })
+  async function fetchUserInfo() {
+    const data = await myInfo();
+    setUser(data);
+    return data;
   }
-
-
 
   // 重置用户信息
   function resetUser() {
-    console.log("reset user");
     localStorage.removeItem(TOKEN_KEY.ACCESS);
     setUser({ ...CST.guestUserInfo });
   }
 
-
   return {
-    user, getInfo, resetUser, setUser
+    user, fetchUserInfo, resetUser
   }
 }
 

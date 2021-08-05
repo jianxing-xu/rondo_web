@@ -5,16 +5,17 @@
  */
 
 
+import { ILyric } from "models/audioModel";
 import instance from "./request";
 
 /** 搜索歌曲 */
-interface ISearchSongParam {
+export interface ISearchSongParam {
   isHot?: boolean;
   keyword?: string;
   page?: number;
 }
-export const searchSong = (data: ISearchSongParam) => {
-  return instance.get("/song/serach", { params: data });
+export const searchSong = (data: ISearchSongParam): Promise<[any]> => {
+  return instance.get("/song/search", { params: data });
 }
 
 /** 移除歌单中的歌曲(取消收藏) */
@@ -35,9 +36,9 @@ export const playSong = (mid: number, room_id: number) => {
 }
 
 /** 用户点歌 */
-interface IAddSongParam {
+export interface IAddSongParam {
   mid: number;
-  room_id: number;
+  roomId: number;
   at?: number;
 }
 export const addSong = (data: IAddSongParam) => {
@@ -45,9 +46,9 @@ export const addSong = (data: IAddSongParam) => {
 }
 
 /** 获取我的歌单 */
-interface IUserSongsParam {
+export interface IUserSongsParam {
   page_num: number;
-  page_size: number;
+  page_size?: number;
 }
 export const userSongs = (data: IUserSongsParam) => {
   return instance.get("/song/userSongs", { params: data });
@@ -63,13 +64,13 @@ export const passSong = (data: IPassSongParam) => {
 }
 
 /** 获取歌曲歌词 */
-export const songLrc = (mid: number) => {
+export const songLrc = (mid: number): Promise<ILyric[]> => {
   return instance.get(`/song/lrc/${mid}`);
 }
 
 /** 顶歌 */
-export const pushSong = (mid: number, room_id: number) => {
-  return instance.post("/song/push", { mid, room_id });
+export const pushSong = (mid: number, roomId: number) => {
+  return instance.post("/song/push", { mid, roomId });
 }
 
 /** 从播放队列移除一首歌 */

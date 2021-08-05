@@ -1,72 +1,49 @@
-import { getWebsocketUrl } from "api/room";
-import Socket from "api/socket";
+import { getRoomInfo, getWebsocketUrl } from "api/room";
+import Socket, { IConnectParam } from "api/socket";
 import { createModel } from "hox";
 import { useEffect, useState } from "react";
-import { Modal, message } from "antd";
-import CST, { MT } from "utils/CST";
-import { player, useAudioModel } from "./audioModel";
+
 
 export const socket = new Socket();
 const socketModel = () => {
-  const [info, setInfo] = useState<any>();
-  const [roomId, setRoomId] = useState(888); // 房间号
-  const [messages, setMessages] = useState([]); // 消息列表
-  const { setCurrent } = useAudioModel();
+  const [roomAuth, setRoomAuth] = useState({
+    id: 888,
+    pwd: "",
+  }); //当前 连接房间号
+  const [room, setRoom] = useState<any>();//当前房间信息
 
-
-  useEffect(() => {
-    fetchUrl();
-  }, []);
-
-  function playerInit() {
-    player.pause();
-    player.currentTime = 0;
+  // 获取房间信息
+  function fetchRoomInfo(password: string = "") {
+    getRoomInfo(roomAuth.id, password).then((data: any) => {
+      setRoom(data);
+    })
   }
 
-  // socket消息控制器
-  function messageController(data: any) {
-    const type = data['type'];
-    data = data['data'];
-    switch (type) {
-      case MT.PLAY_SONG:
-      case MT.NOW:
-        playerInit();
-        const song = data['song'];
-        const user = data['user'];
-        player.src = CST.server_host + "/song/playUrl/" + song['mid'];
-        const time = Date.now() / 1000 - data['since'];
-        setCurrent(time);
-        setInfo({ ...song, user });
-        break;
-
-      case MT.ONLINE: break;
-      case MT.PRE_LOAD_URL: break;
-      case MT.SYSTEM: break;
-      case MT.TEXT: break;
-      default: break;
+  // 获取websocket连接url的链接参数
+  async function fetchWebsocketUrl(): Promise<IConnectParam> {
+    try {
+      const data = await getWebsocketUrl(roomAuth.id);
+      return data;
+    } catch (error) {
+      return error;
     }
   }
 
-  // 获取websocket连接url，获取到后关闭之前的链接，立刻开始现在的链接
-  async function fetchUrl() {
-    return getWebsocketUrl(roomId).then(async res => {
-      if (await socket.forceClose()) {
-        console.log("FETCH_URL>>>");
-        socket.setChannelParam({ ...res });
-        socket.connect(messageController);
-      }
-    })
+  // 设置消息控制和连接参数，连接.....
+  async function setMsgCtrl(param: IConnectParam, ctrl?: (data: any) => void) {
+    console.log("Start connect socket.....");
+    socket.setChannelParam(param);
+    if (await socket.forceClose()) {
+      socket.connect(ctrl);
+    }
   }
-  // 切换房间进入
-  function changeRoom() {
-    message.success("房间切换中");
-    setRoomId(v => v == 888 ? 890 : 888)
-    fetchUrl().then(res => {
-      message.success("房间切换成功...");
-    });
-  }
+
+  useEffect(() => {
+    fetchRoomInfo();
+  }, [roomAuth])
+
   return {
-    roomId, setRoomId, fetchUrl, changeRoom, info
+    roomAuth, setRoomAuth, fetchWebsocketUrl, setMsgCtrl, fetchRoomInfo, room
   }
 }
 

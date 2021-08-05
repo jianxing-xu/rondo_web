@@ -5,7 +5,7 @@ interface IwsStatus {
   status: number;
 }
 const wsUrl = "localhost:8081/ws?";
-interface IUserParam {
+export interface IConnectParam {
   channel: number;
   account: number;
   ticket: any;
@@ -32,7 +32,7 @@ class Socket {
     this.channel = roomId;
   }
 
-  public setChannelParam(param: IUserParam) {
+  public setChannelParam(param: IConnectParam) {
     if (!param.channel || !param.account || !param.ticket) {
       throw new Error("缺少连接参数");
     }
@@ -42,10 +42,14 @@ class Socket {
   }
 
   // websocket 初始化
-  public connect(messageController?: (data: any) => void): void {
-    if (this.connected) return;
+  public connect(messageController: (data: any) => void = (d: any) => { }): void {
+    if (this.connected) {
+      console.log("Socket connected!");
+      return;
+    };
     this.ws = new WebSocket(this.url + `channel=${this.channel}&account=${this.account}&ticket=${this.ticket}`)
     this.ws.onopen = () => {
+      console.log("Socket connect success!");
       this.connected = true;
     }
 
@@ -64,7 +68,10 @@ class Socket {
 
   public forceClose() {
     const that = this;
-    if (!this.connected) return Promise.resolve(true);
+    if (!this.connected) {
+      console.log("Socket closed!")
+      return Promise.resolve(true);
+    }
     if (this.ws?.readyState == 1) {
       this.ws.send('bye');
       this.ws.close();

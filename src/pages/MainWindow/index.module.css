@@ -5,3 +5,6 @@
 .right_content {
 
 }
+.main_inner .ant-drawer-content {
+  background-color: transparent !important;
+}

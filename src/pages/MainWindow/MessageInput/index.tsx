@@ -5,8 +5,8 @@ import _ from './index.module.css';
 import { classNames } from 'utils';
 import SvgIcon from 'components/SvgIcon';
 import { useGlobalModel } from 'models/globalModel';
-import { useSocketModel } from 'models/socketModel';
 import { useAudioModel } from 'models/audioModel';
+import { useCoreModel } from 'models/coreModule';
 
 // 播放进度
 const MProgress: React.FC = () => {
@@ -26,7 +26,8 @@ interface IMessageInput {
 }
 export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) => {
   const { changeSettings, volume } = useGlobalModel();
-  const { info } = useSocketModel();
+  const { now } = useCoreModel();
+  const { currLineLyric } = useAudioModel();
   const [msgVlaue, setMsgVlaue] = useState("");
 
   // ctrl+enter换行 enter发送
@@ -57,8 +58,8 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
           <SvgIcon name="tupian" className="ml-2 text-2xl text-icon-normal hover:text-primary" />
         </Tooltip>
         <div className="flex items-center ml-auto space-x-2">
-          <span className="text-sm">{info?.name ?? ""}</span>
-          <span className="text-sm font-bold cursor-pointer select-none" style={{ color: "var(--primary)" }}> {info?.user?.user_name ?? ""}</span>
+          <span className="text-sm">{now?.name ?? ""}</span>
+          <span className="text-sm font-bold cursor-pointer select-none" style={{ color: "var(--primary)" }}> {now?.uname ?? ""}</span>
           <Tooltip title="加入到我的歌单">
             <SvgIcon name="fav" className="cursor-pointer text-icon-normal hover:text-primary" />
           </Tooltip>
@@ -76,7 +77,7 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
       <div className="relative h-24">
         <textarea value={msgVlaue} onChange={e => setMsgVlaue(e.target.value)} onKeyDown={e => handleInputKeyDown(e)} className="w-full bg-transparent border-0 outline-none resize-none h-18"></textarea>
         <Tooltip title="点击复制">
-          <span className="absolute cursor-pointer bottom-1 left-2" style={{ fontSize: 12 }}>歌词显示</span>
+          <span className="absolute cursor-pointer bottom-1 left-2" style={{ fontSize: 12 }}>{currLineLyric ?? ""}</span>
         </Tooltip>
         <button onClick={() => onEnter(msgVlaue)} className="absolute px-4 py-2 bg-gray-100 rounded-sm outline-none bottom-2 right-2 dark:bg-gray-500 active:bg-gray-200 dark:active:bg-gray-600">发送(Enter)</button>
 

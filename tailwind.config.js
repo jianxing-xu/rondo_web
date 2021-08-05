@@ -12,11 +12,15 @@ module.exports = {
       ...theme('colors'),
       'sidebar': '#2e3238',
       'bgc': 'var(--bg)',
+      'primary': 'var(--primary)',
+      'bg-light': 'var(--bg-light)'
     }),
     textColor: theme => ({
       ...theme('colors'),
       'primary': 'var(--primary)',
-      'icon-normal': 'var(--normal-icon)'
+      'icon-normal': 'var(--normal-icon)',
+      'light': 'var(--font-light)',
+      'normal': 'var(--font-normal)'
     }),
     fontSize: {
       'xxs': '0.5rem',

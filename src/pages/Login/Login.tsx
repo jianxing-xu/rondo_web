@@ -12,6 +12,7 @@ import { useUserModel } from 'models/userModel';
 import { sendMail } from 'api/common';
 import CST from 'utils/CST';
 import { useGlobalModel } from 'models/globalModel';
+import { useCoreModel } from 'models/coreModule';
 
 
 
@@ -19,8 +20,8 @@ import { useGlobalModel } from 'models/globalModel';
 export default function Login(): ReactElement {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const { doSuccessLogin } = useGlobalModel();
   const { user } = useUserModel();
+  const { reconnect } = useCoreModel();
   const [form] = useForm();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function Login(): ReactElement {
     setLoading(true);
     values["plat"] = getOsInfo()["name"];
     login({ ...values }).then(async res => {
-      doSuccessLogin(res);
+      reconnect();
       history.replace("/");
     }).finally(() => setLoading(false));
   }

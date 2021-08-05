@@ -6,6 +6,20 @@
   fill: currentColor;
   overflow: hidden;
 }
+.m_scroll::-webkit-scrollbar{
+  background-color: transparent;
+  width: 2px;
+}
+.m_scroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: gray;
+  width: 3px;
+}
+.m_scroll::-webkit-scrollbar-track{
+  background: transparent;
+}
 
 @font-face {
   font-family: "Inter";
@@ -50,11 +64,17 @@
   --bg: #eee;
   --primary: rgb(226 90 114);
   --normal-icon: #333;
+  --font-light: #999;
+  --font-normal: rgba(55, 65, 81);
+  --bg-light: #dcd4d4;
 }
 .dark {
   --bg: #333;
   --primary: #ed533d;
   --normal-icon: #e6e6e6;
+  --font-light: #666;
+  --font-normal: rgba(209, 213, 219);
+  --bg-light: #383838;
 }
 
 body {
