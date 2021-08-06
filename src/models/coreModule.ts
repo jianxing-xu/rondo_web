@@ -1,5 +1,7 @@
 import { message } from "antd";
+import { messageList } from "api/message";
 import { songLrc } from "api/song";
+import { useFetch } from "components/AddSongPanel";
 import { createModel } from "hox";
 import { useEffect, useState } from "react";
 import CST, { MT, POPKEY } from "utils/CST";
@@ -32,11 +34,13 @@ const initDialog = {
   ROOM_SETTING: false,// "RoomSetting", // 房间设置
 };
 function coreModule() {
+  const [globalLoading, setGlobleLoading] = useState(false);
   // 对话框状态
   const [dialog, setDialog] = useState(initDialog);
   const [now, setNow] = useState<any>(); // 当前播放信息
-  const [messages, setMessages] = useState([]); // 消息列表
+  const [messages, setMessages] = useState<any[]>([]); // 消息列表
 
+  const { loading, data: msgs, setData: setMsgs, setParam, fetching: fetchingMsgs } = useFetch(messageList, parseInt(localStorage.getItem("pre_room_id") ?? "888"), { init: false });
 
   // 隐藏所有对话框
   const hdieAll = () => {
@@ -57,9 +61,9 @@ function coreModule() {
   }
 
   // socket消息控制器
-  function messageController(data: any) {
-    const type = data['type'];
-    data = data['data'];
+  function messageController(chatMsg: any) {
+    const type = chatMsg['type'];
+    const data = chatMsg['data'];
     switch (type) {
       case MT.PLAY_SONG:
       case MT.NOW:
@@ -73,9 +77,15 @@ function coreModule() {
       case MT.ONLINE:
         setNow((n: any) => ({ ...n, onlineCount: data?.length || 0 }))
         break;
+      // 摸一摸 和 系统消息一起
+      case MT.SYSTEM:
+      case MT.TOUCH:
+        setMsgs((msgs: any[]) => ([...msgs, chatMsg]));
+        break;
       case MT.PRE_LOAD_URL: break;
-      case MT.SYSTEM: break;
-      case MT.TEXT: break;
+      case MT.TEXT:
+        setMsgs((msgs: any[]) => ([...msgs, data]));
+        break;
       default: break;
     }
   }
@@ -107,22 +117,41 @@ function coreModule() {
 
   // 获取用户信息后连接socket
   function reconnect() {
+    const roomId = parseInt(localStorage.getItem("pre_room_id") ?? "888");
+    setGlobleLoading(true);
     useUserModel.data?.fetchUserInfo().then((user: any) => { // 用户信息
-      useSocketModel.data?.fetchWebsocketUrl().then((param) => { // 连接参数
-        useSocketModel.data?.setMsgCtrl(param, messageController); // 连接socket
-      })
-    })
+      useSocketModel.data?.fetchRoomInfo(roomId).then(() => { // 房间信息
+        fetchingMsgs(roomId);
+        useSocketModel.data?.fetchWebsocketUrl(roomId).then((param) => { // 连接参数
+          useSocketModel.data?.setMsgCtrl(param, messageController); // 连接socket
+        })
+      }).catch(e => { }).finally(() => setGlobleLoading(false));
+    }).catch(e => {
+      if (e === 403) {
+        reconnect();
+      }
+    }).finally(() => setGlobleLoading(false));
   }
-  // 切换房间进入
-  function changeRoom() {
+  // 切换房间后重连socket
+  function changeRoom(roomId: number) {
     const sd = useSocketModel.data;
     message.success("房间切换中");
-    sd?.setRoomAuth(a => ({
-      id: a.id == 888 ? 890 : 888,
-      pwd: ""
-    }));
-    sd?.fetchWebsocketUrl().then(data => sd?.setMsgCtrl(data, messageController));
+    setGlobleLoading(true);
+    return new Promise((resolve, reject) => {
+      sd?.fetchRoomInfo(roomId).then(roomInfo => {
+        fetchingMsgs(roomId);
+        sd?.fetchWebsocketUrl(roomId).then(data => {
+          sd?.setMsgCtrl(data, messageController);
+          localStorage.setItem("pre_room_id", roomId.toString());
+          resolve("success")
+        });
+      }).catch(e => {
+        console.error("提示输入密码");
+        reject(e);
+      }).finally(() => setGlobleLoading(false));
+    })
   }
+
 
   // 获取歌词 and try
   async function fetchLrc(mid: number) {
@@ -147,7 +176,7 @@ function coreModule() {
   useEffect(() => {
     reconnect();
   }, [])
-  return { now, reconnect, messageController, changeRoom, tryPlay, getNowTime, dialog, hdieAll, showDialog };
+  return { globalLoading, msgs, setMsgs, now, reconnect, messageController, changeRoom, tryPlay, getNowTime, dialog, hdieAll, showDialog, message, setMessages };
 }
 
 export const useCoreModel = createModel(coreModule);

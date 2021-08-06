@@ -6,23 +6,27 @@ import { useEffect, useState } from "react";
 
 export const socket = new Socket();
 const socketModel = () => {
-  const [roomAuth, setRoomAuth] = useState({
-    id: 888,
-    pwd: "",
+  const [roomAuth, setRoomAuth] = useState<{ id: number, pwd?: string }>({
+    id: parseInt(localStorage.getItem("pre_room_id") ?? "888"),
   }); //当前 连接房间号
   const [room, setRoom] = useState<any>();//当前房间信息
 
   // 获取房间信息
-  function fetchRoomInfo(password: string = "") {
-    getRoomInfo(roomAuth.id, password).then((data: any) => {
-      setRoom(data);
-    })
+  async function fetchRoomInfo(roomId: number, password: string = "") {
+    return new Promise((resolve, reject) => {
+      getRoomInfo(roomId, password).then(data => {
+        setRoom(data);
+        resolve(data);
+      }).catch(e => {
+        reject(e);
+      })
+    });
   }
 
   // 获取websocket连接url的链接参数
-  async function fetchWebsocketUrl(): Promise<IConnectParam> {
+  async function fetchWebsocketUrl(roomId: number): Promise<IConnectParam> {
     try {
-      const data = await getWebsocketUrl(roomAuth.id);
+      const data = await getWebsocketUrl(roomId);
       return data;
     } catch (error) {
       return error;
@@ -38,9 +42,11 @@ const socketModel = () => {
     }
   }
 
-  useEffect(() => {
-    fetchRoomInfo();
-  }, [roomAuth])
+  // useEffect(() => {
+  //   fetchRoomInfo(roomAuth.id).catch(e => {
+  //     console.log("提示密码输入等.....")
+  //   })
+  // }, [])
 
   return {
     roomAuth, setRoomAuth, fetchWebsocketUrl, setMsgCtrl, fetchRoomInfo, room

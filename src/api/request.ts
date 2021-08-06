@@ -69,7 +69,8 @@ instance.interceptors.response.use(
           }
         case 403:
           message.error(msg || "请先登录");
-          useUserModel.data?.resetUser(); return Promise.reject(msg);
+          useUserModel.data?.resetUser();
+          return Promise.reject(status);
         case 500:
           message.error(msg || "系统错误"); return Promise.reject(msg);;
       }

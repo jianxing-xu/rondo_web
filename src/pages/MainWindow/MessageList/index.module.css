@@ -13,6 +13,9 @@
 .msglist::-webkit-scrollbar-track{
   background: transparent;
 } */
+.msglist {
+  /* scroll-behavior: smooth; */
+}
 .me .name {
   text-align: right;
 }

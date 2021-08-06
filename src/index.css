@@ -67,6 +67,7 @@
   --font-light: #999;
   --font-normal: rgba(55, 65, 81);
   --bg-light: #dcd4d4;
+  --bg-loading: rgba(207, 206, 206, 0.5);
 }
 .dark {
   --bg: #333;
@@ -75,6 +76,7 @@
   --font-light: #666;
   --font-normal: rgba(209, 213, 219);
   --bg-light: #383838;
+  --bg-loading: rgba(75, 75, 75, 0.5);
 }
 
 body {

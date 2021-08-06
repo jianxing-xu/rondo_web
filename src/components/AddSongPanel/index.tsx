@@ -15,7 +15,17 @@ export const RightHead = ({ title = "" }) => {
     </div>
   );
 }
-export const useFetch = (fetch: (param: any) => Promise<any>, p: any) => {
+/**
+ * 
+ * @param fetch 返回 promis 的请求函数
+ * @param p 初始化参数对象 需要和第一个参数匹配，传递歌第一个函数
+ * @returns 状态对象
+ */
+export interface IUseFetchConfig {
+  init?: boolean; // 初始化是否发出请求 默认 true 
+  append?: boolean; // 数组形式数据，请求后追加到原数据后面 默认 false
+}
+export const useFetch = (fetch: (param: any) => Promise<any>, p?: any, config: IUseFetchConfig = { init: true, append: false }) => {
   const [param, setParam] = useState(p);
   const [data, setData] = useState<any>();
   const [err, setErr] = useState<any>();
@@ -24,7 +34,12 @@ export const useFetch = (fetch: (param: any) => Promise<any>, p: any) => {
     return new Promise((resolve, reject) => {
       setLoading(true);
       fetch(p ?? param).then(d => {
-        setData(d);
+        if (config.append) {
+          if (!Array.isArray(d)) throw new Error("开启配置：{config:{ append: true}}返回的数据不是数组形式");
+          setData((old: any) => [...old, ...d]);
+        } else {
+          setData(d);
+        }
         setErr(null);
         resolve(d);
       }).catch(e => {
@@ -34,7 +49,9 @@ export const useFetch = (fetch: (param: any) => Promise<any>, p: any) => {
     });
   }
   useEffect(() => {
-    fetching();
+    if (config.init) {
+      fetching();
+    }
   }, [param])
   return { loading, data, setData, err, fetching, setParam };
 }
@@ -109,7 +126,10 @@ export const AddSongPanel: React.FC<IAddSongPanel> = ({ children }) => {
             <div key={index} className="relative flex flex-1 px-2 py-2 m-2 rounded-sm bg-bg-light">
               <img className="w-12 h-12 rounded-sm" src={item?.pic} alt="" />
               <div className="w-2/3 pl-2">
-                <div className="truncate">{item?.name}</div>
+                <div className="truncate">
+                  {!!item?.week ? <span className="text-primary">({item?.week})</span> : null}
+                  {item?.name}
+                </div>
                 <div className="pt-2 truncate text-xxs text-light">{item?.singer}</div>
               </div>
               <div onClick={() => addSongHandle(item.mid, index)} className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60" style={{ borderColor: "var(--font-normal)" }}>点歌</div>

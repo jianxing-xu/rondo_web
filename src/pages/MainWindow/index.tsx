@@ -1,5 +1,5 @@
 
-import { Drawer } from "antd";
+import { Drawer, message, Spin } from "antd";
 import MPopover from "components/MPopover";
 import { AddSongPanel } from "components/AddSongPanel";
 import { SideBar } from "components/SideBar";
@@ -15,10 +15,11 @@ import { MessageInput } from "./MessageInput";
 import { MessageList } from "./MessageList";
 import { WaitQueuePanel } from "components/WaitQueuePanel";
 import { MySongsPanel } from "components/MySongsPanel";
+import { RoomListPanel } from "components/RoomListPanel";
 
 
 export default function MainWindow(): ReactElement {
-  const { dialog, showDialog, hdieAll } = useCoreModel();
+  const { globalLoading, dialog, showDialog, hdieAll, } = useCoreModel();
   const siderClick = useCallback((type: string) => {
     switch (type) {
       case "addsong":
@@ -30,7 +31,9 @@ export default function MainWindow(): ReactElement {
       case "songlist":
         showDialog(POPKEY.MY_SONGS);
         break;
-      case "rooms": break;
+      case "rooms":
+        showDialog(POPKEY.ROOM_LIST)
+        break;
       default: break;
     }
   }, [])
@@ -38,15 +41,19 @@ export default function MainWindow(): ReactElement {
   return (
     <>
       <div className={classNames("h-full", _.main_win)} onClick={hdieAll}>
+        {globalLoading ? <div className="absolute top-0 bottom-0 z-10 flex items-center justify-center w-full h-full left-14" style={{ backgroundColor: "var(--bg-loading)" }}>
+          <Spin spinning={true}></Spin>
+        </div> : null}
         <div className={classNames("flex h-full mx-auto ", _.main_inner)}>
           <SideBar click={siderClick} />
-          <div className={classNames("relative bg-gray-200 dark:bg-bgc bg-opacity-80 0 dark:bg-opacity-80  flex-1 flex flex-col justify-between", _.right_content)}>
+          <div className={classNames("relative bg-gray-200 dark:bg-sidebar dark:bg-opacity-80 bg-opacity-80 flex-1 flex flex-col justify-between", _.right_content)}>
             <Head />
             <MessageList />
             <MessageInput onEnter={msg => console.log(msg)} />
             {dialog.SEARCH ? <AddSongPanel /> : null}
             {dialog.WAIT_QUEUE ? <WaitQueuePanel /> : null}
             {dialog.MY_SONGS ? <MySongsPanel /> : null}
+            {dialog.ROOM_LIST ? <RoomListPanel /> : null}
           </div>
         </div>
       </div>

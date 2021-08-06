@@ -57,3 +57,18 @@ export // 获取操作系统信息
   }
   return { name, version };
 }
+
+
+
+
+export const throttle = (fn: Function, rateTime: number) => {
+  let prev = Date.now() - rateTime;
+  return (...args: any[]) => {
+    const now = Date.now();
+    if (now - prev >= rateTime) {
+      fn.apply(this, args);
+      prev = now;
+    }
+  }
+}
+

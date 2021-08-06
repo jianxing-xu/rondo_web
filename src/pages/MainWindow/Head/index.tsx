@@ -4,12 +4,12 @@ import { useSocketModel } from 'models/socketModel';
 import React from 'react';
 
 export const Head: React.FC = () => {
-  const { room, roomAuth } = useSocketModel();
+  const { room } = useSocketModel();
   const { now } = useCoreModel();
   return (
     <div className="flex items-center justify-between px-4 py-2 text-lg border-b border-gray-300 dark:border-gray-600" style={{ backgroundColor: "transparent" }}>
       <Tooltip title="房间ID(房间号)">
-        <span className="px-1 text-sm font-bold border border-red-500 rounded-sm tag" style={{ color: "var(--primary)" }}>ID:{roomAuth?.id}</span>
+        <span className="px-1 text-sm font-bold border border-red-500 rounded-sm tag" style={{ color: "var(--primary)" }}>ID:{room?.room.room_id}</span>
       </Tooltip>
       <span className="flex items-center room_name">
         <Tooltip title="房间类型">
