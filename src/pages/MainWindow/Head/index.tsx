@@ -4,8 +4,8 @@ import { useSocketModel } from 'models/socketModel';
 import React from 'react';
 
 export const Head: React.FC = () => {
-  const { room } = useSocketModel();
-  const { now } = useCoreModel();
+  const { room } = useSocketModel(model => [model.room]);
+  const { now } = useCoreModel(model => model.now);
   return (
     <div className="flex items-center justify-between px-4 py-2 text-lg border-b border-gray-300 dark:border-gray-600" style={{ backgroundColor: "transparent" }}>
       <Tooltip title="房间ID(房间号)">

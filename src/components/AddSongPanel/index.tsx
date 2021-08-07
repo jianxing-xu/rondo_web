@@ -67,7 +67,7 @@ interface IAddSongPanel {
 
 }
 export const AddSongPanel: React.FC<IAddSongPanel> = ({ children }) => {
-  const { roomAuth } = useSocketModel();
+  const { room } = useSocketModel(model => [model.room]);
   const [param, setParam] = useState<ISearchSongParam>({
     isHot: true,
     keyword: "",
@@ -85,7 +85,7 @@ export const AddSongPanel: React.FC<IAddSongPanel> = ({ children }) => {
   // 点歌处理
   const addSongHandle = (mid: any, index: number) => {
     attachLoading(index);
-    addSong({ roomId: roomAuth.id, mid }).then(() => {
+    addSong({ roomId: room['room']?.room_id, mid }).then(() => {
       message.success("点歌成功！");
     }).catch(e => {
       console.log(e);

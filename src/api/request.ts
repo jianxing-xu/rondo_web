@@ -33,13 +33,15 @@ instance.interceptors.response.use(
     if (response.status == 200) {
       const data = response.data;
       switch (data['code']) {
-        // 需要提示的成功消息
         case 5005:
           message.info(data['msg']);
           return Promise.reject();
         case 1020:
           message.info(data['msg'] || "歌曲已经在队列中了！");
           return Promise.reject(data['msg']);
+        // 需要提示的成功消息
+        case 1001:
+          message.success(data['msg']);
         default: break;
       }
       if (response.status == 200 && response.data['code'] == 1000) {

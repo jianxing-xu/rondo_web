@@ -26,7 +26,7 @@ export const removeFav = (mid: number) => {
 
 /** 收藏歌曲 */
 export const favSong = (mid: number, room_id: number) => {
-  return instance.delete("/song/fav", { params: { mid, room_id } });
+  return instance.post("/song/fav", { mid, room_id });
 }
 
 

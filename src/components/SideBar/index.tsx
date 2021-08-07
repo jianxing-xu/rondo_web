@@ -23,7 +23,7 @@ const Btn: React.FC<any> = ({ src, title, ...props }) => {
   );
 }
 const SettingMenu: React.FC = () => {
-  const { notice, dark, sound, changeSettings } = useGlobalModel();
+  const { notice, dark, sound, changeSettings } = useGlobalModel(model => [model.notice, model.dark, model.sound]);
   return <div className="space-y-4">
     <div>
       <span >消息通知：  </span>
@@ -43,7 +43,7 @@ interface ISideBar {
   click: (type: string, e: any) => void;
 }
 export const SideBar: React.FC<ISideBar> = ({ click = (type: string) => { } }) => {
-  const { user } = useUserModel();
+  const { user } = useUserModel(model => [model.user]);
   return <>
     <div className="z-10 w-20 bg-sidebar" onClick={e => e.stopPropagation()}>
       <div className={classNames(_.innerBar, "h-full w-14 mx-auto flex flex-col justify-between")}>

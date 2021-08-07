@@ -11,8 +11,7 @@ interface Properties {
 }
 
 export default function Head({ title }: Properties) {
-  const { changeRoom } = useCoreModel();
-  const context = useContext(MPopoverContext);
+  const { changeRoom } = useCoreModel(model => []);
 
   useEffect(() => {
     document.title = title;

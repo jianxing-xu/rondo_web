@@ -8,3 +8,6 @@
   border: none;
   outline: none;
 }
+.minput::-moz-focus-inner {
+  outline: none;
+}

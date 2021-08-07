@@ -27,8 +27,8 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
 interface MySongsPanel {
 
 }
-export const MySongsPanel: React.FC<MySongsPanel> = ({ children }) => {
-  const { roomAuth } = useSocketModel();
+export const MySongsPanel: React.FC<MySongsPanel> = () => {
+  const { roomAuth } = useSocketModel(model => [model.roomAuth]);
   const [pager, setPager] = useState<IUserSongsParam>({
     page_num: 1,
   });

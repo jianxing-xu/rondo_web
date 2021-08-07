@@ -11,7 +11,7 @@ import { POPKEY } from 'utils/CST';
 import _ from './index.module.css';
 
 export const RightHead = () => {
-  const { showDialog } = useCoreModel();
+  const { showDialog } = useCoreModel(model => []);
 
   return (
     <div className="flex justify-between py-3 text-2xl ">
@@ -27,8 +27,8 @@ interface IWaitQueuePanel {
 
 }
 export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({ }) => {
-  const { roomAuth } = useSocketModel();
-  const { data, setData, loading, fetching, err } = useFetch(roomQueueSongs, roomAuth.id);
+  const { room } = useSocketModel(model => [model.room]);
+  const { data, setData, loading, fetching, err } = useFetch(roomQueueSongs, room['room']?.room_id);
 
   // 给搜索条目附加loading状态
   const attachLoading = (index: number, flag: boolean = true) => {
@@ -49,7 +49,7 @@ export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({ }) => {
   // 顶歌
   const pushSongHandle = async (mid: number, idx: number) => {
     attachLoading(idx);
-    pushSong(mid, roomAuth.id).then(res => {
+    pushSong(mid, room['room']?.room_id).then(res => {
       message.success("顶歌成功");
       fetching();
     }).finally(() => attachLoading(idx, false))

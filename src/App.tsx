@@ -11,7 +11,7 @@ const Login = lazy(() => import("./pages/Login/Login"));
 
 
 export default function App(): ReactElement {
-  const { core } = initModel();
+  initModel();
   useEffect(() => {
     Modal.info({
       content: "欢迎光临！",
@@ -20,7 +20,7 @@ export default function App(): ReactElement {
       }
     });
   }, []);
-
+  console.log("APP RENDER");
   return (
     <>
       <Head title="App" />

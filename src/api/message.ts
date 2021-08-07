@@ -10,9 +10,10 @@ import instance from "./request";
 
 
 /** 发送消息 */
-interface IAtUser {
-  user_id: string;//: 1,
+export interface IAtUser {
+  user_id: number;//: 1,
   user_name: string;//: "机器人"
+  type?: number; //0:送歌@  1:聊天@
 }
 interface ISendParam {
   room_id: string;//: 888,

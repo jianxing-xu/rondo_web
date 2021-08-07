@@ -1,5 +1,5 @@
 
-
+import dayjs from "dayjs";
 export function classNames(clz: string, ...clazz: string[]) {
   return clz + " " + clazz.join(" ");
 }
@@ -58,9 +58,6 @@ export // 获取操作系统信息
   return { name, version };
 }
 
-
-
-
 export const throttle = (fn: Function, rateTime: number) => {
   let prev = Date.now() - rateTime;
   return (...args: any[]) => {
@@ -72,3 +69,32 @@ export const throttle = (fn: Function, rateTime: number) => {
   }
 }
 
+
+export const timeago = (time: Date | string | number) => {
+  const date = new Date(time); // 给定时间
+  const yean = date.getFullYear();
+  const month = date.getMonth();
+  const weekDay = date.getDay();
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minus = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  const now = dayjs();
+  const nowDayZore = now.subtract(now.hour(), "hours");
+  const preDayZore = nowDayZore.subtract(1, "d");
+  const weekZore = nowDayZore.subtract(now.day() - 1, "d");
+
+  const zTime = date.getTime();
+  // console.log(nowDayZore.valueOf(), zTime, nowDayZore.valueOf() + 86400);
+  if (zTime > nowDayZore.valueOf() && zTime <= nowDayZore.valueOf() + 86400) {
+    return `${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`;
+  }
+  if (zTime > preDayZore.valueOf() && zTime < nowDayZore.valueOf()) {
+    return `昨天 ${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`
+  }
+  if (zTime > weekZore.valueOf() && zTime < (weekZore.valueOf() + 604800)) {
+    return `星期${weekDay} ${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`
+  }
+  return dayjs(zTime).format("YYYY年MM月DD") + ` ${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`;
+}

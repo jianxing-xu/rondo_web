@@ -16,10 +16,12 @@ import { MessageList } from "./MessageList";
 import { WaitQueuePanel } from "components/WaitQueuePanel";
 import { MySongsPanel } from "components/MySongsPanel";
 import { RoomListPanel } from "components/RoomListPanel";
+import { send } from "api/message";
 
 
 export default function MainWindow(): ReactElement {
-  const { globalLoading, dialog, showDialog, hdieAll, } = useCoreModel();
+  const { globalLoading, dialog, showDialog, hdieAll } = useCoreModel(model => [model.dialog, model.globalLoading]); // MainWindow 依赖CoreModel
+
   const siderClick = useCallback((type: string) => {
     switch (type) {
       case "addsong":
@@ -37,6 +39,7 @@ export default function MainWindow(): ReactElement {
       default: break;
     }
   }, [])
+  console.log("MAIN WINDOW RENDER");
 
   return (
     <>
@@ -45,11 +48,11 @@ export default function MainWindow(): ReactElement {
           <Spin spinning={true}></Spin>
         </div> : null}
         <div className={classNames("flex h-full mx-auto ", _.main_inner)}>
-          <SideBar click={siderClick} />
+          <SideBar click={siderClick} /> {/** Head组件初始化userModel */}
           <div className={classNames("relative bg-gray-200 dark:bg-sidebar dark:bg-opacity-80 bg-opacity-80 flex-1 flex flex-col justify-between", _.right_content)}>
-            <Head />
+            <Head /> {/** Head组件初始化socketModel */}
             <MessageList />
-            <MessageInput onEnter={msg => console.log(msg)} />
+            <MessageInput />
             {dialog.SEARCH ? <AddSongPanel /> : null}
             {dialog.WAIT_QUEUE ? <WaitQueuePanel /> : null}
             {dialog.MY_SONGS ? <MySongsPanel /> : null}

@@ -31,8 +31,8 @@ interface IRoomListPanel {
 
 }
 export const RoomListPanel: React.FC<IRoomListPanel> = ({ children }) => {
-  const { roomAuth, room } = useSocketModel();
-  const { changeRoom, hdieAll } = useCoreModel();
+  const { room } = useSocketModel(model => [model.room]);
+  const { changeRoom, hdieAll } = useCoreModel(model => []);
   const { data, setData, loading, fetching, err } = useFetch(hotRooms);
 
   // 搜索处理

@@ -20,8 +20,8 @@ import { useCoreModel } from 'models/coreModule';
 export default function Login(): ReactElement {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const { user } = useUserModel();
-  const { reconnect } = useCoreModel();
+  const { user } = useUserModel(model => [model.user]);
+  const { reconnect } = useCoreModel(model => []);
   const [form] = useForm();
 
   useEffect(() => {

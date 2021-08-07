@@ -44,20 +44,20 @@ let MPopover = ({ children, width = 400, popKeys }: any, ref: any) => {
     })
   }
   // 提供调用方法
-  useImperativeHandle(ref, () => ({
-    setShow,
-    hideAll
-  }))
-  useEffect(() => {
-    setFlagVis((f: any) => {
-      popKeys.forEach((k: any) => {
-        f[k] = false;
-      });
-      return f;
-    })
-    document.body.addEventListener("click", handleTouch, false);
-    return () => document.body.removeEventListener("click", handleTouch, false);
-  }, [])
+  // useImperativeHandle(ref, () => ({
+  //   setShow,
+  //   hideAll
+  // }))
+  // useEffect(() => {
+  //   setFlagVis((f: any) => {
+  //     popKeys.forEach((k: any) => {
+  //       f[k] = false;
+  //     });
+  //     return f;
+  //   })
+  //   document.body.addEventListener("click", handleTouch, false);
+  //   return () => document.body.removeEventListener("click", handleTouch, false);
+  // }, [])
 
   return (
     <MPopoverContext.Provider value={{ setShow, hideAll, handleTouch }}>

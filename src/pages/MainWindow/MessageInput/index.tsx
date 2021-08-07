@@ -1,16 +1,19 @@
 
-import { Tooltip, Slider } from 'antd';
-import React, { useMemo, useState } from 'react';
+import { Tooltip, Slider, message } from 'antd';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import _ from './index.module.css';
 import { classNames } from 'utils';
 import SvgIcon from 'components/SvgIcon';
 import { useGlobalModel } from 'models/globalModel';
 import { useAudioModel } from 'models/audioModel';
 import { useCoreModel } from 'models/coreModule';
+import { favSong, passSong } from 'api/song';
+import { useSocketModel } from 'models/socketModel';
+import { send } from 'api/message';
 
 // 播放进度
 const MProgress: React.FC = () => {
-  const { percent } = useAudioModel();
+  const { percent } = useAudioModel(model => [model.percent]);
   return (
     <Tooltip title="进度">
       <div className="absolute left-0 right-0 bg-green-800 top-8 w-ful" style={{ height: 1 }}>
@@ -20,27 +23,59 @@ const MProgress: React.FC = () => {
   );
 }
 
+// 歌词行
+const Lyricline: React.FC = () => {
+  const { currLineLyric } = useAudioModel(model => [model.currLineLyric]);
+  return (
+    <span className="absolute cursor-pointer bottom-1 left-2" style={{ fontSize: 12 }}>{currLineLyric ?? ""}</span>
+  )
+}
+
 
 interface IMessageInput {
   onEnter?: (msgVlaue: string) => void;
 }
 export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) => {
-  const { changeSettings, volume } = useGlobalModel();
-  const { now } = useCoreModel();
-  const { currLineLyric } = useAudioModel();
-  const [msgVlaue, setMsgVlaue] = useState("");
+  const { changeSettings, volume } = useGlobalModel(model => [model.volume]);
+  const { room } = useSocketModel(model => [model.room])
+  const { now, at, setAt } = useCoreModel(model => [model.now, model.at]);
+  const textRef = useRef<HTMLInputElement | any>();
 
   // ctrl+enter换行 enter发送
   const handleInputKeyDown = (e: any) => {
     if (e.key == "Enter" && e.ctrlKey) {
-      setMsgVlaue(v => v + "\n");
+      e.target.value += "\n";
     } else if (e.key == "Enter") {
       e.preventDefault();
-      onEnter(msgVlaue);
-      setMsgVlaue("");
+      popmsg();
       return false;
     }
   }
+
+  const popmsg = () => {
+    const value = textRef.current.value;
+    if (!!!value || !!!value?.trim()) return;
+    onEnter(textRef.current.value);
+    handleSend(value);
+    textRef.current.value = "";
+  }
+  const handlePass = () => {
+    if (!now.mid) return message.info("暂无正在播放歌曲");
+    passSong({ mid: now.mid, room_id: room['room']?.room_id }).then(() => { }).catch(e => { });
+  }
+  const handleFav = () => {
+    if (!now.mid) return message.info("暂无正在播放歌曲");
+    favSong(now.mid, room['room']?.room_id)
+  }
+  const handleSend = (value: string) => {
+    send({ room_id: room['room']?.room_id, type: "text", resource: value, msg: value, where: "channel", atUser: { user_id: 1, user_name: "xxx" } })
+    setAt(null);
+  }
+
+  useEffect(() => {
+    console.log("AT", at);
+    textRef.current.value += `@${at?.user_name} `;
+  }, [at])
 
   const iconName = useMemo(() => {
     if (volume <= 0) return "guanbishengyin";
@@ -48,6 +83,7 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
     if (volume > 40 && volume < 80) return "zhongdengyinliang";
     return "zuidayinliang";
   }, [volume])
+  console.log("INPUT RENDER");
   return (
     <div className="h-32 bg-transparent">
       <div className="relative flex items-center h-8 px-2">
@@ -57,11 +93,12 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
         <Tooltip title="图片">
           <SvgIcon name="tupian" className="ml-2 text-2xl text-icon-normal hover:text-primary" />
         </Tooltip>
+        <div>{ }</div>
         <div className="flex items-center ml-auto space-x-2">
           <span className="text-sm">{now?.name ?? ""}</span>
           <span className="text-sm font-bold cursor-pointer select-none" style={{ color: "var(--primary)" }}> {now?.uname ?? ""}</span>
           <Tooltip title="加入到我的歌单">
-            <SvgIcon name="fav" className="cursor-pointer text-icon-normal hover:text-primary" />
+            <SvgIcon click={handleFav} name="fav" className="cursor-pointer text-icon-normal hover:text-primary" />
           </Tooltip>
 
           <Tooltip title={<div className="h-20 pb-2"><Slider vertical value={parseInt(volume.toString())} onChange={e => { changeSettings("volume", e) }} /></div>}>
@@ -69,17 +106,17 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
           </Tooltip>
 
           <Tooltip title="发表不想听态度" placement="topLeft">
-            <SvgIcon name="next" className="cursor-pointer text-icon-normal hover:text-primary" />
+            <span onClick={handlePass}><SvgIcon name="next" className="cursor-pointer text-icon-normal hover:text-primary" /></span>
           </Tooltip>
         </div>
         <MProgress />
       </div>
       <div className="relative h-24">
-        <textarea value={msgVlaue} onChange={e => setMsgVlaue(e.target.value)} onKeyDown={e => handleInputKeyDown(e)} className="w-full bg-transparent border-0 outline-none resize-none h-18"></textarea>
+        <textarea ref={textRef} onKeyDown={e => handleInputKeyDown(e)} className={classNames("w-full bg-transparent border-0 outline-none resize-none h-18", _.input)}></textarea>
         <Tooltip title="点击复制">
-          <span className="absolute cursor-pointer bottom-1 left-2" style={{ fontSize: 12 }}>{currLineLyric ?? ""}</span>
+          <Lyricline />
         </Tooltip>
-        <button onClick={() => onEnter(msgVlaue)} className="absolute px-4 py-2 bg-gray-100 rounded-sm outline-none bottom-2 right-2 dark:bg-gray-500 active:bg-gray-200 dark:active:bg-gray-600">发送(Enter)</button>
+        <button onClick={popmsg} className="absolute px-4 py-2 bg-gray-100 rounded-sm outline-none bottom-2 right-2 dark:bg-gray-500 active:bg-gray-200 dark:active:bg-gray-600">发送(Enter)</button>
 
       </div>
     </div>

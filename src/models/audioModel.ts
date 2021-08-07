@@ -48,15 +48,20 @@ function audioModel() {
     // 可以播放了
     player.oncanplay = () => {
       // player.play();
+      // setCurrent(useCoreModel?.data?.getNowTime());
     }
     // 加载出错
-    player.onerror = () => {
+    player.onerror = (err) => {
       console.log("播放出错，准备重试...");
+      console.log(err);
       useCoreModel.data?.tryPlay();
     }
     // 元数据加载完成
     player.onloadedmetadata = () => {
-      setCurrent(useCoreModel.data?.getNowTime());
+      setCurrent(useCoreModel?.data?.getNowTime());
+    }
+    player.onloadeddata = () => {
+      setCurrent(useCoreModel?.data?.getNowTime());
     }
     return () => {
       player.removeEventListener("timeupdate", handlePlay, false);
