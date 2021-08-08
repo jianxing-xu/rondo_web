@@ -1,12 +1,14 @@
 import { createModel } from "hox";
-import { Modal } from 'antd';
 import { useEffect, useMemo, useState } from "react";
 import { useCoreModel } from "./coreModule";
 
 export interface ILyric {
   lineLyric: string, time: string
 }
-export const player = new Audio();
+export const noticePlayer = new Audio("sqy.mp3");//消息提示播放器
+noticePlayer.load();
+export const preloadPlayer = new Audio(); // 预加载播放器 只加载资源
+export const player = new Audio();// 主音乐播放器
 player.autoplay = true;
 player.volume = parseInt(localStorage.getItem("volume") || "50") / 100;
 function audioModel() {

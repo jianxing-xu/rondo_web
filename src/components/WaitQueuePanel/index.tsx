@@ -1,9 +1,10 @@
 import { message, Spin } from 'antd';
-import { addSong, ISearchSongParam, pushSong, roomQueueSongs, searchSong } from 'api/song';
+import { addSong, ISearchSongParam, pushSong, removeForQueue, roomQueueSongs, searchSong } from 'api/song';
 import { RightPanelWrapper, useFetch } from 'components/AddSongPanel';
 import { MInput } from 'components/MInput';
 import { useCoreModel } from 'models/coreModule';
 import { useSocketModel } from 'models/socketModel';
+import { useUserModel } from 'models/userModel';
 import React, { useEffect, useState } from 'react';
 import { classNames } from 'utils';
 import { POPKEY } from 'utils/CST';
@@ -27,8 +28,8 @@ interface IWaitQueuePanel {
 
 }
 export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({ }) => {
-  const { room } = useSocketModel(model => [model.room]);
-  const { data, setData, loading, fetching, err } = useFetch(roomQueueSongs, room['room']?.room_id);
+  const { room } = useSocketModel(model => []);
+  const { data, setData, loading, fetching, err } = useFetch(roomQueueSongs, room['room']?.room_id, { init: false });
 
   // 给搜索条目附加loading状态
   const attachLoading = (index: number, flag: boolean = true) => {
@@ -50,12 +51,21 @@ export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({ }) => {
   const pushSongHandle = async (mid: number, idx: number) => {
     attachLoading(idx);
     pushSong(mid, room['room']?.room_id).then(res => {
-      message.success("顶歌成功");
+    }).catch(e => {
+      attachLoading(idx, false)
       fetching();
-    }).finally(() => attachLoading(idx, false))
+    }).finally(() => { })
+  }
+  const remove = (mid: number, index: number) => {
+    console.log(room);
+    removeForQueue(mid, room['room']?.room_id).then(() => {
+      fetching();
+      message.success("删除成功");
+    });
   }
 
   useEffect(() => {
+    fetching();
     const timer = setInterval(() => {
       fetching();
     }, 10000);
@@ -81,11 +91,14 @@ export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({ }) => {
                 <div className="truncate">{item?.song?.name || ""}</div>
                 <div className="pt-2 truncate text-xxs text-light">点歌人:{item?.user?.user_name || ""} 歌手: {item?.song?.singer || ""}</div>
               </div>
-              <div onClick={() => pushSongHandle(item?.song?.mid, index)} className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60" style={{ borderColor: "var(--font-normal)" }}>顶</div>
+              <div className="flex flex-col items-stretch relavite right-2 ">
+                <div onClick={() => pushSongHandle(item?.song?.mid, index)} className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60" style={{ borderColor: "var(--font-normal)" }}>顶</div>
+                {useUserModel.data?.user.admin ? <div onClick={() => remove(item?.song?.mid, index)} className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 bottom-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60" style={{ borderColor: "var(--font-normal)" }}> 移除</div> : null}
+              </div>
             </div>
           </Spin>
         ))}
       </Spin>
     </div>
-  </RightPanelWrapper>
+  </RightPanelWrapper >
 }

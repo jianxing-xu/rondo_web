@@ -6,8 +6,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useUserModel } from 'models/userModel';
 import { message } from 'antd';
-import CST, { TOKEN_KEY } from 'utils/CST';
+import CST, { POPKEY, TOKEN_KEY } from 'utils/CST';
 import { log } from 'utils/LoggerUtil';
+import { useCoreModel } from 'models/coreModule';
 
 
 const instance = axios.create({
@@ -42,6 +43,7 @@ instance.interceptors.response.use(
         // 需要提示的成功消息
         case 1001:
           message.success(data['msg']);
+          return Promise.reject(data['msg']);
         default: break;
       }
       if (response.status == 200 && response.data['code'] == 1000) {
@@ -56,7 +58,7 @@ instance.interceptors.response.use(
     return response.data;
   },
   err => {
-    log.err("Response.ts:==INFO==: Response Error!", err);
+    log.err("Response.ts:==INFO==: Response Error!");
     if (err && err.response && err.response.data) {
       const status = err.response.status;
       const myStatus = err.response.data["code"];
@@ -66,12 +68,16 @@ instance.interceptors.response.use(
         case 400:
           switch (myStatus) {
             case 1054: return Promise.reject(msg);
+            case 1012: return Promise.reject(msg);
             default:
               message.error(msg || "响应错误"); return Promise.reject(msg);
           }
         case 403:
-          message.error(msg || "请先登录");
           useUserModel.data?.resetUser();
+          localStorage.removeItem(TOKEN_KEY.ACCESS);
+          setTimeout(() => {
+            useCoreModel.data?.reconnect();
+          }, 100)
           return Promise.reject(status);
         case 500:
           message.error(msg || "系统错误"); return Promise.reject(msg);;

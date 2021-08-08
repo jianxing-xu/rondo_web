@@ -39,7 +39,7 @@ export const playSong = (mid: number, room_id: number) => {
 export interface IAddSongParam {
   mid: number;
   roomId: number;
-  at?: number;
+  atUser?: number;
 }
 export const addSong = (data: IAddSongParam) => {
   return instance.post("/song/add", data);
@@ -74,8 +74,8 @@ export const pushSong = (mid: number, roomId: number) => {
 }
 
 /** 从播放队列移除一首歌 */
-export const removeForQueue = (mid: number, room_id: number) => {
-  return instance.post("/song/removeForQueue", { mid, room_id });
+export const removeForQueue = (mid: number, roomId: number) => {
+  return instance.post("/song/removeForQueue", { mid, roomId });
 }
 
 /** 获取歌曲播放url */

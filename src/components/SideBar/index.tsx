@@ -48,7 +48,7 @@ export const SideBar: React.FC<ISideBar> = ({ click = (type: string) => { } }) =
     <div className="z-10 w-20 bg-sidebar" onClick={e => e.stopPropagation()}>
       <div className={classNames(_.innerBar, "h-full w-14 mx-auto flex flex-col justify-between")}>
         <div className="flex flex-col justify-between flex-grow">
-          <div style={{ background: `url('${CST.server_host}/${user?.user_head}') no-repeat center center`, backgroundSize: '100% 100%', backgroundColor: "var(--primary)" }} className={classNames("h-12 w-12 rounded-sm mx-auto mt-6", _.head)}></div>
+          <div style={{ background: `url('${CST.static_url}/${user?.user_head}') no-repeat center center`, backgroundSize: '100% 100%', backgroundColor: "var(--primary)" }} className={classNames("h-12 w-12 rounded-sm mx-auto mt-6", _.head)}></div>
           <div className={classNames(_.btns, "flex-1 flex flex-col justify-center space-y-6")}>
             <Btn src={add_song} title="点歌" onClick={click.bind(this, "addsong")} />
             <Btn src={queue} title="已点" onClick={click.bind(this, "pointed")} />

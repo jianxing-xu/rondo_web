@@ -54,7 +54,7 @@ export const RoomListPanel: React.FC<IRoomListPanel> = ({ children }) => {
 
 
   return <RightPanelWrapper>
-    <RightHead title="点歌" />
+    <RightHead title="房间" />
     <MInput onSearch={onSearch} hint="房间号" />
     <div className="absolute bottom-0 left-0 right-0 overflow-y-auto m_scroll" style={{ top: 120 }}>
       <Spin spinning={loading}  >
@@ -76,7 +76,7 @@ export const RoomListPanel: React.FC<IRoomListPanel> = ({ children }) => {
                 <div className="px-1 ml-auto border rounded-sm text-primary" style={{ borderColor: "var(--primary)" }}>ID:{item?.room_id}</div>
               </div>
               <div className="relative flex flex-1 rounded-sm bg-bg-light">
-                <img className="w-12 h-12 rounded-sm" src={CST.server_host + item?.user_head} alt="" />
+                <img className="w-12 h-12 rounded-sm" src={CST.static_url + item?.user_head} alt="" />
                 <div className="w-5/6 pl-2">
                   <div className="truncate">
                     {!!item?.room_online ? <span className="text-primary">({item?.room_online})</span> : null}

@@ -11,13 +11,16 @@ import instance from "./request";
 
 /** 发送消息 */
 export interface IAtUser {
+  // 参数字段
   user_id: number;//: 1,
   user_name: string;//: "机器人"
+  // 前台处理at字段
+  user_head?: string; // 头像
   type?: number; //0:送歌@  1:聊天@
 }
 interface ISendParam {
   room_id: string;//: 888,
-  atUser?: IAtUser;
+  atUser?: IAtUser | null;
   type: string;//: "img",
   where?: string;//: "channel",
   msg?: string;//: "hello <script>alert('Xss来了')</script>",

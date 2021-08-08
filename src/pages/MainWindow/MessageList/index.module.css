@@ -13,6 +13,9 @@
 .msglist::-webkit-scrollbar-track{
   background: transparent;
 } */
+.notice {
+  @apply bg-gray-50 text-icon-normal
+}
 .msglist {
   /* scroll-behavior: smooth; */
 }
@@ -30,6 +33,24 @@
 }
 .me .head {
   order: 1;
+}
+.content.loading::after {
+  content: " ";
+  width: 16px;
+  height: 16px;
+  background: url("../../../../assets/loading.gif");
+  position: absolute;
+  right: -20px;
+  top: 10px;
+}
+.me .content.loading::after {
+  content: " ";
+  width: 16px;
+  height: 16px;
+  background: url("../../../../assets/loading.gif");
+  position: absolute;
+  left: -20px;
+  top: 10px;  
 }
 .content::before {
   content: " ";

@@ -1,11 +1,12 @@
-import { message } from "antd";
+import { message, notification } from "antd";
 import { IAtUser, messageList } from "api/message";
 import { songLrc } from "api/song";
 import { useFetch } from "components/AddSongPanel";
 import { createModel } from "hox";
 import { useEffect, useMemo, useState } from "react";
+import { uuid } from "utils";
 import CST, { MT } from "utils/CST";
-import { player, useAudioModel } from "./audioModel";
+import { noticePlayer, player, preloadPlayer, useAudioModel } from "./audioModel";
 import { useGlobalModel } from "./globalModel";
 import { useSocketModel } from "./socketModel";
 import { useUserModel } from "./userModel";
@@ -43,7 +44,7 @@ function coreModule() {
   const [dialog, setDialog] = useState<any>(initDialog);
   const [now, setNow] = useState<any>(); // 当前播放信息
   // 消息列表
-  const { loading, data: msgs, setData: setMsgs, fetching: fetchingMsgs } = useFetch(messageList, parseInt(localStorage.getItem("pre_room_id") ?? "888"), { init: false });
+  const { loading, data: msgs = [], setData: setMsgs, fetching: fetchingMsgs } = useFetch(messageList, parseInt(localStorage.getItem("pre_room_id") ?? "888"), { init: false });
 
   // 隐藏所有对话框
   const hdieAll = () => {
@@ -70,43 +71,103 @@ function coreModule() {
     });
   }
 
+  const checkMax = () => {
+    if (msgs?.length > CST.historyMax) {
+      setMsgs((msgs: [any]) => {
+        msgs?.shift();
+        return msgs;
+      });
+    }
+  }
+
   // socket消息控制器
   function messageController(chatMsg: any) {
     const type = chatMsg['type'];
     const data = chatMsg['data'];
     switch (type) {
       case MT.PLAY_SONG:
-      case MT.NOW:
-        console.log(data);
         const song = data['song'];
         const user = data['user'];
-        const url = CST.server_host + "/song/playUrl/" + song['mid'];
+        console.log(song, user, useUserModel.data?.user);
+        if (user?.user_id == useUserModel.data?.user?.user_id) {
+          if (useGlobalModel.data?.notice) {
+            notification.info({ message: "正在播放你点的歌", description: `正在播放你点的歌：${song?.name}` });
+          }
+          if (useGlobalModel.data?.sound) {
+            noticePlayer.play();
+          }
+        }
+      case MT.NOW:
+        const nsong = data['song'];
+        const nuser = data['user'];
+        const url = CST.static_url + "/song/playUrl/" + nsong['mid'];
         player.src = url;
-        setNow({ ...song, uid: user?.user_id, uname: user?.user_name, url, since: data?.since });
-        fetchLrc(song.mid);
+        setNow({ ...nsong, uid: nuser?.user_id, uname: nuser?.user_name, url, since: data?.since });
+        fetchLrc(nsong.mid);
         break;
       case MT.ONLINE:
         setNow((n: any) => ({ ...n, onlineCount: data?.length || 0 }))
         break;
+      case MT.ADD_SONG:
+        const addSong = data['song'];
+        const addUser = data['user'];
+        if (data['at'] && data['at'].user_id == useUserModel.data?.user?.user_id) {
+          if (useGlobalModel.data?.sound) {
+            noticePlayer.play();
+          }
+          if (useGlobalModel.data?.notice) {
+            notification.info({ message: "有人给你送了一首歌", description: addUser?.user_name + " 送了一首 " + addSong?.name + " 给你！" })
+          }
+        }
+        setMsgs((msgs: any[]) => ([...msgs, chatMsg]));
+        break;
       // 摸一摸 和 系统消息一起
       case MT.SYSTEM:
-      case MT.ADD_SONG:
       case MT.PUSH:
       case MT.JOIN:
       case MT.TOUCH:
       case MT.PASS:
       case MT.SHUT_DOWN:
       case MT.REMOVE_BAN:
+      case MT.REMOVE_SONG:
+        // 系统通知 @all
+        if (!!data['@all']) {
+          console.log(data['user'], useUserModel.data?.user);
+          if (useGlobalModel.data?.notice && data['user']?.user_id != useUserModel.data?.user?.user_id) {
+            notification.info({ message: "@全体成员", description: data['content'] });
+          }
+          if (useGlobalModel.data?.sound && data['user']?.user_id != useUserModel.data?.user?.user_id) {
+            noticePlayer.play();
+          }
+          document.title = `@全体成员${data['user']?.user_name}：${data['content'].replace("@all", "")}`;
+          setTimeout(() => {
+            document.title = useSocketModel?.data?.room['room']?.room_name;
+          }, 3000)
+        }
         setMsgs((msgs: any[]) => ([...msgs, chatMsg]));
         break;
-      case MT.PRE_LOAD_URL: break;
+      case MT.PRE_LOAD_URL:
+        preloadPlayer.src = CST.server_host + data['url'];
+        preloadPlayer.load();
+        break;
+      case MT.IMG:
       case MT.TEXT:
+        if (data['at'] && data['at'].user_id == useUserModel.data?.user?.user_id) {
+          if (useGlobalModel.data?.sound) {
+            noticePlayer.play();
+          }
+          if (useGlobalModel.data?.notice) {
+            notification.info({ message: "被@提醒", description: data['user']?.user_name + "@了你！" })
+          }
+        }
         setMsgs((msgs: any[]) => ([...msgs, data]));
         break;
       case MT.BACK:
         const msgId = data['message_id'];
         setMsgs((msgs: any) => {
-          return msgs.filter((item: any) => item.message_id != msgId);
+          msgs = msgs.filter((item: any) => item.message_id != msgId);
+          msgs.push(chatMsg);
+          return msgs;
         }); break;
       case MT.CLEAR:
         setMsgs([]); break;
@@ -123,6 +184,11 @@ function coreModule() {
         break; // coming soon
       default: break;
     }
+  }
+
+  // 重新载入预加载
+  function reloadPreload() {
+
   }
 
   // 重新加载url
@@ -159,16 +225,14 @@ function coreModule() {
     setGlobleLoading(true);
     useUserModel.data?.fetchUserInfo().then((user: any) => { // 用户信息
       useSocketModel.data?.fetchRoomInfo(roomId).then(() => { // 房间信息
-        fetchingMsgs(roomId);
-        useSocketModel.data?.fetchWebsocketUrl(roomId).then((param) => { // 连接参数
-          useSocketModel.data?.setMsgCtrl(param, messageController); // 连接socket
-        })
+        fetchingMsgs(roomId).then(() => {
+          useSocketModel.data?.fetchWebsocketUrl(roomId).then((param) => { // 连接参数
+            useSocketModel.data?.setMsgCtrl(param, messageController); // 连接socket
+          });
+          pushAnno();
+        }).catch((e) => { })
       }).catch(e => { }).finally(() => setGlobleLoading(false));
-    }).catch(e => {
-      if (e === 403) {
-        reconnect();
-      }
-    }).finally(() => setGlobleLoading(false));
+    }).catch(e => { }).finally(() => { }); // 此处不能改变状态
   }
   // 切换房间后重连socket
   function changeRoom(roomId: number) {
@@ -177,7 +241,9 @@ function coreModule() {
     setGlobleLoading(true);
     return new Promise((resolve, reject) => {
       sd?.fetchRoomInfo(roomId).then(roomInfo => {
-        fetchingMsgs(roomId);
+        fetchingMsgs(roomId).then(() => {
+          pushAnno();
+        });
         sd?.fetchWebsocketUrl(roomId).then(data => {
           sd?.setMsgCtrl(data, messageController);
           localStorage.setItem("pre_room_id", roomId.toString());
@@ -188,6 +254,24 @@ function coreModule() {
         reject(e);
       }).finally(() => setGlobleLoading(false));
     })
+  }
+
+  // 添加公告
+  const pushAnno = () => {
+    const room = useSocketModel.data?.room;
+    const announcement = {
+      message_content: room?.room?.room_notice ?? "",// "dssfd"
+      message_createtime: Date.now() / 1000,// 1628415100
+      message_id: uuid(),// 154
+      message_resource: room?.room?.room_notice ?? "",// "dssfd"
+      message_status: 0,// 0
+      message_to: room?.room?.room_id,// 888
+      message_type: "text",// "text"
+      message_user: room?.admin?.user_id,// 100006
+      message_where: "channel",
+      user: room?.admin
+    }
+    setMsgs((msgs: [any]) => ([...msgs, announcement]));
   }
 
 
@@ -209,6 +293,10 @@ function coreModule() {
       }, 2000)
     }
   }
+
+  useEffect(() => {
+    checkMax();
+  }, [msgs])
 
   // 初始化
   useEffect(() => {

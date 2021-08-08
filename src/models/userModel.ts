@@ -34,6 +34,7 @@ interface IUser {
 }
 const userModel = () => {
   const [user, setUser] = useState<IUser>({ ...CST.guestUserInfo });
+  const [u, su] = useState<number | null>(null); // 查看其他用户信息的id
 
   // 获取我的信息
   async function fetchUserInfo() {
@@ -49,7 +50,7 @@ const userModel = () => {
   }
 
   return {
-    user, fetchUserInfo, resetUser
+    user, fetchUserInfo, resetUser, u, su
   }
 }
 

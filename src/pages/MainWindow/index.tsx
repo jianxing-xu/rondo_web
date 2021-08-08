@@ -16,7 +16,7 @@ import { MessageList } from "./MessageList";
 import { WaitQueuePanel } from "components/WaitQueuePanel";
 import { MySongsPanel } from "components/MySongsPanel";
 import { RoomListPanel } from "components/RoomListPanel";
-import { send } from "api/message";
+import { ProfilePanel } from "components/Profile";
 
 
 export default function MainWindow(): ReactElement {
@@ -57,6 +57,7 @@ export default function MainWindow(): ReactElement {
             {dialog.WAIT_QUEUE ? <WaitQueuePanel /> : null}
             {dialog.MY_SONGS ? <MySongsPanel /> : null}
             {dialog.ROOM_LIST ? <RoomListPanel /> : null}
+            {dialog.PROFILE ? <ProfilePanel /> : null}
           </div>
         </div>
       </div>

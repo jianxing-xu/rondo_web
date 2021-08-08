@@ -68,17 +68,28 @@ export const throttle = (fn: Function, rateTime: number) => {
     }
   }
 }
+export const debounce = (fn: Function, rateTime: number, immute: boolean = true) => {
+  let timer: any = null;
+  let iImmute = immute;
+  return (...args: any[]) => {
+    if (iImmute) {
+      fn.apply(this, args);
+      iImmute = false;
+    }
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, rateTime);
+  }
+}
 
 
 export const timeago = (time: Date | string | number) => {
   const date = new Date(time); // 给定时间
-  const yean = date.getFullYear();
-  const month = date.getMonth();
   const weekDay = date.getDay();
-  const day = date.getDate();
   const hours = date.getHours();
-  const minus = date.getMinutes();
-  const seconds = date.getSeconds();
 
   const now = dayjs();
   const nowDayZore = now.subtract(now.hour(), "hours");
@@ -86,15 +97,21 @@ export const timeago = (time: Date | string | number) => {
   const weekZore = nowDayZore.subtract(now.day() - 1, "d");
 
   const zTime = date.getTime();
-  // console.log(nowDayZore.valueOf(), zTime, nowDayZore.valueOf() + 86400);
-  if (zTime > nowDayZore.valueOf() && zTime <= nowDayZore.valueOf() + 86400) {
-    return `${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`;
+  if (zTime > nowDayZore.valueOf() && zTime <= nowDayZore.add(1, "d").valueOf()) {
+    return dayjs(zTime).format(`${hours < 12 ? "上午" : "下午"}HH:mm`);
   }
   if (zTime > preDayZore.valueOf() && zTime < nowDayZore.valueOf()) {
-    return `昨天 ${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`
+    return dayjs(zTime).format(`昨天 ${hours < 12 ? "上午" : "下午"}HH:mm`);
   }
-  if (zTime > weekZore.valueOf() && zTime < (weekZore.valueOf() + 604800)) {
-    return `星期${weekDay} ${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`
+  if (zTime > weekZore.valueOf() && zTime < (weekZore.add(1, "w").valueOf())) {
+    return dayjs(zTime).format(`星期${weekDay} ${hours < 12 ? "上午" : "下午"}HH:mm`);
   }
-  return dayjs(zTime).format("YYYY年MM月DD") + ` ${hours < 12 ? "上午" : "下午"} ${hours}:${minus}`;
+  return dayjs(zTime).format(`YYYY年MM月DD ${hours < 12 ? "上午" : "下午"}HH:mm`);
+}
+
+export const uuid = function () {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }

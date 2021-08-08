@@ -42,11 +42,9 @@ const socketModel = () => {
     }
   }
 
-  // useEffect(() => {
-  //   fetchRoomInfo(roomAuth.id).catch(e => {
-  //     console.log("提示密码输入等.....")
-  //   })
-  // }, [])
+  useEffect(() => {
+    document.title = room?.room?.room_name ?? "音乐大厅";
+  }, [room])
 
   return {
     roomAuth, setRoomAuth, fetchWebsocketUrl, setMsgCtrl, fetchRoomInfo, room

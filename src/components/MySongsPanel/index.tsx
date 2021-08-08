@@ -32,13 +32,14 @@ export const MySongsPanel: React.FC<MySongsPanel> = () => {
   const [pager, setPager] = useState<IUserSongsParam>({
     page_num: 1,
   });
-  const { data, setData, setParam, loading, fetching, err } = useFetch(userSongs, pager, { init: false });
+  const { data, setData, setParam, loading, fetching, err } = useFetch(userSongs, pager, { init: true });
 
   // 点歌处理
   const addSongHandle = (mid: any, index: number) => {
     attachLoading(index);
     addSong({ mid, roomId: roomAuth.id }).then(() => {
       message.success("点歌成功");
+      fetching();
     }).catch(e => { }).finally(() => attachLoading(index, false));
   }
   // 删除

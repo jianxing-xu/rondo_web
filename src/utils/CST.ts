@@ -8,7 +8,9 @@ export default {
     user_id: -1,
     user_name: "11",
   },
-  server_host: "http://localhost:8080/api"
+  static_url: "http://localhost:8080/api",
+  server_host: "http://localhost:8080/",
+  historyMax: 50 // 显示最大消息条数
 }
 export const MT = {
   ADD_SONG: "addSong", // , "点歌{user,song}"),

@@ -109,4 +109,10 @@ body {
   animation: head_bounce 0.2s ease 0s 3;
 }
 
+.dot2 {
+  display: -webkit-box; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+}
 

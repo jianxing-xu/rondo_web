@@ -2,7 +2,7 @@
 import { Tooltip, Slider, message } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import _ from './index.module.css';
-import { classNames } from 'utils';
+import { classNames, uuid } from 'utils';
 import SvgIcon from 'components/SvgIcon';
 import { useGlobalModel } from 'models/globalModel';
 import { useAudioModel } from 'models/audioModel';
@@ -10,6 +10,7 @@ import { useCoreModel } from 'models/coreModule';
 import { favSong, passSong } from 'api/song';
 import { useSocketModel } from 'models/socketModel';
 import { send } from 'api/message';
+import { useUserModel } from 'models/userModel';
 
 // 播放进度
 const MProgress: React.FC = () => {
@@ -38,7 +39,7 @@ interface IMessageInput {
 export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) => {
   const { changeSettings, volume } = useGlobalModel(model => [model.volume]);
   const { room } = useSocketModel(model => [model.room])
-  const { now, at, setAt } = useCoreModel(model => [model.now, model.at]);
+  const { now, at, setAt, setMsgs } = useCoreModel(model => [model.now, model.at]);
   const textRef = useRef<HTMLInputElement | any>();
 
   // ctrl+enter换行 enter发送
@@ -68,13 +69,36 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
     favSong(now.mid, room['room']?.room_id)
   }
   const handleSend = (value: string) => {
-    send({ room_id: room['room']?.room_id, type: "text", resource: value, msg: value, where: "channel", atUser: { user_id: 1, user_name: "xxx" } })
+    const msgParam = { loading: true, room_id: room['room']?.room_id, type: "text", resource: value, msg: value, where: "channel", atUser: at };
+    const tempMsg = {
+      message_content: value,
+      message_createtime: Date.now() / 1000,
+      message_id: uuid(),
+      message_resource: value,
+      message_status: 0,
+      message_type: "text",
+      message_user: useUserModel.data?.user?.user_id,
+      message_where: "channel",
+      loading: true,
+      user: useUserModel.data?.user
+    }
+    setMsgs((msgs: [any]) => ([...msgs, tempMsg]))
+
+    send(msgParam)
+      .then(() => {
+      }).catch(e => {
+      }).finally(() => {
+        setMsgs((msgs: [any]) => {
+          return msgs.filter((msg: any) => !msg.loading);
+        })
+      })
     setAt(null);
   }
 
   useEffect(() => {
-    console.log("AT", at);
-    textRef.current.value += `@${at?.user_name} `;
+    if (!!at && at?.user_name?.trim() && at.type == 1) {
+      textRef.current.value += `@${at?.user_name} `;
+    }
   }, [at])
 
   const iconName = useMemo(() => {
@@ -83,7 +107,6 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
     if (volume > 40 && volume < 80) return "zhongdengyinliang";
     return "zuidayinliang";
   }, [volume])
-  console.log("INPUT RENDER");
   return (
     <div className="h-32 bg-transparent">
       <div className="relative flex items-center h-8 px-2">
