@@ -14,6 +14,16 @@ export default defineConfig(({ mode }) => ({
         javascriptEnabled: true,
         modifyVars: {
           // "@popover-background": "#2e3238"
+          "@btn-primary-color": "var(--font-normal)",
+          "@btn-primary-bg": "var(--bg-light)",
+          "@label-color": "var(--font-normal)",
+          "@input-bg": "var(--bg-bg-light)",
+          "@input-color": "var(--font-normal)",
+          "@select-item-selected-color": "var(--font-normal)",
+          "@select-item-selected-bg": "var(--bg-light)",
+          "@select-background": "var(--bg-light)",
+          "@select-selection-item-bg": "var(--bg-light)",
+          "@select-selection-item-color": "var(--font-normal)",
         },
       }
     }

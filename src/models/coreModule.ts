@@ -29,7 +29,8 @@ const initDialog = {
   MY_SONGS: false,// "MySongs", // 我的歌单列表
   ONLINE_LIST: false,// "OnlineList", // 在线用户列表
   WAIT_QUEUE: false,// "WaitQueue", // 等待播放
-  PROFILE: false,// "Profile", // 我的信息
+  PROFILE: false,// "Profile", // 用户信息
+  PROFILE_ME: false, // 我的信息
   ROOM_CREATE: false,// "RoomCreate", // 创建房间
   ROOM_LIST: false,// "RoomList", // 房间列表
   ROOM_PWD: false,// "RoomPwd", // 输入房间密码

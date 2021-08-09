@@ -49,6 +49,7 @@ export const addSong = (data: IAddSongParam) => {
 export interface IUserSongsParam {
   page_num: number;
   page_size?: number;
+  user_id?: number; // 其他用户id用户查询其他用户的歌单
 }
 export const userSongs = (data: IUserSongsParam) => {
   return instance.get("/song/userSongs", { params: data });

@@ -63,8 +63,12 @@ export const removeBan = (roomId: number, banId: number): Promise<any> => {
 }
 
 /** 获取在线用户 */
-export const online = (roomId: number, sync: string = "yes"): Promise<any> => {
-  return instance.post(`/user/online/${roomId}/${sync}`);
+interface IOnline {
+  roomId: number;
+  sync?: string;
+}
+export const online = ({ roomId, sync = "yes" }: IOnline = { roomId: 888, sync: "yes" }): Promise<any> => {
+  return instance.get(`/user/online/${roomId}/${sync}`);
 }
 
 

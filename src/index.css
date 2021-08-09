@@ -61,6 +61,9 @@
 
 
 :root {
+
+  --boy: #759fd1;
+  --girl: #ef87a4;
   --bg: #eee;
   --primary: rgb(226 90 114);
   --normal-icon: #333;
@@ -114,5 +117,17 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   -webkit-line-clamp: 2;
+}
+input:-internal-autofill-selected {
+  background-color: var(--bg-light) !important;
+  color: var(--font-light) !important;
+}
+
+/** antd 颜色全局覆盖 */
+.ant-select-selection-item{
+  color: var(--font-normal) !important;
+}
+.ant-radio,.ant-radio-wrapper{
+  color: var(--font-normal) !important;
 }
 

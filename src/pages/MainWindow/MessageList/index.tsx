@@ -24,7 +24,7 @@ interface IMsgItemParam {
   msgItem: IMsgItme;
 }
 // 头像下拉次啊单
-const AvatarMenu = ({ user }: any) => {
+export const AvatarMenu = ({ user }: any) => {
   const { setAt, showDialog } = useCoreModel(model => []);
   const { su } = useUserModel(model => []);
   const { user_id, user_name, user_head } = user;
@@ -74,7 +74,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({ isMe = false, msgItem, showTime }) =
           </Popover> :
             <img onContextMenu={handleMenu} className={classNames("inline w-10 h-10 bg-gray-400 cursor-pointer", _.head)} src={CST.static_url + user?.user_head} alt="" onDoubleClick={e => touch(e)} onAnimationEnd={(e: any) => e.target.classList.remove("head_bounce")} />}
           {
-            isMe ? <Popover destroyTooltipOnHide color="var(--bg-light)" trigger="click" placement="bottom" className={classNames(_.msg_item_main_info,)} content={<div className="cursor-pointer text-icon-normal" onClick={handleBack}>撤回</div>} >
+            isMe ? <Popover destroyTooltipOnHide color="var(--bg-light)" placement="bottom" className={classNames(_.msg_item_main_info,)} content={<div className="cursor-pointer text-icon-normal" onClick={handleBack}>撤回</div>} >
               <div onContextMenu={handleMenu} className="cursor-pointer" >{ /* 区别 */}
                 {isMe ? null : <div className={_.name}><span>{user?.user_name}</span></div>}
                 <div className={classNames("max-w-sm px-3 py-2 bg-bgc relative rounded-sm", _.content, loading ? _.loading : '')}>

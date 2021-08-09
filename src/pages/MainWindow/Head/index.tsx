@@ -2,10 +2,11 @@ import { Tooltip } from 'antd';
 import { useCoreModel } from 'models/coreModule';
 import { useSocketModel } from 'models/socketModel';
 import React from 'react';
+import { POPKEY } from 'utils/CST';
 
 export const Head: React.FC = () => {
   const { room } = useSocketModel(model => [model.room]);
-  const { now } = useCoreModel(model => model.now);
+  const { now, showDialog } = useCoreModel(model => model.now);
   return (
     <div className="flex items-center justify-between px-4 py-2 text-lg border-b border-gray-300 dark:border-gray-600" style={{ backgroundColor: "transparent" }}>
       <Tooltip title="房间ID(房间号)">
@@ -21,7 +22,7 @@ export const Head: React.FC = () => {
           {room?.room?.room_name}
           (
           <Tooltip title="在线人数">
-            <span style={{ color: "var(--primary)" }} className="cursor-pointer">
+            <span onClick={() => showDialog(POPKEY.ONLINE_LIST)} style={{ color: "var(--primary)" }} className="cursor-pointer">
               <span className="text-current">{(now?.onlineCount || 0) + 2}</span>
               <svg className="inline icon" aria-hidden="true">
                 <use xlinkHref="#icon-PersonalCenteron"></use>

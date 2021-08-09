@@ -44,11 +44,12 @@ export const POPKEY = {
   MY_SONGS: "MY_SONGS", // 我的歌单列表
   ONLINE_LIST: "ONLINE_LIST", // 在线用户列表
   WAIT_QUEUE: "WAIT_QUEUE", // 等待播放
-  PROFILE: "PROFILE", // 我的信息
+  PROFILE: "PROFILE", // 用户信息
   ROOM_CREATE: "ROOM_CREATE", // 创建房间
   ROOM_LIST: "ROOM_LIST", // 房间列表
   ROOM_PWD: "ROOM_PWD", // 输入房间密码
   ROOM_SETTING: "ROOM_SETTING", // 房间设置
+  PROFILE_ME: "PROFILE_ME" // 我的信息
 }
 // MySetting: false,
 // MySongList: false,

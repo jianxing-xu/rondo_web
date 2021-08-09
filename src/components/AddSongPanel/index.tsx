@@ -32,7 +32,7 @@ export const useFetch = (fetch: (param: any) => Promise<any>, p?: any, config: I
   const [data, setData] = useState<any>();
   const [err, setErr] = useState<any>();
   const [loading, setLoading] = useState(false);
-  const fetching = (p?: any) => {
+  const fetching = async (p?: any) => {
     return new Promise((resolve, reject) => {
       setLoading(true);
       fetch(p ?? param).then(d => {

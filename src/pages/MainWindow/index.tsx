@@ -3,7 +3,7 @@ import { Drawer, message, Spin } from "antd";
 import MPopover from "components/MPopover";
 import { AddSongPanel } from "components/AddSongPanel";
 import { SideBar } from "components/SideBar";
-import { useCoreModel } from "models/coreModule";
+import { initModel, useCoreModel } from "models/coreModule";
 import { useSocketModel } from "models/socketModel";
 import { useUserModel } from "models/userModel";
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from "react";
@@ -17,6 +17,8 @@ import { WaitQueuePanel } from "components/WaitQueuePanel";
 import { MySongsPanel } from "components/MySongsPanel";
 import { RoomListPanel } from "components/RoomListPanel";
 import { ProfilePanel } from "components/Profile";
+import { OnlineListPanel } from "components/OnlineListPanel";
+import { ProfileMePanel } from "components/ProfileMePanel";
 
 
 export default function MainWindow(): ReactElement {
@@ -58,6 +60,8 @@ export default function MainWindow(): ReactElement {
             {dialog.MY_SONGS ? <MySongsPanel /> : null}
             {dialog.ROOM_LIST ? <RoomListPanel /> : null}
             {dialog.PROFILE ? <ProfilePanel /> : null}
+            {dialog.ONLINE_LIST ? <OnlineListPanel /> : null}
+            {dialog.PROFILE_ME ? <ProfileMePanel /> : null}
           </div>
         </div>
       </div>

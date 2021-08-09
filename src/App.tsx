@@ -11,7 +11,6 @@ const Login = lazy(() => import("./pages/Login/Login"));
 
 
 export default function App(): ReactElement {
-  initModel();
   useEffect(() => {
     Modal.info({
       content: "欢迎光临！",
