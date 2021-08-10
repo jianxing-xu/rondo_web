@@ -13,6 +13,7 @@ import songlist from '../../../assets/songlist.svg';
 import { Popover, Switch } from 'antd';
 import { useGlobalModel } from 'models/globalModel';
 import { useCoreModel } from 'models/coreModule';
+import { useHistory } from 'react-router-dom';
 
 
 const Btn: React.FC<any> = ({ src, title, ...props }) => {
@@ -45,12 +46,19 @@ interface ISideBar {
 }
 export const SideBar: React.FC<ISideBar> = ({ click = (type: string) => { } }) => {
   const { user } = useUserModel(model => [model.user]);
-  const { showDialog } = useCoreModel(model => [])
+  const history = useHistory();
+  const handleShow = () => {
+    if (user.user_id == -1) {
+      history.push("/login");
+    } else {
+      useCoreModel.data?.showDialog(POPKEY.PROFILE_ME)
+    }
+  }
   return <>
     <div className="z-10 w-20 bg-sidebar" onClick={e => e.stopPropagation()}>
       <div className={classNames(_.innerBar, "h-full w-14 mx-auto flex flex-col justify-between")}>
         <div className="flex flex-col justify-between flex-grow">
-          <div onClick={() => showDialog(POPKEY.PROFILE_ME)} style={{ background: `url('${CST.static_url}/${user?.user_head}') no-repeat center center`, backgroundSize: '100% 100%', backgroundColor: "var(--primary)" }} className={classNames("h-12 w-12 rounded-sm mx-auto mt-6", _.head)}></div>
+          <div onClick={handleShow} style={{ backgroundImage: `url('${CST.static_url}/${user?.user_head}')` }} className={classNames("h-12 w-12 rounded-sm mx-auto mt-6 cursor-pointer", _.head)}></div>
           <div className={classNames(_.btns, "flex-1 flex flex-col justify-center space-y-6")}>
             <Btn src={add_song} title="点歌" onClick={click.bind(this, "addsong")} />
             <Btn src={queue} title="已点" onClick={click.bind(this, "pointed")} />

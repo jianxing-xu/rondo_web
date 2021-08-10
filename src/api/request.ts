@@ -69,6 +69,8 @@ instance.interceptors.response.use(
           switch (myStatus) {
             case 1054: return Promise.reject(msg);
             case 1012: return Promise.reject(msg);
+            case 1039: return Promise.reject(myStatus);
+            case 1139: return Promise.reject(myStatus);
             default:
               message.error(msg || "响应错误"); return Promise.reject(msg);
           }

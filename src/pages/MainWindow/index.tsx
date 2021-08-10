@@ -8,7 +8,7 @@ import { useSocketModel } from "models/socketModel";
 import { useUserModel } from "models/userModel";
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { classNames } from "utils";
-import { POPKEY } from "utils/CST";
+import CST, { POPKEY } from "utils/CST";
 import { Head } from "./Head";
 import _ from './index.module.css';
 import { MessageInput } from "./MessageInput";
@@ -19,10 +19,14 @@ import { RoomListPanel } from "components/RoomListPanel";
 import { ProfilePanel } from "components/Profile";
 import { OnlineListPanel } from "components/OnlineListPanel";
 import { ProfileMePanel } from "components/ProfileMePanel";
+import { CreateRoomPanel } from "components/CreateRoomPanel";
+import { RoomSettingPanel } from "components/RoomSettingPanel";
+import { RoomPwdPanel } from "components/RoomPwdPanel";
 
 
 export default function MainWindow(): ReactElement {
   const { globalLoading, dialog, showDialog, hdieAll } = useCoreModel(model => [model.dialog, model.globalLoading]); // MainWindow 依赖CoreModel
+  const { room } = useSocketModel(model => [model.room]);
 
   const siderClick = useCallback((type: string) => {
     switch (type) {
@@ -49,9 +53,9 @@ export default function MainWindow(): ReactElement {
         {globalLoading ? <div className="absolute top-0 bottom-0 z-10 flex items-center justify-center w-full h-full left-14" style={{ backgroundColor: "var(--bg-loading)" }}>
           <Spin spinning={true}></Spin>
         </div> : null}
-        <div className={classNames("flex h-full mx-auto ", _.main_inner)}>
+        <div className={classNames("flex h-full mx-auto ", _.main_inner)} style={{ backgroundImage: `url(${CST.static_url + room?.room?.room_background || "public/bg.jpg"})` }}>
           <SideBar click={siderClick} /> {/** Head组件初始化userModel */}
-          <div className={classNames("relative bg-gray-200 dark:bg-sidebar dark:bg-opacity-80 bg-opacity-80 flex-1 flex flex-col justify-between", _.right_content)}>
+          <div className={classNames("relative bg-gray-200 dark:bg-sidebar dark:bg-opacity-95 bg-opacity-95 flex-1 flex flex-col justify-between", _.right_content)}>
             <Head /> {/** Head组件初始化socketModel */}
             <MessageList />
             <MessageInput />
@@ -62,6 +66,9 @@ export default function MainWindow(): ReactElement {
             {dialog.PROFILE ? <ProfilePanel /> : null}
             {dialog.ONLINE_LIST ? <OnlineListPanel /> : null}
             {dialog.PROFILE_ME ? <ProfileMePanel /> : null}
+            {dialog.ROOM_CREATE ? <CreateRoomPanel /> : null}
+            {dialog.ROOM_SETTING ? <RoomSettingPanel /> : null}
+            {dialog.ROOM_PWD ? <RoomPwdPanel /> : null}
           </div>
         </div>
       </div>

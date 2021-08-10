@@ -9,14 +9,15 @@ import { useCoreModel } from 'models/coreModule';
 import { useSocketModel } from 'models/socketModel';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { classNames } from 'utils';
-import CST from 'utils/CST';
+import CST, { POPKEY } from 'utils/CST';
 
 import _ from './index.module.css';
 
 export const RightHead = ({ title = "" }) => {
   return (
-    <div className="py-3 text-2xl">
-      {title}
+    <div className="flex justify-between py-3 text-2xl">
+      <div>{title}</div>
+      <div onClick={() => useCoreModel.data?.showDialog(POPKEY.ROOM_CREATE)} className="px-2 border rounded-sm cursor-pointer" style={{ borderColor: "var(--font-normal)" }}>创建房间</div>
     </div>
   );
 }
@@ -32,7 +33,7 @@ interface IRoomListPanel {
 }
 export const RoomListPanel: React.FC<IRoomListPanel> = ({ children }) => {
   const { room } = useSocketModel(model => [model.room]);
-  const { changeRoom, hdieAll } = useCoreModel(model => []);
+  const { changeRoom, hdieAll, showDialog } = useCoreModel(model => []);
   const { data, setData, loading, fetching, err } = useFetch(hotRooms);
 
   // 搜索处理
@@ -49,7 +50,7 @@ export const RoomListPanel: React.FC<IRoomListPanel> = ({ children }) => {
     }
     changeRoom(roomId).then(() => {
       hdieAll();
-    })
+    }).catch(e => { })
   }
 
 
@@ -73,7 +74,10 @@ export const RoomListPanel: React.FC<IRoomListPanel> = ({ children }) => {
                   <SvgIcon name={item?.room_type == 1 ? "erji" : item?.room_type == 4 ? "voice" : "erji"} className="mr-1 text-lg cursor-pointer text-primary" />
                 </Tooltip>
                 <div>{item?.room_name}</div>
-                <div className="px-1 ml-auto border rounded-sm text-primary" style={{ borderColor: "var(--primary)" }}>ID:{item?.room_id}</div>
+                <div className="px-1 ml-auto border rounded-sm text-primary" style={{ borderColor: "var(--primary)" }}>
+                  {item?.room_public == 1 ? <SvgIcon name="Octiconslock" className="inline-block text-primary" /> : null}
+                  ID:{item?.room_id}
+                </div>
               </div>
               <div className="relative flex flex-1 rounded-sm bg-bg-light">
                 <img className="w-12 h-12 rounded-sm" src={CST.static_url + item?.user_head} alt="" />

@@ -19,11 +19,11 @@ export default defineConfig(({ mode }) => ({
           "@label-color": "var(--font-normal)",
           "@input-bg": "var(--bg-bg-light)",
           "@input-color": "var(--font-normal)",
-          "@select-item-selected-color": "var(--font-normal)",
-          "@select-item-selected-bg": "var(--bg-light)",
+          // "@select-item-selected-color": "var(--font-normal)",
+          // "@select-item-selected-bg": "var(--bg-light)",
           "@select-background": "var(--bg-light)",
-          "@select-selection-item-bg": "var(--bg-light)",
-          "@select-selection-item-color": "var(--font-normal)",
+          // "@select-selection-item-bg": "var(--bg-light)",
+          // "@select-selection-item-color": "var(--font-normal)",
         },
       }
     }

@@ -19,13 +19,13 @@ export const hotRooms = () => {
 interface ICreateRoomParam {
   room_name: number; //"大厅",
   room_notice: number; //"欢迎来到rondo音乐大厅!",
-  room_public: number;// //1, 0:公开  1:加密
-  room_type: number;// 1, 4:电台
-  room_votepass: number;// 1, // 1开启投票点歌
-  room_votepercent: number;// 30,//投片比例
-  room_addsong: number;// 0, //  1:仅房主点歌
-  room_sendmsg: number;// 1, // 1：全员禁言  2：仅嘉宾发言  0：正常
-  room_robot: number;// 1 //1:开启机器人
+  // room_public: number;// //1, 0:公开  1:加密
+  room_type: number;//0:文字 1:点歌, 4:电台
+  // room_votepass: number;// 1, // 1开启投票点歌
+  // room_votepercent: number;// 30,//投片比例
+  // room_addsong: number;// 0, //  1:仅房主点歌
+  // room_sendmsg: number;// 1, // 1：全员禁言  2：仅嘉宾发言  0：正常
+  // room_robot: number;// 1 //1:开启机器人
 }
 export const createRoom = (data: ICreateRoomParam) => {
   return instance.post("/room/create", data);

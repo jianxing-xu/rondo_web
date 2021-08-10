@@ -1,3 +1,6 @@
 .head {
-
+  /* no-repeat center center 100% 100% */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
 }

@@ -20,12 +20,17 @@ export const allAttach = (data: IAllAttachParam) => {
 /** 上传图片 { file } */
 interface IUploadImgParam {
   file: File;
-  type: number; //0 头像   1: 聊天图片
+  type: string; //0 头像   1: 聊天图片
 }
-export const uploadImg = (formData: FormData) => {
-  return instance.post("/attach/uploadImg", formData);
+export const uploadImg = (param: IUploadImgParam) => {
+  const form = new FormData();
+  form.append("file", param.file);
+  form.append("type", param.type);
+  return instance.post("/attach/uploadImg", form);
 }
 /** 上传歌曲 { file } */
-export const uploadMusic = (formData: FormData) => {
-  return instance.post("/attach/uploadMusic", formData);
+export const uploadMusic = (file: File) => {
+  const form = new FormData();
+  form.append("file", file);
+  return instance.post("/attach/uploadMusic", form);
 }

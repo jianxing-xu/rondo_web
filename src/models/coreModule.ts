@@ -5,7 +5,7 @@ import { useFetch } from "components/AddSongPanel";
 import { createModel } from "hox";
 import { useEffect, useMemo, useState } from "react";
 import { uuid } from "utils";
-import CST, { MT } from "utils/CST";
+import CST, { MT, POPKEY } from "utils/CST";
 import { noticePlayer, player, preloadPlayer, useAudioModel } from "./audioModel";
 import { useGlobalModel } from "./globalModel";
 import { useSocketModel } from "./socketModel";
@@ -46,6 +46,9 @@ function coreModule() {
   const [now, setNow] = useState<any>(); // 当前播放信息
   // 消息列表
   const { loading, data: msgs = [], setData: setMsgs, fetching: fetchingMsgs } = useFetch(messageList, parseInt(localStorage.getItem("pre_room_id") ?? "888"), { init: false });
+
+  // 准备进入房间的id
+  const [pre, setPre] = useState<any>();
 
   // 隐藏所有对话框
   const hdieAll = () => {
@@ -232,16 +235,21 @@ function coreModule() {
           });
           pushAnno();
         }).catch((e) => { })
-      }).catch(e => { }).finally(() => setGlobleLoading(false));
+      }).catch(e => {
+        if (e === 1039) {
+          setPre(roomId);
+          showDialog(POPKEY.ROOM_PWD);
+          changeRoom(890);
+        }
+      }).finally(() => setGlobleLoading(false));
     }).catch(e => { }).finally(() => { }); // 此处不能改变状态
   }
   // 切换房间后重连socket
-  function changeRoom(roomId: number) {
+  function changeRoom(roomId: number, password = "") {
     const sd = useSocketModel.data;
-    message.success("房间切换中");
     setGlobleLoading(true);
     return new Promise((resolve, reject) => {
-      sd?.fetchRoomInfo(roomId).then(roomInfo => {
+      sd?.fetchRoomInfo(roomId, password).then(roomInfo => {
         fetchingMsgs(roomId).then(() => {
           pushAnno();
         });
@@ -251,7 +259,13 @@ function coreModule() {
           resolve("success")
         });
       }).catch(e => {
-        console.error("提示输入密码");
+        if (e === 1039 || e === 1139) {
+          setPre(roomId);
+          showDialog(POPKEY.ROOM_PWD);
+          if (e === 1139) {
+            message.error("房间密码密码错误");
+          }
+        }
         reject(e);
       }).finally(() => setGlobleLoading(false));
     })
@@ -303,7 +317,7 @@ function coreModule() {
   useEffect(() => {
     reconnect();
   }, [])
-  return { at, setAt, globalLoading, msgs, setMsgs, now, reconnect, messageController, changeRoom, tryPlay, getNowTime, dialog, hdieAll, showDialog };
+  return { pre, at, setAt, globalLoading, msgs, setMsgs, now, reconnect, messageController, changeRoom, tryPlay, getNowTime, dialog, hdieAll, showDialog };
 }
 
 export const useCoreModel = createModel(coreModule);

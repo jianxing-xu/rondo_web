@@ -47,13 +47,17 @@ export default function Login(): ReactElement {
       message.success("邮件发送成功");
     }).finally(() => setLoading(false));
   }
+  const handleVisitor = () => {
+    history.replace("/");
+    useCoreModel.data?.reconnect();
+  }
   return (
     <>
       <div className="flex items-center justify-center w-full h-full login">
         <div className={classNames("bg-gray-200 dark:bg-gray-700 w-3/5 rounded-lg p-8 divide-gray-700", style?.login_panel)}>
           <div className="flex items-center justify-between divide-x-2 divide-gray-400 login_panel_head">
             <h2 className="text-3xl font-semibold text-current">先登录后在一起玩耍</h2>
-            <a className="pl-8 text-lg text-gray-400 cursor-pointer select-none hover:text-gray-500">游客登录</a>
+            <a onClick={handleVisitor} className="pl-8 text-lg text-gray-400 cursor-pointer select-none hover:text-gray-500">游客登录</a>
           </div>
           <div className="pt-8 login_panel_form">
             <Form form={form} onFinish={finish}>

@@ -1,4 +1,5 @@
 import { Tooltip } from 'antd';
+import SvgIcon from 'components/SvgIcon';
 import { useCoreModel } from 'models/coreModule';
 import { useSocketModel } from 'models/socketModel';
 import React from 'react';
@@ -12,6 +13,10 @@ export const Head: React.FC = () => {
       <Tooltip title="房间ID(房间号)">
         <span className="px-1 text-sm font-bold border border-red-500 rounded-sm tag" style={{ color: "var(--primary)" }}>ID:{room?.room.room_id}</span>
       </Tooltip>
+      <span onClick={() => showDialog(POPKEY.ROOM_SETTING)} className="absolute flex items-center text-sm cursor-pointer select-none left-24">
+        <SvgIcon name="xingzhuang604" className="text-sm" />
+        <span style={{ paddingLeft: 2 }}>管理</span>
+      </span>
       <span className="flex items-center room_name">
         <Tooltip title="房间类型">
           <svg className="text-xl icon" style={{ color: "var(--primary)" }} aria-hidden="true">

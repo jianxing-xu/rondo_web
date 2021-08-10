@@ -57,7 +57,7 @@ export const ProfilePanel: React.FC<IProfilePanel> = ({ children }) => {
           {data?.user_head ? <img className="w-12 h-12 rounded-md" src={CST.static_url + data?.user_head} alt="" /> : <div className="h-12"></div>}
           <div className="flex items-center space-x-1">
             <span className="border">ID:{data?.user_id}</span>
-            <span className="border">QQ</span>
+            <span className="border">{data?.plat}</span>
             <i className="cursor-pointer text-icon-normal" title={data?.user_sex == 0 ? "boy" : "girl"}><SvgIcon name={data?.user_sex == 0 ? "boy" : "girl"} className={classNames("text-lg", data?.user_sex == 0 ? _.boy : _.girl)} /></i>
             <i className="cursor-pointer text-icon-normal" title={data?.user_device == "mac" ? "Mac在线" : "Windows在线"}><SvgIcon name={data?.user_device == "mac" ? "mac" : "iconfontwindows"} /></i>
           </div>

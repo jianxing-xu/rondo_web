@@ -4,6 +4,7 @@ import { createModel } from "hox";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import CST, { TOKEN_KEY } from "utils/CST";
+import { useCoreModel } from "./coreModule";
 import { useSocketModel } from "./socketModel";
 
 interface IUser {
@@ -49,8 +50,14 @@ const userModel = () => {
     setUser({ ...CST.guestUserInfo });
   }
 
+  function logout() {
+    resetUser();
+    useCoreModel.data?.hdieAll();
+    useCoreModel.data?.reconnect();
+  }
+
   return {
-    user, fetchUserInfo, resetUser, u, su
+    user, fetchUserInfo, resetUser, u, su, setUser, logout
   }
 }
 

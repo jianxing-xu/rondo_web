@@ -47,7 +47,7 @@ const socketModel = () => {
   }, [room])
 
   return {
-    roomAuth, setRoomAuth, fetchWebsocketUrl, setMsgCtrl, fetchRoomInfo, room
+    roomAuth, setRoomAuth, fetchWebsocketUrl, setMsgCtrl, fetchRoomInfo, room, setRoom
   }
 }
 

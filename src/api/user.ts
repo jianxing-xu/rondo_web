@@ -41,7 +41,7 @@ interface IUpdateUserParam {
   userPassword: string;
 }
 export const updateUser = (data: IUpdateUserParam): Promise<any> => {
-  return instance.post("/user/update");
+  return instance.post("/user/update", data);
 }
 /** 更新密码 */
 export const updatePwd = (old: string, newPwd: string): Promise<any> => {

@@ -11,7 +11,6 @@ import { Popover, notification, message } from 'antd';
 import { createPortal } from 'react-dom';
 import { useGlobalModel } from 'models/globalModel';
 import { noticePlayer } from 'models/audioModel';
-import { MessageInput } from '../MessageInput';
 
 
 export const PortalWidget: React.FC<any> = ({ children, ...props }) => {
@@ -61,6 +60,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({ isMe = false, msgItem, showTime }) =
   const handleMenu = () => { }
   // 处理撤回消息
   const handleBack = () => {
+    if (!Number.isInteger(message_id)) return message.error("你不能撤回公告");
     backMessage(room['room']?.room_id, message_id).then(() => { })
   }
 
