@@ -115,3 +115,34 @@ export const uuid = function () {
     return v.toString(16);
   });
 }
+
+/*光标处插入html代码，参数是String类型的html代码，例子："<p>猪头诺</p>"*/
+export const insertHtml = (html: any) => {
+  let sel: any, range: any;
+  if (window.getSelection) {
+    // IE9 或 非IE浏览器
+    sel = window.getSelection();
+    if (sel.getRangeAt && sel.rangeCount) {
+      range = sel.getRangeAt(0);
+      range.deleteContents();
+      // Range.createContextualFragment() would be useful here but is
+      // non-standard and not supported in all browsers (IE9, for one)
+      var el = document.createElement("div");
+      el.innerHTML = html;
+      var frag = document.createDocumentFragment(),
+        node, lastNode;
+      while ((node = el.firstChild)) {
+        lastNode = frag.appendChild(node);
+      }
+      range.insertNode(frag);
+      // Preserve the selection
+      if (lastNode) {
+        range = range.cloneRange();
+        range.setStartAfter(lastNode);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+  }
+}

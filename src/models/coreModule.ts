@@ -1,7 +1,7 @@
 import { message, notification } from "antd";
 import { IAtUser, messageList } from "api/message";
 import { songLrc } from "api/song";
-import { useFetch } from "components/AddSongPanel";
+import { useFetch } from 'hooks/useFetch';
 import { createModel } from "hox";
 import { useEffect, useMemo, useState } from "react";
 import { uuid } from "utils";
@@ -19,7 +19,7 @@ export const initModel = () => {
   const au = useAudioModel(model => []);
   const core = useCoreModel(model => []);
 
-  return { core, au, usr, sm, sys };
+  return { au, usr, sm, sys };
 }
 
 let tryCount = 0;
@@ -76,7 +76,7 @@ function coreModule() {
   }
 
   const checkMax = () => {
-    if (msgs?.length > CST.historyMax) {
+    if (msgs?.length && msgs.length > CST.historyMax) {
       setMsgs((msgs: [any]) => {
         msgs?.shift();
         return msgs;
@@ -155,6 +155,17 @@ function coreModule() {
         preloadPlayer.load();
         break;
       case MT.IMG:
+        console.log(msgs);
+        setMsgs((msgs: any) => {
+          return msgs.map((item: any) => {
+            if (item.loading) {
+              delete item.loading;
+              item.message_id = data['message_id'];
+            }
+            return item;
+          })
+        });
+        break;
       case MT.TEXT:
         if (data['at'] && data['at'].user_id == useUserModel.data?.user?.user_id) {
           if (useGlobalModel.data?.sound) {
@@ -219,9 +230,6 @@ function coreModule() {
   function getNowTime(since: any = now?.since ?? Date.now() / 1000) {
     return (Date.now() / 1000) - since;
   }
-  const nowTime = useMemo(() => {
-    return (Date.now() / 1000) - now?.since ?? 0;
-  }, [now])
 
   // 获取用户信息后连接socket
   function reconnect() {
@@ -236,13 +244,25 @@ function coreModule() {
           pushAnno();
         }).catch((e) => { })
       }).catch(e => {
+        // 进入加密房间提示输入密码，并先进入大厅
         if (e === 1039) {
           setPre(roomId);
           showDialog(POPKEY.ROOM_PWD);
-          changeRoom(890);
+          changeRoom(888);
+        }
+        // 游客第一次加载加密自动跳转到大厅
+        if (e === 1008) {
+          changeRoom(888)
+        }
+        if (e == 403) {
+          reconnect();
         }
       }).finally(() => setGlobleLoading(false));
-    }).catch(e => { }).finally(() => { }); // 此处不能改变状态
+    }).catch(e => {
+      if (e == 403) {
+        reconnect();
+      }
+    }).finally(() => { }); // 此处不能改变状态
   }
   // 切换房间后重连socket
   function changeRoom(roomId: number, password = "") {
@@ -265,6 +285,9 @@ function coreModule() {
           if (e === 1139) {
             message.error("房间密码密码错误");
           }
+        }
+        if (e == 403) {
+          reconnect();
         }
         reject(e);
       }).finally(() => setGlobleLoading(false));

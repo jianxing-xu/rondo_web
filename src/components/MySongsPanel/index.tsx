@@ -1,6 +1,6 @@
 import { message, Spin } from 'antd';
 import { addSong, ISearchSongParam, IUserSongsParam, removeFav, searchSong, userSongs } from 'api/song';
-import { useFetch } from 'components/AddSongPanel';
+import { useFetch } from 'hooks/useFetch';
 import { MInput } from 'components/MInput';
 import { MPopoverContext } from 'components/MPopover';
 import { useCoreModel } from 'models/coreModule';

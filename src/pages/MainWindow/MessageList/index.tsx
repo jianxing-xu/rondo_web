@@ -7,7 +7,7 @@ import { useUserModel } from 'models/userModel';
 import CST, { MT, POPKEY } from 'utils/CST';
 import { backMessage, mo } from 'api/message';
 import { useSocketModel } from 'models/socketModel';
-import { Popover, notification, message } from 'antd';
+import { Popover, notification, message, Spin } from 'antd';
 import { createPortal } from 'react-dom';
 import { useGlobalModel } from 'models/globalModel';
 import { noticePlayer } from 'models/audioModel';
@@ -79,7 +79,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({ isMe = false, msgItem, showTime }) =
                 {isMe ? null : <div className={_.name}><span>{user?.user_name}</span></div>}
                 <div className={classNames("max-w-sm px-3 py-2 bg-bgc relative rounded-sm", _.content, loading ? _.loading : '')}>
                   {
-                    type == "text" ? content : type == "img" ? (<img src={CST.static_url + content} />) : null
+                    type == "text" ? content : type == "img" ? (<img src={content} />) : null
                   }
                 </div>
               </div>
@@ -87,7 +87,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({ isMe = false, msgItem, showTime }) =
               {isMe ? null : <div className={_.name}><span>{user?.user_name}</span></div>}
               <div className={classNames("max-w-sm px-3 py-2 bg-bgc relative rounded-sm", _.content, loading ? _.loading : '')}>
                 {
-                  type == "text" ? content : type == "img" ? (<img src={CST.static_url + content} />) : null
+                  type == "text" ? content : type == "img" ? (<img src={content} />) : null
                 }
               </div>
             </div>
@@ -190,19 +190,20 @@ interface IMsgItme {
 export const MessageList: React.FC = () => {
   const boxRef = useRef<any>();
   const [toTop, setTotop] = useState(false);
-  const { msgs } = useCoreModel(model => [model.msgs]);
+  const { msgs, globalLoading } = useCoreModel(model => [model.msgs, model.globalLoading]);
   const { user } = useUserModel(model => [model.user]);
   useEffect(() => {
-    console.log(msgs);
     if (!!!msgs || msgs?.length == 0) return;
     const height = boxRef.current?.scrollHeight;
     if (toTop) return;
-    boxRef.current.scrollTop = height + 100000;
+    setTimeout(() => {
+      boxRef.current.scrollTop = height + 100000;
+    }, 100)
   }, [msgs])
   const onScroll = (e: any) => {
     const top = e.target.scrollTop + e.target.clientHeight;
     const height = e.target.scrollHeight;
-    if (height - top > 40) {
+    if (height - top > 80) {
       if (toTop) return;
       setTotop(true);
     } else {
@@ -211,24 +212,29 @@ export const MessageList: React.FC = () => {
     }
   }
   return (
-    <div ref={boxRef} onScroll={debounce(onScroll, 50)} className={classNames("relative flex-grow px-6 py-3 overflow-y-scroll bg-transparent m_scroll overscroll-none", _.msglist)}>
-      {toTop ? <div onClick={() => boxRef.current.scrollTo(0, boxRef.current.scrollHeight + 1000)} className="fixed p-2 border cursor-pointer bottom-32 right-3 bg-bg-light" style={{ borderColor: "var(--icon-normal)" }}>回到底部</div> : null}
-      {
-        msgs?.map((item: IMsgItme, index: number) => {
-          let showTime = true;
-          if (index >= 1) {
-            showTime = (item.message_createtime - (msgs[index - 1].message_createtime)) > 300;
-          }
-          if (item?.type) {
-            return <NoticeMsg key={item?.id} noticeItem={item} showTime={showTime} />
-          }
-          const isMe = item.message_user == user.user_id;
-          if (item.loading) {
-            console.log(item);
-          }
-          return <MsgItem key={item?.message_id} isMe={isMe} msgItem={item} showTime={showTime}></MsgItem>
-        })
-      }
-    </div >
+    <>
+      {globalLoading ? <div className="absolute top-0 bottom-0 left-0 z-10 flex items-center justify-center w-full h-full" style={{ backgroundColor: "var(--bg-loading)" }}>
+        <Spin spinning={true}></Spin>
+      </div> : null}
+      <div ref={boxRef} onScroll={debounce(onScroll, 50)} className={classNames("relative flex-grow px-6 pt-3 overflow-y-scroll bg-transparent m_scroll overscroll-none", _.msglist)}>
+        {toTop ? <div onClick={() => boxRef.current.scrollTo(0, boxRef.current.scrollHeight + 1000)} className="fixed p-2 border cursor-pointer bottom-32 right-3 bg-bg-light" style={{ borderColor: "var(--icon-normal)" }}>回到底部</div> : null}
+        {
+          msgs?.map((item: IMsgItme, index: number) => {
+            let showTime = true;
+            if (index >= 1) {
+              showTime = (item.message_createtime - (msgs[index - 1].message_createtime)) > 300;
+            }
+            if (item?.type) {
+              return <NoticeMsg key={item?.id} noticeItem={item} showTime={showTime} />
+            }
+            const isMe = item.message_user == user.user_id;
+            if (item.loading) {
+              console.log(item);
+            }
+            return <MsgItem key={item?.message_id} isMe={isMe} msgItem={item} showTime={showTime}></MsgItem>
+          })
+        }
+      </div >
+    </>
   );
 }

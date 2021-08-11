@@ -1,7 +1,7 @@
 import { Popover, Spin } from 'antd';
 import { mo } from 'api/message';
 import { online } from 'api/user';
-import { useFetch } from 'components/AddSongPanel';
+import { useFetch } from 'hooks/useFetch';
 import { useSocketModel } from 'models/socketModel';
 import { AvatarMenu } from 'pages/MainWindow/MessageList';
 import React, { useEffect } from 'react';

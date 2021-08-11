@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Select, Upload } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { uploadImg } from 'api/attach';
 import { updateRoom } from 'api/room';
-import { useFetch } from 'components/AddSongPanel';
+import { useFetch } from 'hooks/useFetch';
 
 import { useSocketModel } from 'models/socketModel';
 import React, { useEffect, useState } from 'react';

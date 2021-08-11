@@ -2,7 +2,7 @@ import { message, Spin, Tooltip } from 'antd';
 import { hotRooms } from 'api/room';
 import { userSongs } from 'api/song';
 import { userInfo } from 'api/user';
-import { useFetch } from 'components/AddSongPanel';
+import { useFetch } from 'hooks/useFetch';
 import { MInput } from 'components/MInput';
 import SvgIcon from 'components/SvgIcon';
 import { useCoreModel } from 'models/coreModule';

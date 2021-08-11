@@ -1,7 +1,7 @@
 
 
 import { Button, Form, Input, message } from 'antd';
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import { classNames, getOsInfo } from "utils";
@@ -13,6 +13,7 @@ import { sendMail } from 'api/common';
 import CST from 'utils/CST';
 import { useGlobalModel } from 'models/globalModel';
 import { useCoreModel } from 'models/coreModule';
+import { useSocketModel } from 'models/socketModel';
 
 
 
@@ -53,8 +54,10 @@ export default function Login(): ReactElement {
   }
   return (
     <>
-      <div className="flex items-center justify-center w-full h-full login">
-        <div className={classNames("bg-gray-200 dark:bg-gray-700 w-3/5 rounded-lg p-8 divide-gray-700", style?.login_panel)}>
+      <div className="z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-bgc">
+        <div style={{ backgroundImage: `url("/public/bg.jpg")` }} className="fixed top-0 bottom-0 left-0 right-0 w-full h-full dark:opacity-30 opacity-60"></div>
+
+        <div className={classNames("bg-gray-200 dark:bg-gray-700 w-3/5 rounded-lg p-8 divide-gray-700 z-10", style?.login_panel)}>
           <div className="flex items-center justify-between divide-x-2 divide-gray-400 login_panel_head">
             <h2 className="text-3xl font-semibold text-current">先登录后在一起玩耍</h2>
             <a onClick={handleVisitor} className="pl-8 text-lg text-gray-400 cursor-pointer select-none hover:text-gray-500">游客登录</a>
@@ -86,6 +89,7 @@ export default function Login(): ReactElement {
             </Form>
           </div>
         </div>
+
       </div>
     </>
   );

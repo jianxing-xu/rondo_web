@@ -1,8 +1,8 @@
 import { Button, Form, Input, message, Radio, Select, Spin, Upload } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { uploadImg } from 'api/attach';
-import { myInfo, updateUser } from 'api/user';
-import { useFetch } from 'components/AddSongPanel';
+import { updateUser } from 'api/user';
+import { useFetch } from 'hooks/useFetch';
 import { useUserModel } from 'models/userModel';
 import React, { useEffect } from 'react';
 import CST from 'utils/CST';

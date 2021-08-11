@@ -1,8 +1,8 @@
 
-import { Tooltip, Slider, message } from 'antd';
+import { Tooltip, Slider, message, Upload, Modal } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import _ from './index.module.css';
-import { classNames, uuid } from 'utils';
+import { classNames, insertHtml, uuid } from 'utils';
 import SvgIcon from 'components/SvgIcon';
 import { useGlobalModel } from 'models/globalModel';
 import { useAudioModel } from 'models/audioModel';
@@ -11,6 +11,8 @@ import { favSong, passSong } from 'api/song';
 import { useSocketModel } from 'models/socketModel';
 import { send } from 'api/message';
 import { useUserModel } from 'models/userModel';
+import CST from 'utils/CST';
+import { uploadImg } from 'api/attach';
 
 // 播放进度
 const MProgress: React.FC = () => {
@@ -32,6 +34,20 @@ const Lyricline: React.FC = () => {
   )
 }
 
+// 表情
+const Phiz: React.FC<{ putChar?: Function }> = ({ putChar = () => { } }) => {
+  return (
+    <div onClick={e => e.stopPropagation()} className="absolute flex flex-col p-2 rounded-lg shadow-md left-6 bg-bg-light" style={{ height: "19rem", width: 387, top: '-19rem' }}>
+
+      <div className="flex flex-wrap flex-grow overflow-y-scroll m_scroll">
+        {
+          new Array(30).fill("", 0, 30).map((e, i) => {
+            return <img onClick={() => putChar(CST.static_url + `/res/images/emoji/${i + 1}.png`)} className="w-12 h-12 mt-2 ml-2 cursor-pointer" key={i} src={CST.static_url + `/res/images/emoji/${i + 1}.png`} alt="" />
+          })
+        }
+      </div>
+    </div>);
+}
 
 interface IMessageInput {
   onEnter?: (msgVlaue: string) => void;
@@ -41,11 +57,12 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
   const { room } = useSocketModel(model => [model.room])
   const { now, at, setAt, setMsgs } = useCoreModel(model => [model.now, model.at]);
   const textRef = useRef<HTMLInputElement | any>();
-
+  const pref = useRef<any>();
   // ctrl+enter换行 enter发送
   const handleInputKeyDown = (e: any) => {
     if (e.key == "Enter" && e.ctrlKey) {
-      e.target.value += "\n";
+      insertHtml("<br/>");
+      return false;
     } else if (e.key == "Enter") {
       e.preventDefault();
       popmsg();
@@ -54,11 +71,11 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
   }
 
   const popmsg = () => {
-    const value = textRef.current.value;
+    const value = textRef.current.innerHTML.replace("<br />", "");
     if (!!!value || !!!value?.trim()) return;
-    onEnter(textRef.current.value);
+    onEnter(value);
     handleSend(value);
-    textRef.current.value = "";
+    textRef.current.innerHTML = "<br />";
   }
   const handlePass = () => {
     if (!now.mid) return message.info("暂无正在播放歌曲");
@@ -68,15 +85,15 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
     if (!now.mid) return message.info("暂无正在播放歌曲");
     favSong(now.mid, room['room']?.room_id)
   }
-  const handleSend = (value: string) => {
-    const msgParam = { loading: true, room_id: room['room']?.room_id, type: "text", resource: value, msg: value, where: "channel", atUser: at };
+  const handleSend = (value: string, type = "text") => {
+    const msgParam = { loading: true, room_id: room['room']?.room_id, type, resource: value, msg: value, where: "channel", atUser: at };
     const tempMsg = {
       message_content: value,
       message_createtime: Date.now() / 1000,
       message_id: uuid(),
       message_resource: value,
       message_status: 0,
-      message_type: "text",
+      message_type: type,
       message_user: useUserModel.data?.user?.user_id,
       message_where: "channel",
       loading: true,
@@ -87,17 +104,14 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
     send(msgParam)
       .then(() => {
       }).catch(e => {
-      }).finally(() => {
-        setMsgs((msgs: [any]) => {
-          return msgs.filter((msg: any) => !msg.loading);
-        })
-      })
+        setMsgs((msgs: [any]) => msgs.filter((item: any) => !item.loading));
+      }).finally(() => { })
     setAt(null);
   }
 
   useEffect(() => {
     if (!!at && at?.user_name?.trim() && at.type == 1) {
-      textRef.current.value += `@${at?.user_name} `;
+      textRef.current.innerHTML += `@${at?.user_name} `;
     }
   }, [at])
 
@@ -107,15 +121,39 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
     if (volume > 40 && volume < 80) return "zhongdengyinliang";
     return "zuidayinliang";
   }, [volume])
+
+  const [pshow, setPshow] = useState(false);
+  const hide = () => setPshow(false);
+  useEffect(() => {
+    document.addEventListener("click", hide, false);
+    return document.removeEventListener("click", hide, false);
+  }, []);
+
+  const handleUpload = (e: any) => {
+    const hide = message.loading("上传中...")
+    if (["image/jpeg", "image/png", "image/gif"].includes(e?.file?.type)) {
+      uploadImg({ file: e.file, type: "1" }).then((res: any) => {
+        const path = CST.static_url + res.attach_path;
+        Modal.confirm({
+          title: "确定发送图片吗？",
+          content: <img src={path} alt="" />,
+          onOk() {
+            handleSend(path, "img");
+          }
+        });
+      }).finally(() => hide());
+    } else {
+      message.error("文件类型不匹配");
+    }
+  }
   return (
     <div className="h-32 bg-transparent">
       <div className="relative flex items-center h-8 px-2">
-        <Tooltip title="表情">
-          <SvgIcon name="biaoqing" className="text-2xl text-icon-normal hover:text-primary" />
-        </Tooltip>
-        <Tooltip title="图片">
-          <SvgIcon name="tupian" className="ml-2 text-2xl text-icon-normal hover:text-primary" />
-        </Tooltip>
+        {pshow ? <Phiz putChar={(v: any) => handleSend(v, "img")} /> : null}
+        <SvgIcon click={() => setPshow(p => !p)} name="biaoqing" className="text-2xl text-icon-normal hover:text-primary" />
+        <Upload showUploadList={false} customRequest={handleUpload} className="flex items-center self-center justify-center pl-2 text-xl text-icon-normal hover:text-primary">
+          <SvgIcon name="tupian" className="text-2xl text-icon-normal hover:text-primary" />
+        </Upload>
         <div>{ }</div>
         <div className="flex items-center ml-auto space-x-2">
           <span className="text-sm">{now?.name ?? ""}</span>
@@ -135,7 +173,9 @@ export const MessageInput: React.FC<IMessageInput> = ({ onEnter = () => { } }) =
         <MProgress />
       </div>
       <div className="relative h-24">
-        <textarea ref={textRef} onKeyDown={e => handleInputKeyDown(e)} className={classNames("w-full bg-transparent border-0 outline-none resize-none h-18", _.input)}></textarea>
+        <pre suppressContentEditableWarning contentEditable ref={textRef} onKeyDown={e => handleInputKeyDown(e)} className={classNames("w-full h-20 bg-transparent border-0 outline-none resize-none h-18 box-border pl-2 pt-2 overflow-y-auto m_scroll", _.input)}>
+          {/* <pre onKeyDown={e => handleInputKeyDown(e)} className="h-24 pt-2 pl-2 overflow-x-hidden overflow-y-auto border-0 outline-none"></pre> */}
+        </pre>
         <Tooltip title="点击复制">
           <Lyricline />
         </Tooltip>

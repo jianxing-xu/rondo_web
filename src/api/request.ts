@@ -69,17 +69,19 @@ instance.interceptors.response.use(
           switch (myStatus) {
             case 1054: return Promise.reject(msg);
             case 1012: return Promise.reject(msg);
-            case 1039: return Promise.reject(myStatus);
-            case 1139: return Promise.reject(myStatus);
+            case 1039: return Promise.reject(myStatus);//需要输入房间密码
+            case 1139: return Promise.reject(myStatus);//房间密码错误
+            case 1008:
+              message.error("游客禁止访问")
+              return Promise.reject(myStatus);//游客不允许获取加密房间信息
             default:
               message.error(msg || "响应错误"); return Promise.reject(msg);
           }
         case 403:
-          useUserModel.data?.resetUser();
           localStorage.removeItem(TOKEN_KEY.ACCESS);
-          setTimeout(() => {
-            useCoreModel.data?.reconnect();
-          }, 100)
+          // setTimeout(() => {
+          // useCoreModel.data?.reconnect();
+          // }, 100)
           return Promise.reject(status);
         case 500:
           message.error(msg || "系统错误"); return Promise.reject(msg);;

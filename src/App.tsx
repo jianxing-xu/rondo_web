@@ -1,25 +1,18 @@
+// import Head from "components/Head";
 import Head from "components/Head";
 import LoadingOrError from "components/LoadingOrError";
-import { player } from "models/audioModel";
-import React, { lazy, ReactElement, Suspense, useEffect } from "react";
-import { HashRouter, Route, Switch } from "react-router-dom";
-import { Modal } from 'antd';
 import { initModel } from "models/coreModule";
+import React, { lazy, ReactElement, Suspense, useEffect, useState } from "react";
+import { HashRouter, Route, Switch } from "react-router-dom";
 
 const MainWindow = lazy(() => import("./pages/MainWindow"));
 const Login = lazy(() => import("./pages/Login/Login"));
 
 
+
 export default function App(): ReactElement {
-  useEffect(() => {
-    Modal.info({
-      content: "欢迎光临！",
-      async onOk() {
-        player.play();
-      }
-    });
-  }, []);
   console.log("APP RENDER");
+  initModel();
   return (
     <>
       <Head title="App" />
