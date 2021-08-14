@@ -1,29 +1,31 @@
-// import Head from "components/Head";
+import { Modal } from "antd";
 import Head from "components/Head";
 import LoadingOrError from "components/LoadingOrError";
-import { initModel } from "models/coreModule";
-import React, { lazy, ReactElement, Suspense, useEffect, useState } from "react";
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { player } from "models/audioModel";
+import React, { lazy, ReactElement, Suspense, useEffect } from "react";
+import { Route, Router, Switch } from "react-router-dom";
+import { createHashHistory } from "history";
+import { useCoreModel } from "models/coreModule";
 
 const MainWindow = lazy(() => import("./pages/MainWindow"));
 const Login = lazy(() => import("./pages/Login/Login"));
 
-
+export const hashHistory = createHashHistory();
 
 export default function App(): ReactElement {
   console.log("APP RENDER");
-  initModel();
+  // useCoreModel(m => []);
   return (
     <>
       <Head title="App" />
-      <HashRouter>
+      <Router history={hashHistory}>
         <Suspense fallback={<LoadingOrError />}>
           <Switch>
             <Route exact path="/" component={MainWindow} />
             <Route path="/login" component={Login} />
           </Switch>
         </Suspense>
-      </HashRouter>
+      </Router>
     </>
   );
 }

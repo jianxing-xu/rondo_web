@@ -7,7 +7,7 @@
   fill: currentColor;
   overflow: hidden;
 }
-.m_scroll::-webkit-scrollbar{
+.m_scroll::-webkit-scrollbar {
   background-color: transparent;
   width: 2px;
 }
@@ -18,7 +18,7 @@
   background-color: gray;
   width: 3px;
 }
-.m_scroll::-webkit-scrollbar-track{
+.m_scroll::-webkit-scrollbar-track {
   background: transparent;
 }
 
@@ -59,10 +59,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
+input {
+  @apply ring-0 !important;
+  outline: none;
+  border: 0;
+}
 
 :root {
-
   --boy: #759fd1;
   --girl: #ef87a4;
   --bg: #eee;
@@ -72,6 +75,8 @@
   --font-normal: rgba(55, 65, 81);
   --bg-light: #dcd4d4;
   --bg-loading: rgba(207, 206, 206, 0.5);
+  --bg-revers: #333;
+  --txt-revers: #eee;
 }
 .dark {
   --bg: #333;
@@ -81,6 +86,8 @@
   --font-normal: rgba(209, 213, 219);
   --bg-light: #383838;
   --bg-loading: rgba(75, 75, 75, 0.5);
+  --bg-revers: #eee;
+  --txt-revers: #333;
 }
 @keyframes resetBg {
   to {
@@ -88,17 +95,17 @@
     background: var(--bg-light);
   }
 }
-input{
-  animation: resetBg .1s forwards;
+input {
+  animation: resetBg 0.1s forwards;
 }
-input{
+input {
   height: 0;
-  padding: 1.2em .5em !important;
-  caret-color:#fff;
+  padding: 1em 0.5em !important;
+  caret-color: #fff;
   background-clip: content-box !important;
 }
 
-input::first-line{
+input::first-line {
   color: var(--font-normal);
 }
 
@@ -111,10 +118,9 @@ input::first-line{
   background-size: cover;
 } */
 
-
 /* 摸一摸动画 */
 @keyframes head_bounce {
-  0%{
+  0% {
     transform: rotateZ(-0);
   }
   30% {
@@ -133,17 +139,17 @@ input::first-line{
 }
 
 .dot2 {
-  display: -webkit-box; 
+  display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
   -webkit-line-clamp: 2;
 }
 
 /** antd 颜色全局覆盖 */
-.ant-select-selection-item{
+.ant-select-selection-item {
   color: var(--font-normal) !important;
 }
-.ant-radio,.ant-radio-wrapper{
+.ant-radio,
+.ant-radio-wrapper {
   color: var(--font-normal) !important;
 }
-

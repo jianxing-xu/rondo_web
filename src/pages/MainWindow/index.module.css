@@ -1,5 +1,6 @@
-.main_win,.main_inner {
-  background-image: url("public/bg.jpg");
+.main_win,
+.main_inner {
+  background-image: url("/public/bg.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -9,7 +10,6 @@
   min-width: 500px;
 }
 .right_content {
-
 }
 .main_inner .ant-drawer-content {
   background-color: transparent !important;

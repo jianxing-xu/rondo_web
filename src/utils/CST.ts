@@ -1,20 +1,23 @@
-
 export default {
-  visitorToken: "1d40dc0b40000743d69ba671d8a418250f66422df9c61e332deeec7c15a2dade",
+  visitorToken:
+    "1d40dc0b40000743d69ba671d8a418250f66422df9c61e332deeec7c15a2dade",
   guestUserInfo: {
     room: null,
-    user_admin: false,
     user_head: "/res/images/nohead.jpg",
     user_id: -1,
-    user_name: "11",
+    user_name: "Ghost",
   },
-  static_url: "http://localhost:8080/api",
-  server_host: "http://localhost:8080/",
-  historyMax: 50 // 显示最大消息条数
-}
+  // static_url: "http://localhost:8080/api",
+  // server_host: "http://localhost:8080/",
+  // wsUrl: "localhost:8081/ws?",
+  static_url: "http://49.235.175.45:8899/api",
+  server_host: "http://49.235.175.45:8899/",
+  wsUrl: "49.235.175.45:8810/ws?",
+  historyMax: 50, // 显示最大消息条数
+};
 export const MT = {
   ADD_SONG: "addSong", // , "点歌{user,song}"),
-  PLAY_SONG: "playSong",//,,播放歌曲{user,song}"),
+  PLAY_SONG: "playSong", //,,播放歌曲{user,song}"),
   SYSTEM: "system", //,"系统消息"),
   TEXT: "text", //"文字消息"),
   IMG: "img", //,"图片消息"),
@@ -28,16 +31,16 @@ export const MT = {
   BACK: "back", //,"消息撤回"),
   ROOM_UPDATE: "room_update", //,"房间资料更新{room}"),
   PRE_LOAD_URL: "preload", //,"预加载url{url}");
-  NOW: "now",  // 正在播放的歌曲
+  NOW: "now", // 正在播放的歌曲
   JOIN: "join", // 加入房间
-  PUSH: "push",//顶歌
-  CLEAR: "clear",// 清除消息
+  PUSH: "push", //顶歌
+  CLEAR: "clear", // 清除消息
   TOUCH: "touch", //摸一摸
-}
+};
 export const TOKEN_KEY = {
   TEMP: "temp-token",
-  ACCESS: "access-token"
-}
+  ACCESS: "access-token",
+};
 
 export const POPKEY = {
   SEARCH: "SEARCH", // 搜索
@@ -49,8 +52,8 @@ export const POPKEY = {
   ROOM_LIST: "ROOM_LIST", // 房间列表
   ROOM_PWD: "ROOM_PWD", // 输入房间密码
   ROOM_SETTING: "ROOM_SETTING", // 房间设置
-  PROFILE_ME: "PROFILE_ME" // 我的信息
-}
+  PROFILE_ME: "PROFILE_ME", // 我的信息
+};
 // MySetting: false,
 // MySongList: false,
 // OnlineList: false,

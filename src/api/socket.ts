@@ -1,10 +1,11 @@
+import CST from "utils/CST";
 
 // websocket 状态接口
 interface IwsStatus {
   msg: string;
   status: number;
 }
-const wsUrl = "localhost:8081/ws?";
+
 export interface IConnectParam {
   channel: number;
   account: number;
@@ -22,10 +23,10 @@ class Socket {
 
   constructor(timeOut: number = 3000) {
     // console.log("Socket INIT");
-    const protocol = (window.location.protocol == 'http:') ? 'ws://' : 'wss://';
-    this.url = protocol + wsUrl;
-    this.connected = false
-    this.timeOut = timeOut
+    const protocol = window.location.protocol == "http:" ? "ws://" : "wss://";
+    this.url = protocol + CST.wsUrl;
+    this.connected = false;
+    this.timeOut = timeOut;
   }
 
   public changeRoom(roomId: number) {
@@ -42,45 +43,50 @@ class Socket {
   }
 
   // websocket 初始化
-  public connect(messageController: (data: any) => void = (d: any) => { }): void {
+  public connect(
+    messageController: (data: any) => void = (d: any) => {}
+  ): void {
     if (this.connected) {
       console.log("Socket connected!");
       return;
-    };
-    this.ws = new WebSocket(this.url + `channel=${this.channel}&account=${this.account}&ticket=${this.ticket}`)
+    }
+    this.ws = new WebSocket(
+      this.url +
+        `channel=${this.channel}&account=${this.account}&ticket=${this.ticket}`
+    );
     this.ws.onopen = () => {
       console.log("Socket connect success!");
       this.connected = true;
-    }
+    };
 
-    this.ws.addEventListener('message', (e: any) => {
+    this.ws.addEventListener("message", (e: any) => {
       messageController && messageController(JSON.parse(e.data));
-    })
+    });
 
     this.ws.onerror = (e: any) => {
-      this.reconnect()
-    }
+      this.reconnect();
+    };
 
     this.ws.onclose = (e: any) => {
       this.connected = false;
-    }
+    };
   }
 
   public forceClose() {
     const that = this;
     if (!this.connected) {
-      console.log("Socket closed!")
+      console.log("Socket closed!");
       return Promise.resolve(true);
     }
     if (this.ws?.readyState == 1) {
-      this.ws.send('bye');
+      this.ws.send("bye");
       this.ws.close();
     }
     return new Promise((resolve) => {
       setTimeout(async () => {
         const v = await this.forceClose();
         resolve(v);
-      }, 10)
+      }, 10);
     });
   }
 
@@ -91,18 +97,18 @@ class Socket {
     }
     setTimeout(() => {
       this.reconnect();
-    }, 5000)
+    }, 5000);
   }
 
   // 返回websocket 实例 {promise}
   public getInstance(): Promise<WebSocket> {
     return new Promise((resolve, reject) => {
       if (this.ws) {
-        resolve(this.ws)
+        resolve(this.ws);
       } else {
-        reject('出错啦！！！')
+        reject("出错啦！！！");
       }
-    })
+    });
   }
 
   // 返回websocket的状态
@@ -111,47 +117,51 @@ class Socket {
     // OPEN：值为1，表示连接成功，可以通信了。
     // CLOSING：值为2，表示连接正在关闭。
     // CLOSED：值为3，表示连接已经关闭，或者打开连接失败。
-    let status = this.ws?.readyState
+    let status = this.ws?.readyState;
     let reStatus = {
-      msg: '',
-      status: 3
-    }
+      msg: "",
+      status: 3,
+    };
     switch (status) {
       case 0:
         reStatus = {
-          msg: 'connecting',
-          status: 0
-        }
+          msg: "connecting",
+          status: 0,
+        };
         break;
       case 1:
         reStatus = {
-          msg: 'open',
-          status: 1
-        }
+          msg: "open",
+          status: 1,
+        };
         break;
       case 2:
         reStatus = {
-          msg: 'closing',
-          status: 2
-        }
+          msg: "closing",
+          status: 2,
+        };
         break;
       case 3:
         reStatus = {
-          msg: 'closed',
-          status: 3
-        }
+          msg: "closed",
+          status: 3,
+        };
         break;
       default:
-        return reStatus
+        return reStatus;
     }
 
-
-    return reStatus
+    return reStatus;
   }
 
-
+  // 设置消息控制和连接参数，连接.....
+  public async setMsgCtrl(param: IConnectParam, ctrl?: (data: any) => void) {
+    console.log("Start connect socket.....");
+    this.setChannelParam(param);
+    if (await this.forceClose()) {
+      this.connect(ctrl);
+    }
+  }
 }
 
 export default Socket;
-
-

@@ -5890,6 +5890,11 @@
   "resolved" "https://registry.npmjs.org/lodash.map/-/lodash.map-4.6.0.tgz"
   "version" "4.6.0"
 
+"lodash.memoize@^4.1.2":
+  "integrity" "sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4="
+  "resolved" "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz"
+  "version" "4.1.2"
+
 "lodash.memoize@~3.0.3":
   "integrity" "sha1-LcvSwofLwKVcxCMovQxzYVDVPj8="
   "resolved" "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-3.0.4.tgz"
@@ -7620,6 +7625,16 @@
     "object-assign" "^4.1.1"
     "scheduler" "^0.20.2"
 
+"react-dom@^16.12.0":
+  "integrity" "sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw=="
+  "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-16.14.0.tgz"
+  "version" "16.14.0"
+  dependencies:
+    "loose-envify" "^1.1.0"
+    "object-assign" "^4.1.1"
+    "prop-types" "^15.6.2"
+    "scheduler" "^0.19.1"
+
 "react-is@^16.12.0", "react-is@^16.6.0", "react-is@^16.7.0", "react-is@^16.8.1":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -7678,6 +7693,17 @@
     "tiny-invariant" "^1.0.2"
     "tiny-warning" "^1.0.0"
 
+"react-zmage@^0.8.5-beta.36":
+  "integrity" "sha512-iF0LxAXczbU7tTFOZwGe5eMBbGznLdNEmvyuTu51v7ub6K82RE2YiDGhlYO6SRS5ioFm3kWYC/SQYBRk2h6QSQ=="
+  "resolved" "https://registry.npmjs.org/react-zmage/-/react-zmage-0.8.5-beta.36.tgz"
+  "version" "0.8.5-beta.36"
+  dependencies:
+    "classnames" "^2.2.6"
+    "lodash.memoize" "^4.1.2"
+    "prop-types" "^15.6.2"
+    "react" "^16.12.0"
+    "react-dom" "^16.12.0"
+
 "react@*", "react@^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "react@^16.13.1", "react@^16.8.0 || ^17.0.0", "react@>= 16.9.0", "react@>=15", "react@>=16.0.0", "react@>=16.8.0", "react@>=16.9.0", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
@@ -7685,6 +7711,15 @@
   dependencies:
     "loose-envify" "^1.1.0"
     "object-assign" "^4.1.1"
+
+"react@^16.12.0", "react@^16.14.0":
+  "integrity" "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g=="
+  "resolved" "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
+  "version" "16.14.0"
+  dependencies:
+    "loose-envify" "^1.1.0"
+    "object-assign" "^4.1.1"
+    "prop-types" "^15.6.2"
 
 "read-only-stream@^2.0.0":
   "integrity" "sha1-JyT9aoET1zdkrCiNQ4YnDB2/F/A="

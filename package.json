@@ -64,11 +64,6 @@
     "vite-plugin-pwa": "0.8.1",
     "vite-tsconfig-paths": "3.3.13"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --cache --fix",
-    "*.css": "stylelint --fix",
-    "*.{html,js,ts,tsx,css,md,json}": "prettier --write"
-  },
   "browserslist": "Edge >= 18, Firefox >= 60, Chrome >= 61, Safari >= 11, Opera >= 48",
   "config": {
     "commitizen": {

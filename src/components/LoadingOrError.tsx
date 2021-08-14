@@ -5,8 +5,15 @@ interface Properties {
 }
 export default function LoadingOrError({ error }: Properties): ReactElement {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-xl" data-cy="LoadingOrError">
+    <div
+      className="flex items-center justify-center min-h-screen"
+      style={{ background: "#333" }}
+    >
+      <h1
+        className="text-xl"
+        style={{ color: "#eee" }}
+        data-cy="LoadingOrError"
+      >
         {error ? error.message : "Loading..."}
       </h1>
     </div>

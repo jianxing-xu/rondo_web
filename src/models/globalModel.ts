@@ -1,66 +1,72 @@
-import { message } from "antd";
 import { createModel } from "hox";
-import { useEffect, useState } from "react";
-import { themeChange, setDark as setDarkTheme } from "utils";
-import { TOKEN_KEY } from "utils/CST";
+import { useEffect, useReducer } from "react";
+import { themeChange, setDark as setDarkTheme, local } from "utils";
 import { player } from "./audioModel";
 
-
-
-
 /** 系统配置模块 */
+interface IInitState {
+  notice: number;
+  sound: number;
+  dark: number;
+  volume: number;
+  oldVolume: number;
+}
+const initState = {
+  notice: local.get("notice", 1),
+  sound: local.get("sound", 1),
+  dark: local.get("dark", 1),
+  volume: local.get("volume", 50),
+  oldVolume: local.get("old_volume", 0),
+};
+const GReducer = (state: IInitState, action: { type: string; data: any }) => {
+  const { type, data } = action;
+  const { volume, oldVolume, notice, sound, dark } = state;
+  switch (type) {
+    case "muteToggle":
+      const newState: any = {};
+      if (volume == 0) {
+        newState["volume"] = oldVolume;
+        player.volume = oldVolume / 100;
+      } else {
+        newState["oldVolume"] = volume;
+        newState["volume"] = 0;
+        player.volume = 0;
+      }
+      return { ...state, ...newState };
+    case "volume":
+      player.volume = data[0] / 100;
+      return { ...state, volume: data[0] };
+    case "notice":
+      return { ...state, notice: notice == 1 ? 0 : 1 };
+    case "sound":
+      return { ...state, sound: sound == 1 ? 0 : 1 };
+    case "dark":
+      const isDark = dark == 1 ? 0 : 1;
+      themeChange(isDark);
+      return { ...state, dark: isDark };
+    default:
+      return state;
+  }
+};
 function globalModel() {
-  const [notice, setNotice] = useState(localStorage.getItem("notice") ?? 1); // 浏览器开启通知
-  const [sound, setSound] = useState(localStorage.getItem("sound") ?? 1); // 声音通知
-  const [dark, setDark] = useState(localStorage.getItem("dark") ?? 1); // 深色模式
-  const [volume, setVolume] = useState<any>(localStorage.getItem("volume") ?? 50); // 音乐音量
-  const [oldVolume, setOldVolulme] = useState<any>(localStorage.getItem("old_volume") ?? 0);
-
+  const [state, dispatch] = useReducer(GReducer, initState);
   useEffect(() => {
-    localStorage.setItem("notice", notice.toString());
-    localStorage.setItem("sound", sound.toString());
-    localStorage.setItem("dark", dark.toString());
-    localStorage.setItem("volume", volume.toString());
-    localStorage.setItem("old_volume", oldVolume.toString());
-  }, [notice, sound, dark, volume, oldVolume]);
+    local.set("notice", state.notice);
+    local.set("notice", state.notice);
+    local.set("sound", state.sound);
+    local.set("dark", state.dark);
+    local.set("volume", state.volume);
+    local.set("old_volume", state.oldVolume);
+  }, [state]);
   useEffect(() => {
-    if (dark == 1) {
+    if (state.dark == 1) {
       setDarkTheme();
     }
-  }, [])
-
+  }, []);
 
   function changeSettings(type: string, ...args: any[]) {
-    switch (type) {
-      case "muteToggle":
-        if (volume == 0) {
-          setVolume(oldVolume);
-          player.volume = (oldVolume / 100)
-        } else {
-          setOldVolulme(volume);
-          setVolume(0);
-          player.volume = 0
-        }
-
-        break;
-      case "volume":
-        setVolume(args[0]);
-        player.volume = args[0] / 100;
-        break;
-      case "notice":
-        setNotice((v: any) => v == 1 ? 0 : 1); break;
-      case "sound":
-        setSound((v: any) => v == 1 ? 0 : 1); break;
-      case "dark":
-        setDark((v: any) => {
-          const f = v == 1 ? 0 : 1
-          themeChange(f);
-          return f;
-        }); break;
-      default: break;
-    }
+    dispatch({ type, data: args });
   }
-  return { changeSettings, notice, sound, dark, volume };
+  return { changeSettings, ...state };
 }
-
 export const useGlobalModel = createModel(globalModel);

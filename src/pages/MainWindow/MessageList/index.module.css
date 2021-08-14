@@ -14,21 +14,21 @@
   background: transparent;
 } */
 .notice {
-  @apply bg-gray-50 text-icon-normal
+  @apply bg-gray-50 text-icon-normal;
 }
 .msglist {
-  /* scroll-behavior: smooth; */
+  scroll-behavior: smooth;
 }
 .me .name {
   text-align: right;
 }
-.me .msg_item_main{
+.me .msg_item_main {
   justify-content: flex-end;
 }
-.msg_item_main_info{
+.msg_item_main_info {
   @apply ml-3;
 }
-.me .msg_item_main_info{
+.me .msg_item_main_info {
   @apply mr-3;
 }
 .me .head {
@@ -50,7 +50,7 @@
   background: url("../../../../assets/loading.gif");
   position: absolute;
   left: -20px;
-  top: 10px;  
+  top: 10px;
 }
 .content::before {
   content: " ";
