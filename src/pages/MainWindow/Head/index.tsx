@@ -4,12 +4,15 @@ import TextArea from "antd/lib/input/TextArea";
 import { sendBugs } from "api/common";
 import SvgIcon from "components/SvgIcon";
 import { useCoreModel } from "models/coreModule";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
-import { POPKEY } from "utils/CST";
+import { useHistory } from "react-router-dom";
+import { copy, local } from "utils";
+import CST, { POPKEY } from "utils/CST";
 import _ from "./index.module.css";
 
 export const Head: React.FC = () => {
+  const history = useHistory();
   const [bs, setBs] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -34,31 +37,36 @@ export const Head: React.FC = () => {
         });
     });
   };
+  const handleShare = () => {
+    const content = `${room?.room_name} 正在播放 ${now?.name}(${now?.singer})，快来一起听听吧~\n
+    ${CST.FRONT_END_URL}?room=${room?.room_id}`;
+    copy(content);
+    message.success("复制成功，快去粘贴分享吧！");
+  };
+  useEffect(() => {
+    const roomid = history.location.search.split("=")[1];
+    if (!!roomid) {
+      console.log("分享进入房间");
+      local.set("pre_room_id", roomid);
+      history.replace("/");
+    }
+  }, []);
   return (
     <div
-      className="flex items-center justify-between px-4 py-2 text-lg border-b border-gray-300 dark:border-gray-600"
+      className="flex items-center px-4 py-2 text-lg border-b border-gray-300 dark:border-gray-600"
       style={{ backgroundColor: "transparent" }}
     >
+      {/* 房间id */}
       <Tooltip title="房间ID(房间号)">
         <span
-          className="px-1 text-sm font-bold border border-red-500 rounded-sm tag"
+          className="px-1 mr-2 text-sm font-bold border border-red-500 rounded-sm tag"
           style={{ color: "var(--primary)" }}
         >
           ID:{room?.room_id}
         </span>
       </Tooltip>
-      <span
-        onClick={() => showDialog(POPKEY.ROOM_SETTING)}
-        className="absolute flex items-center text-sm cursor-pointer select-none left-24"
-      >
-        {isMeRoom ? (
-          <>
-            <SvgIcon name="xingzhuang604" className="text-sm" />
-            <span style={{ paddingLeft: 2 }}> 管理</span>
-          </>
-        ) : null}
-      </span>
-      <span className="flex items-center room_name">
+      {/* 房间信息 */}
+      <span className="flex items-center mr-2 room_name">
         <Tooltip title="房间类型">
           <svg
             className="text-xl icon"
@@ -68,8 +76,38 @@ export const Head: React.FC = () => {
             <use xlinkHref="#icon-erji"></use>
           </svg>
         </Tooltip>
-        <span className="text-sm font-bold">
-          {room?.room_name}(
+        <span className="text-sm font-bold text-primary">
+          {room?.room_name}
+        </span>
+      </span>
+      {/* 管理按钮 */}
+      <span
+        onClick={() => showDialog(POPKEY.ROOM_SETTING)}
+        className="flex items-center text-sm cursor-pointer select-none left-24"
+      >
+        {isMeRoom ? (
+          <>
+            <SvgIcon name="xingzhuang604" className="text-sm" />
+            <span style={{ paddingLeft: 2 }}> 管理</span>
+          </>
+        ) : null}
+      </span>
+      {/* bug反馈登右侧按钮 */}
+      <div className="absolute flex items-center text-sm right-3">
+        <div
+          onClick={() => setBs(true)}
+          className="flex items-center px-1 text-sm cursor-pointer"
+        >
+          <svg className="icon" aria-hidden="true">
+            <use xlinkHref="#icon-bug"></use>
+          </svg>
+          <span className="pl-1">bug反馈</span>
+        </div>
+        <div className="px-1 cursor-pointer text-primary" onClick={handleShare}>
+          分享
+        </div>
+
+        <div className="px-1 text-sm font-bold ">
           <Tooltip title="在线人数">
             <span
               onClick={() => showDialog(POPKEY.ONLINE_LIST)}
@@ -79,23 +117,11 @@ export const Head: React.FC = () => {
               <span className="text-current">
                 {(now?.onlineCount || 0) + 2}
               </span>
-              <svg className="inline icon" aria-hidden="true">
-                <use xlinkHref="#icon-PersonalCenteron"></use>
-              </svg>
+              在线
             </span>
           </Tooltip>
-          )
-        </span>
-      </span>
-      <span
-        onClick={() => setBs(true)}
-        className="flex items-center text-sm cursor-pointer"
-      >
-        <svg className="icon" aria-hidden="true">
-          <use xlinkHref="#icon-bug"></use>
-        </svg>
-        <span className="pl-1">bug反馈</span>
-      </span>
+        </div>
+      </div>
       <Modal
         confirmLoading={loading}
         okText="提交"

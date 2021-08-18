@@ -209,7 +209,9 @@ export const MessageInput: React.FC<IMessageInput> = ({
           />
         </Upload>
         <div className="flex items-center ml-auto space-x-2">
-          <span className="text-sm">{now?.name ?? ""}</span>
+          <span className="text-sm">
+            {now?.name ?? "--"}({now?.singer ?? "--"})
+          </span>
           <span
             onClick={() => {
               useCoreModel.data?.udsp({ type: UActionType.SU, data: now?.uid });

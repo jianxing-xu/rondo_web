@@ -14,6 +14,7 @@ export default {
   server_host: "http://49.235.175.45:8899/",
   wsUrl: "49.235.175.45:8810/ws?",
   historyMax: 50, // 显示最大消息条数
+  FRONT_END_URL: "http://49.235.175.45/rondo/#/",
 };
 export const MT = {
   ADD_SONG: "addSong", // , "点歌{user,song}"),

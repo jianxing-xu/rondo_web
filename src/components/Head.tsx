@@ -1,4 +1,3 @@
-import { useCoreModel } from "models/coreModule";
 import { useEffect } from "react";
 
 interface Properties {

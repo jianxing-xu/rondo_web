@@ -226,3 +226,16 @@ export const handleUpload = (e: any, type: any, callback: Function) => {
     });
   }
 };
+
+export const copy = (sometext: string) => {
+  let hiddenInput = document.createElement("input");
+  hiddenInput.value = sometext;
+  hiddenInput.setAttribute("readonly", "");
+  hiddenInput.style.position = "absolute";
+  hiddenInput.style.left = "-9999px";
+  document.body.appendChild(hiddenInput);
+  hiddenInput.select();
+  hiddenInput.setSelectionRange(0, hiddenInput.value.length); // ios
+  document.execCommand("copy");
+  document.body.removeChild(hiddenInput);
+};
