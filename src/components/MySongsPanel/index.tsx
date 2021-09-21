@@ -16,7 +16,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -120,10 +120,10 @@ export const MySongsPanel: React.FC<MySongsPanel> = () => {
             <Spin spinning={item?.loading ?? false} key={index}>
               <div
                 key={index}
-                className="relative flex flex-1 px-2 py-2 m-2 rounded-sm bg-bg-light"
+                className="relative flex flex-1 px-2 py-2 m-2 transition rounded hover:bg-select"
               >
                 <img
-                  className="w-12 h-12 rounded-sm"
+                  className="w-12 h-12 rounded"
                   src={item?.song_pic}
                   alt=""
                 />
@@ -138,14 +138,14 @@ export const MySongsPanel: React.FC<MySongsPanel> = () => {
                 </div>
                 <div
                   onClick={() => removeSong(item.song_mid, index)}
-                  className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
+                  className="absolute w-10 px-1 text-center transition border rounded cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
                   style={{ borderColor: "var(--font-normal)" }}
                 >
                   删除
                 </div>
                 <div
                   onClick={() => addSongHandle(item.song_mid, index)}
-                  className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-14 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
+                  className="absolute w-10 px-1 text-center transition border rounded cursor-pointer select-none right-14 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
                   style={{ borderColor: "var(--font-normal)" }}
                 >
                   点歌

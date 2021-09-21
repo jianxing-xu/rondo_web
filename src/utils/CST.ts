@@ -7,14 +7,18 @@ export default {
     user_id: -1,
     user_name: "Ghost",
   },
-  // static_url: "http://localhost:8080/api",
-  // server_host: "http://localhost:8080/",
-  // wsUrl: "localhost:8081/ws?",
-  static_url: "http://49.235.175.45:8899/api",
-  server_host: "http://49.235.175.45:8899/",
-  wsUrl: "49.235.175.45:8810/ws?",
+  static_url: "http://localhost:8080/api",
+  server_host: "http://localhost:8080/",
+  wsUrl: "localhost:8081/ws?",
+  // static_url: "http://http://106.15.137.156:8899/api",
+  // server_host: "http://http://106.15.137.156:8899/",
+  // wsUrl: "http://106.15.137.156:8810/ws?",
+
   historyMax: 50, // 显示最大消息条数
-  FRONT_END_URL: "http://49.235.175.45/rondo/#/",
+  FRONT_END_URL: "http://http://106.15.137.156/rondo/#/",
+  fill(url: String) {
+    return this.static_url + url;
+  },
 };
 export const MT = {
   ADD_SONG: "addSong", // , "点歌{user,song}"),

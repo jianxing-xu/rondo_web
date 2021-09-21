@@ -1,12 +1,15 @@
 .minput_w {
-  background-color: var(--bg-light);
+  background-color: var(--bg-input);
   color: var(--font-normal);
 }
 .minput {
-  background-color: var(--bg-light);
-  color: var(--font-normal);
+  background-color: var(--bg-input);
+  color: var(--font-input);
   border: none;
   outline: none;
+}
+.minput::placeholder {
+  color: var(--font-input);
 }
 .minput::-moz-focus-inner {
   outline: none;

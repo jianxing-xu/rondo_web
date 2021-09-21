@@ -17,7 +17,7 @@ const Btn: React.FC<any> = ({ src, title, ...props }) => {
   return (
     <div className="text-center cursor-pointer select-none" {...props}>
       <img src={src} className="w-5 h-5 mx-auto mb-1 " alt="" />
-      <span className="text-xs font-normal text-white active:text-gray-200">
+      <span className="text-xs font-normal text-sidebar active:text-light2">
         {title}
       </span>
     </div>
@@ -87,9 +87,10 @@ export const SideBar: React.FC<ISideBar> = ({
               onClick={handleShow}
               style={{
                 backgroundImage: `url('${CST.static_url}/${user?.user_head}')`,
+                borderRadius: "50%",
               }}
               className={classNames(
-                "h-12 w-12 rounded-sm mx-auto mt-6 cursor-pointer",
+                "h-12 w-12 rounded-full mx-auto mt-6 cursor-pointer",
                 _.head
               )}
             ></div>

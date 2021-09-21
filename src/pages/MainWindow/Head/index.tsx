@@ -53,20 +53,20 @@ export const Head: React.FC = () => {
   }, []);
   return (
     <div
-      className="flex items-center px-4 py-2 text-lg border-b border-gray-300 dark:border-gray-600"
+      className="flex items-center px-4 text-lg"
       style={{ backgroundColor: "transparent" }}
     >
       {/* 房间id */}
       <Tooltip title="房间ID(房间号)">
         <span
-          className="px-1 mr-2 text-sm font-bold border border-red-500 rounded-sm tag"
+          className="px-1 mr-2 text-sm font-bold border rounded border-primary"
           style={{ color: "var(--primary)" }}
         >
           ID:{room?.room_id}
         </span>
       </Tooltip>
       {/* 房间信息 */}
-      <span className="flex items-center mr-2 room_name">
+      <span className="flex items-center px-1 mr-2 border rounded room_name border-primary">
         <Tooltip title="房间类型">
           <svg
             className="text-xl icon"
@@ -81,22 +81,23 @@ export const Head: React.FC = () => {
         </span>
       </span>
       {/* 管理按钮 */}
-      <span
-        onClick={() => showDialog(POPKEY.ROOM_SETTING)}
-        className="flex items-center text-sm cursor-pointer select-none left-24"
-      >
-        {isMeRoom ? (
+
+      {isMeRoom ? (
+        <span
+          onClick={() => showDialog(POPKEY.ROOM_SETTING)}
+          className="flex items-center px-2 text-sm border rounded cursor-pointer select-none left-24 border-primary text-primary"
+        >
           <>
             <SvgIcon name="xingzhuang604" className="text-sm" />
             <span style={{ paddingLeft: 2 }}> 管理</span>
           </>
-        ) : null}
-      </span>
+        </span>
+      ) : null}
       {/* bug反馈登右侧按钮 */}
       <div className="absolute flex items-center text-sm right-3">
         <div
           onClick={() => setBs(true)}
-          className="flex items-center px-1 text-sm cursor-pointer"
+          className="flex items-center px-1 text-sm text-red-500 cursor-pointer"
         >
           <svg className="icon" aria-hidden="true">
             <use xlinkHref="#icon-bug"></use>

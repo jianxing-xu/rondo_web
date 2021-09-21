@@ -65,29 +65,74 @@ input {
   border: 0;
 }
 
+.bg-opa-10 {
+  --bg-opa: var(--opa-10) !important;
+}
+.bg-opa-60 {
+  --bg-opa: var(--opa-60) !important;
+}
+.bg-opa-80 {
+  --bg-opa: var(--opa-80) !important;
+}
+.bg-opa-90 {
+  --bg-opa: var(--opa-90) !important;
+}
+
 :root {
+  --opa-10: 0.1;
+  --opa-30: 0.3;
+  --opa-50: 0.6;
+  --opa-80: 0.8;
+  --opa-90: 0.9;
+  --opa-100: 1;
+  --text-sidebar: #eee;
+
   --boy: #759fd1;
   --girl: #ef87a4;
-  --bg: #eee;
-  --primary: rgb(226 90 114);
-  --normal-icon: #333;
-  --font-light: #999;
-  --font-normal: rgba(55, 65, 81);
-  --bg-light: #dcd4d4;
-  --bg-loading: rgba(207, 206, 206, 0.5);
-  --bg-revers: #333;
-  --txt-revers: #eee;
-}
-.dark {
-  --bg: #333;
-  --primary: #ed533d;
-  --normal-icon: #e6e6e6;
-  --font-light: #666;
-  --font-normal: rgba(209, 213, 219);
+
+  --bg: rgb(241, 242, 243); /* 主背景色 */
+  --bg-chat: rgb(255, 255, 255); /* 聊天框背景 */
+  --bg-sidebar: hsl(225, 22%, 28%); /* 侧边背景 */
+  --bg-input: rgb(214, 215, 217); /* 输入框背景 */
+  --bg-select: rgb(224, 226, 228); /* 列表项选中高亮背景 */
+  --bg-float: rgb(255, 255, 255); /* 浮层背景色 */
+
+  --primary: rgb(0, 136, 254); /* 主题色 */
+  --normal-icon: rgb(116, 117, 119); /* icon 颜色*/
+  --border-color: rgb(239, 240, 241);
+
+  --font-light2: rgb(199, 200, 201); /* lighe level 2*/
+  --font-light: rgb(162, 163, 165); /* 深色字体 */
+  --font-normal: rgb(23, 26, 29); /* 正常字体 */
+  --font-input: rgb(159, 177, 251); /* 输入框字体颜色 */
+
   --bg-light: #383838;
   --bg-loading: rgba(75, 75, 75, 0.5);
-  --bg-revers: #eee;
-  --txt-revers: #333;
+
+  --opa-bg: rgb(241, 242, 243, var(--opa-90));
+}
+
+.dark {
+  --bg: rgb(21, 21, 24); /* 主背景色 */
+  --bg-chat: rgb(47, 48, 53); /* 聊天框背景 */
+  --bg-sidebar: rgb(39, 43, 50); /* 侧边背景 */
+  --bg-input: rgb(75, 83, 94); /* 输入框背景 */
+  --bg-select: rgb(55, 57, 61); /* 列表项选中高亮背景 */
+  --bg-float: rgb(86, 90, 92); /* 浮层背景色 */
+
+  --primary: rgb(0, 136, 254); /* 主题色 */
+  --normal-icon: rgb(176, 179, 182); /* icon 颜色*/
+  --border-color: rgb(44, 45, 49);
+
+  --font-light2: rgb(156, 159, 163); /* lighe level 2*/
+  --font-light: rgb(115, 116, 120); /* 深色字体 */
+  --font-normal: rgb(238, 242, 248); /* 正常字体 */
+  --font-input: rgb(75, 83, 94); /* 输入框字体颜色 */
+
+  --bg-light: #383838;
+  --bg-loading: rgba(75, 75, 75, 0.5);
+
+  --opa-bg: rgb(21, 21, 24, var(--opa-90));
 }
 @keyframes resetBg {
   to {

@@ -12,9 +12,15 @@ export const RightHead = ({
   loading = false,
 }) => {
   return (
-    <div className="flex justify-between px-4 py-3 text-2xl border-b">
+    <div className="flex justify-between px-4 py-3 text-2xl border-b text-normal">
       <span>{title}</span>
-      <Button loading={loading} type="default" onClick={onSave}>
+      <Button
+        loading={loading}
+        type="ghost"
+        onClick={onSave}
+        className="text-normal"
+        style={{ color: "var(--font-normal)" }}
+      >
         创建
       </Button>
     </div>
@@ -26,7 +32,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -52,7 +58,7 @@ export const CreateRoomPanel: React.FC<ICreateRoomPanel> = () => {
     <RightPanelWrapper>
       <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full">
         <RightHead title="创建房间" onSave={save} loading={loading} />
-        <div className="relative flex-grow w-full mt-5 bg-bgc">
+        <div className="relative flex-grow w-full mt-5 bg-main">
           <Form
             initialValues={{ room_type: 1 }}
             form={form}

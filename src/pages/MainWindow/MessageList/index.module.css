@@ -13,8 +13,11 @@
 .msglist::-webkit-scrollbar-track{
   background: transparent;
 } */
+img {
+  @apply w-full h-full rounded;
+}
 .notice {
-  @apply bg-gray-50 text-icon-normal;
+  @apply bg-gray-50 text-icon;
 }
 .msglist {
   scroll-behavior: smooth;
@@ -33,6 +36,9 @@
 }
 .me .head {
   order: 1;
+}
+.content {
+  @apply bg-chat;
 }
 .content.loading::after {
   content: " ";
@@ -56,21 +62,21 @@
   content: " ";
   width: 0px;
   height: 0px;
-  background-color: var(--bg);
+  background-color: var(--bg-chat);
   position: absolute;
   left: -3px;
   top: 13px;
-  border: solid 6px var(--bg);
+  border: solid 6px var(--bg-chat);
   transform: rotateZ(45deg);
 }
 .me .content::before {
   content: " ";
   width: 0px;
   height: 0px;
-  background-color: var(--bg);
+  background-color: var(--bg-chat);
   position: absolute;
   left: calc(100% - 9px);
   top: 13px;
-  border: solid 6px var(--bg);
+  border: solid 6px var(--bg-chat);
   transform: rotateZ(45deg);
 }

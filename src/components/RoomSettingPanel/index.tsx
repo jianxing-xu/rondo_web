@@ -16,7 +16,13 @@ export const RightHead = ({
   return (
     <div className="flex justify-between px-4 py-3 text-2xl border-b">
       <span>{title}</span>
-      <Button loading={loading} type="default" onClick={onSave}>
+      <Button
+        ghost
+        loading={loading}
+        type="default"
+        onClick={onSave}
+        style={{ color: "var(--font-normal)" }}
+      >
         保存
       </Button>
     </div>
@@ -28,7 +34,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -61,7 +67,7 @@ export const RoomSettingPanel: React.FC<IRoomSettingPanel> = () => {
     <RightPanelWrapper>
       <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full">
         <RightHead title="房间设置" onSave={save} loading={loading} />
-        <div className="relative flex-grow w-full mt-5 bg-bgc">
+        <div className="relative flex-grow w-full mt-5 bg-main">
           <div className="absolute top-0 bottom-0 left-0 right-0 overflow-y-scroll m_scroll">
             <Form
               initialValues={{ ...useCoreModel.data?.room }}
@@ -91,7 +97,7 @@ export const RoomSettingPanel: React.FC<IRoomSettingPanel> = () => {
               >
                 <Select
                   onChange={(v) =>
-                    setFields((val) => ({ ...val, rputlic: v == 4 }))
+                    setFields((val) => ({ ...val, dtmode: v == 4 }))
                   }
                 >
                   <Select.Option value={0}>文字聊天房</Select.Option>
@@ -210,10 +216,16 @@ export const RoomSettingPanel: React.FC<IRoomSettingPanel> = () => {
           </div>
         </div>
         <div
-          className="flex justify-end w-full pt-1 pr-4 bg-bgc"
+          className="flex justify-end w-full pt-1 pr-4 bg-main"
           style={{ height: "8%" }}
         >
-          <Button danger>清理聊天记录</Button>
+          <Button
+            className="rounded"
+            ghost
+            style={{ color: "var(--font-normal)" }}
+          >
+            清理聊天记录
+          </Button>
         </div>
       </div>
     </RightPanelWrapper>

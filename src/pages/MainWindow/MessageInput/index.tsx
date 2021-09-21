@@ -17,11 +17,11 @@ const MProgress: React.FC = () => {
   return (
     <Tooltip title="进度">
       <div
-        className="absolute left-0 right-0 bg-green-800 top-8 w-ful"
+        className="absolute left-0 right-0 top-8 w-ful"
         style={{ height: 1 }}
       >
         <div
-          className={classNames(_.process_inner, "bg-green-300 relative")}
+          className={classNames(_.process_inner, "bg-primary relative")}
           style={{ width: `${percent}%`, height: 1 }}
         ></div>
       </div>
@@ -47,7 +47,7 @@ const Phiz: React.FC<{ putChar?: Function }> = ({ putChar = () => {} }) => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute flex flex-col p-2 rounded-lg shadow-md left-6 bg-bg-light"
+      className="absolute flex flex-col p-2 rounded-lg shadow-md left-6 bg-chat"
       style={{ height: "19rem", width: 387, top: "-19rem" }}
     >
       <div className="flex flex-wrap flex-grow overflow-y-scroll m_scroll">
@@ -192,22 +192,20 @@ export const MessageInput: React.FC<IMessageInput> = ({
     <div className="h-32 bg-transparent">
       <div className="relative flex items-center h-8 px-2">
         {pshow ? <Phiz putChar={(v: any) => handleSend(v, "img")} /> : null}
-        <SvgIcon
-          stop={true}
-          click={() => setPshow((p) => !p)}
-          name="biaoqing"
-          className="text-2xl text-icon-normal hover:text-primary"
-        />
-        <Upload
-          showUploadList={false}
-          customRequest={handleUpload}
-          className="flex items-center self-center justify-center pl-2 text-xl text-icon-normal hover:text-primary"
-        >
+        <div className="flex gap-2">
           <SvgIcon
-            name="tupian"
-            className="text-2xl text-icon-normal hover:text-primary"
+            stop={true}
+            click={() => setPshow((p) => !p)}
+            name="biaoqing"
+            className="text-2xl text-icon hover:text-primary"
           />
-        </Upload>
+          <Upload showUploadList={false} customRequest={handleUpload}>
+            <SvgIcon
+              name="tupian"
+              className="text-2xl text-icon hover:text-primary"
+            />
+          </Upload>
+        </div>
         <div className="flex items-center ml-auto space-x-2">
           <span className="text-sm">
             {now?.name ?? "--"}({now?.singer ?? "--"})
@@ -274,7 +272,7 @@ export const MessageInput: React.FC<IMessageInput> = ({
         </Tooltip>
         <button
           onClick={popmsg}
-          className="absolute px-4 py-2 bg-gray-100 rounded-sm outline-none bottom-2 right-2 dark:bg-gray-500 active:bg-gray-200 dark:active:bg-gray-600"
+          className="absolute px-4 py-2 bg-gray-100 rounded shadow-inner outline-none bottom-2 right-2 dark:bg-gray-500 active:bg-gray-200 dark:active:bg-gray-600"
         >
           发送(Enter)
         </button>

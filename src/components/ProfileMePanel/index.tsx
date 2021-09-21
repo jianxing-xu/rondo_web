@@ -25,7 +25,12 @@ export const RightHead = ({
   return (
     <div className="flex justify-between px-4 py-3 text-2xl border-b">
       <span>{title}</span>
-      <Button loading={loading} type="default" onClick={onSave}>
+      <Button
+        loading={loading}
+        type="ghost"
+        onClick={onSave}
+        style={{ color: "var(--font-normal)" }}
+      >
         保存
       </Button>
     </div>
@@ -37,7 +42,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -100,7 +105,7 @@ export const ProfileMePanel: React.FC<IProfileMePanel> = ({ children }) => {
           </div>
           <div className="text-lg">{u?.user?.user_name}</div>
         </div>
-        <div className="relative flex-grow w-full bg-bgc">
+        <div className="relative flex-grow w-full bg-main">
           <Form
             form={form}
             initialValues={u?.user}
@@ -136,10 +141,15 @@ export const ProfileMePanel: React.FC<IProfileMePanel> = ({ children }) => {
           </Form>
         </div>
         <div
-          className="flex justify-end w-full bg-bgc"
+          className="flex justify-end w-full bg-main"
           style={{ height: "8%" }}
         >
-          <Button danger className="self-center" onClick={u?.logout}>
+          <Button
+            type="ghost"
+            onClick={u?.logout}
+            style={{ color: "var(--font-normal)" }}
+            className="mr-2"
+          >
             退出登录
           </Button>
         </div>

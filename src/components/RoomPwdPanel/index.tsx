@@ -21,7 +21,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>

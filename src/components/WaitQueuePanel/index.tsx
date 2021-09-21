@@ -15,7 +15,7 @@ export const RightHead = () => {
       <span>等待播放歌曲</span>
       <span
         onClick={() => useCoreModel?.data?.showDialog(POPKEY.SEARCH)}
-        className="self-center px-1 text-sm border rounded-sm cursor-pointer select-none"
+        className="self-center px-1 text-sm border rounded cursor-pointer select-none"
         style={{ borderColor: "var(--font-normal)" }}
       >
         我要点歌
@@ -102,10 +102,10 @@ export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({}) => {
               <Spin spinning={item?.loading ?? false} key={index}>
                 <div
                   key={index}
-                  className="relative flex flex-1 px-2 py-2 m-2 rounded-sm bg-bg-light"
+                  className="relative flex flex-1 px-2 py-2 m-2 transition rounded hover:bg-select"
                 >
                   <img
-                    className="w-12 h-12 rounded-sm"
+                    className="w-12 h-12 rounded"
                     src={item?.song?.pic}
                     alt=""
                   />
@@ -119,7 +119,7 @@ export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({}) => {
                   <div className="flex flex-col items-stretch relavite right-2 ">
                     <div
                       onClick={() => pushSongHandle(item?.song?.mid, index)}
-                      className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
+                      className="absolute w-10 px-1 text-center transition border rounded cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
                       style={{ borderColor: "var(--font-normal)" }}
                     >
                       顶
@@ -129,7 +129,7 @@ export const WaitQueuePanel: React.FC<IWaitQueuePanel> = ({}) => {
                       useCoreModel?.data?.user?.user_id ? (
                       <div
                         onClick={() => remove(item?.song?.mid, index)}
-                        className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 bottom-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
+                        className="absolute w-10 px-1 text-center transition border rounded cursor-pointer select-none right-2 bottom-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
                         style={{ borderColor: "var(--font-normal)" }}
                       >
                         {" "}

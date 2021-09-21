@@ -8,19 +8,19 @@ var e = Object.defineProperty,
       : (a[t] = r);
 import {
   a6 as n,
-  u as c,
-  M as s,
+  u as s,
+  M as c,
   p as o,
   n as i,
   R as m,
-  af as u,
-  aT as p,
-  aU as d,
+  af as d,
+  aT as u,
+  aU as p,
   aV as f,
   q as g,
-} from "./index.2974fcfe.js";
+} from "./index.f6e0add2.js";
 import { r as v, u as y, R as h } from "./vendor.a6a4925f.js";
-import "./index.5fe6a9c3.js";
+import "./index.62254d56.js";
 var b = {
     icon: {
       tag: "svg",
@@ -73,8 +73,8 @@ var _ = { login_panel: "_login_panel_ryq59_1" };
 function z() {
   const e = y(),
     [n, b] = v.exports.useState(!1),
-    { user: x } = c((e) => [e.user]),
-    [w] = s.useForm();
+    { user: x } = s((e) => [e.user]),
+    [w] = c.useForm();
   v.exports.useEffect(() => {
     (null == x ? void 0 : x.user_id) !== o.guestUserInfo.user_id &&
       e.replace("/");
@@ -117,7 +117,7 @@ function z() {
             {
               onClick: () => {
                 var a;
-                e.replace("/"), null == (a = c.data) || a.reconnect();
+                e.replace("/"), null == (a = s.data) || a.reconnect();
               },
               className:
                 "pl-8 text-lg text-gray-400 cursor-pointer select-none hover:text-gray-500",
@@ -129,36 +129,36 @@ function z() {
           "div",
           { className: "pt-8 login_panel_form" },
           h.createElement(
-            s,
+            c,
             {
               form: w,
               onFinish: (n) => {
                 b(!0),
-                  (n.plat = p().name),
-                  d(
+                  (n.plat = u().name),
+                  p(
                     ((e, n) => {
-                      for (var c in n || (n = {}))
-                        t.call(n, c) && l(e, c, n[c]);
-                      if (a) for (var c of a(n)) r.call(n, c) && l(e, c, n[c]);
+                      for (var s in n || (n = {}))
+                        t.call(n, s) && l(e, s, n[s]);
+                      if (a) for (var s of a(n)) r.call(n, s) && l(e, s, n[s]);
                       return e;
                     })({}, n)
                   )
                     .then(async (a) => {
                       var t;
-                      null == (t = c.data) || t.reconnect(), e.replace("/");
+                      null == (t = s.data) || t.reconnect(), e.replace("/");
                     })
                     .finally(() => b(!1));
               },
             },
             h.createElement(
-              s.Item,
+              c.Item,
               {
                 name: "account",
                 rules: [{ required: !0, message: "你是谁？" }],
               },
               h.createElement(m, {
                 addonAfter: h.createElement(
-                  u,
+                  d,
                   {
                     loading: n,
                     type: "link",
@@ -183,7 +183,7 @@ function z() {
               })
             ),
             h.createElement(
-              s.Item,
+              c.Item,
               {
                 name: "password",
                 rules: [{ required: !0, message: "啊这..." }],
@@ -198,10 +198,10 @@ function z() {
               })
             ),
             h.createElement(
-              s.Item,
+              c.Item,
               null,
               h.createElement(
-                u,
+                d,
                 {
                   loading: n,
                   style: { width: "100px" },

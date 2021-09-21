@@ -47,7 +47,7 @@ export default function Login(): ReactElement {
   };
   return (
     <>
-      <div className="z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-bgc">
+      <div className="z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-main">
         <div
           style={{ backgroundImage: `url("/public/bg.jpg")` }}
           className="fixed top-0 bottom-0 left-0 right-0 w-full h-full dark:opacity-30 opacity-60"
@@ -55,7 +55,7 @@ export default function Login(): ReactElement {
 
         <div
           className={classNames(
-            "bg-gray-200 dark:bg-gray-700 w-3/5 rounded-lg p-8 divide-gray-700 z-10",
+            "bg-main w-3/5 rounded p-8 z-10",
             style?.login_panel
           )}
         >
@@ -83,6 +83,7 @@ export default function Login(): ReactElement {
                       type="link"
                       className="cursor-pointer"
                       onClick={sendMailHandle}
+                      ghost
                     >
                       发送邮件
                     </Button>
@@ -106,11 +107,12 @@ export default function Login(): ReactElement {
               <Form.Item>
                 <Button
                   loading={loading}
-                  style={{ width: "100px" }}
                   size="large"
+                  ghost
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
+                  style={{ color: "var(--font-normal)", width: 100 }}
                 >
                   登录
                 </Button>

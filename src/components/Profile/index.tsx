@@ -19,7 +19,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -56,19 +56,21 @@ export const ProfilePanel: React.FC<IProfilePanel> = () => {
         <Spin spinning={loading}>
           <div
             style={{ height: 220 }}
-            className="flex flex-col items-center justify-between w-full p-4 pb-1 space-y-2 text-center bg-bgc"
+            className="flex flex-col items-center justify-between w-full p-4 pb-1 space-y-2 text-center bg-main"
           >
             {data?.user_head ? (
               <img
-                className="w-12 h-12 rounded-md"
+                className="w-16 h-16 rounded"
                 src={CST.static_url + data?.user_head}
                 alt=""
               />
             ) : (
-              <div className="h-12"></div>
+              <div className="h-16"></div>
             )}
             <div className="flex items-center space-x-1">
-              <span className="border">ID:{data?.user_id}</span>
+              <span className="px-2 border rounded border-primary text-primary">
+                ID:{data?.user_id}
+              </span>
               <span className="border">{data?.plat}</span>
               <i
                 className="cursor-pointer text-icon-normal"
@@ -91,12 +93,12 @@ export const ProfilePanel: React.FC<IProfilePanel> = () => {
                 />
               </i>
             </div>
-            <div>{data?.user_name}</div>
-            <div className="dot2">{data?.user_remark}</div>
+            <div className="text-lg">{data?.user_name}</div>
+            <div className="dot2 text-light">{data?.user_remark}</div>
             <div className="self-start text-left">TA最近在听的歌</div>
           </div>
         </Spin>
-        <div className="relative flex-grow w-full bg-bgc">
+        <div className="relative flex-grow w-full bg-main">
           <Spin spinning={listLoading}>
             <div className="w-full h-16"></div>
           </Spin>
@@ -104,7 +106,7 @@ export const ProfilePanel: React.FC<IProfilePanel> = () => {
             {songs?.list?.map((item: any) => (
               <div
                 key={item?.song_id}
-                className="flex items-center p-2 bg-bg-light"
+                className="flex items-center p-2 m-2 rounded bg-select"
               >
                 <div className="flex flex-col items-start justify-between space-y-2">
                   <span>{item?.song_name ?? "--"}</span>
@@ -118,11 +120,11 @@ export const ProfilePanel: React.FC<IProfilePanel> = () => {
           </div>
         </div>
         <div
-          className="flex justify-end w-full bg-bgc"
+          className="flex justify-end w-full bg-main"
           style={{ height: "8%" }}
         >
           <div
-            className="self-center px-2 mr-2 border cursor-pointer"
+            className="self-center px-2 mr-2 border rounded cursor-pointer"
             onClick={goRoom}
           >
             去TA房间看看

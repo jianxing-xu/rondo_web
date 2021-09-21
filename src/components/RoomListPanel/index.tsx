@@ -24,7 +24,7 @@ export const RightHead = ({ title = "" }) => {
       <div>{title}</div>
       <div
         onClick={() => useCoreModel.data?.showDialog(POPKEY.ROOM_CREATE)}
-        className="px-2 border rounded-sm cursor-pointer"
+        className="px-2 border rounded cursor-pointer"
         style={{ borderColor: "var(--font-normal)" }}
       >
         创建房间
@@ -38,7 +38,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -110,7 +110,7 @@ export const RoomListPanel: React.FC = ({ children }) => {
               <div
                 key={index}
                 onClick={() => joinRoom(item?.room_id, index)}
-                className="relative flex flex-col flex-1 px-2 py-2 m-2 rounded-sm cursor-pointer bg-bg-light"
+                className="relative flex flex-col flex-1 px-2 py-2 m-2 transition rounded cursor-pointer hover:bg-select"
               >
                 <div className="flex items-center pb-2">
                   <Tooltip title="房间类型">
@@ -127,7 +127,7 @@ export const RoomListPanel: React.FC = ({ children }) => {
                   </Tooltip>
                   <div>{item?.room_name}</div>
                   <div
-                    className="px-1 ml-auto border rounded-sm text-primary"
+                    className="px-1 ml-auto border rounded text-primary"
                     style={{ borderColor: "var(--primary)" }}
                   >
                     {item?.room_public == 1 ? (
@@ -139,9 +139,9 @@ export const RoomListPanel: React.FC = ({ children }) => {
                     ID:{item?.room_id}
                   </div>
                 </div>
-                <div className="relative flex flex-1 rounded-sm bg-bg-light">
+                <div className="relative flex flex-1 rounded bg-bg-light">
                   <img
-                    className="w-12 h-12 rounded-sm"
+                    className="w-12 h-12 rounded"
                     src={CST.static_url + item?.user_head}
                     alt=""
                   />

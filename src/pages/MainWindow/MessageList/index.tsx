@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { classNames, debounce, timeago } from "utils";
+import { classNames, debounce, hoc, timeago } from "utils";
 
 import _ from "./index.module.css";
 import { useCoreModel, UActionType } from "models/coreModule";
@@ -23,21 +23,38 @@ interface IMsgItemParam {
 }
 
 // 头像下拉次啊单
-export const AvatarMenu = ({ user }: any) => {
-  const { user_id, user_name, user_head } = user;
-  const handleSendsong = () => {
+export const AvatarMenu = ({ user }: any = { user: { user_id: 0 } }) => {
+  // const { user_id, user_name, user_head } = user;
+  const user_id = user?.user_id || 0;
+  const user_name = user?.user_name || "--";
+  const user_head = user?.user_head || CST.fill("/res/images/nohead.jpg");
+
+  const chekcUser = () => {
+    if (!!!user?.user_id) {
+      message.warn("用户不存在");
+      return Promise.reject("");
+    }
+    return Promise.resolve("");
+  };
+
+  const handleSendsong = hoc(() => {
     const core = useCoreModel.data;
     core?.setAt({ user_id, user_name, type: 0, user_head }); // 送歌@
     core?.showDialog(POPKEY.SEARCH);
-  };
+  }, chekcUser);
+  const showHome = hoc(() => {
+    useCoreModel.data?.udsp({ type: UActionType.SU, data: user_id });
+    useCoreModel.data?.showDialog(POPKEY.PROFILE);
+  }, chekcUser);
+  const atTa = hoc(() => {
+    const atUser = { user_id, user_name, user_head, type: 1 };
+    useCoreModel.data?.setAt(atUser);
+  }, chekcUser);
   return (
-    <div className="flex flex-col bg-bg-light text-icon-normal">
+    <div className="flex flex-col bg-bg-light text-normal">
       <div
         className="px-2 py-1 cursor-pointer hover:text-primary"
-        onClick={() => {
-          const atUser = { user_id, user_name, user_head, type: 1 };
-          useCoreModel.data?.setAt(atUser);
-        }}
+        onClick={atTa}
       >
         @TA
       </div>
@@ -49,10 +66,7 @@ export const AvatarMenu = ({ user }: any) => {
       </div>
       <div
         className="px-2 py-1 cursor-pointer hover:text-primary"
-        onClick={() => {
-          useCoreModel.data?.udsp({ type: UActionType.SU, data: user_id });
-          useCoreModel.data?.showDialog(POPKEY.PROFILE);
-        }}
+        onClick={showHome}
       >
         主页
       </div>
@@ -106,14 +120,14 @@ const MsgItem: React.FC<IMsgItemParam> = ({
             <Popover
               trigger="click"
               placement="bottom"
-              color="var(--bg-light)"
+              color="var(--bg-float)"
               destroyTooltipOnHide
               className={classNames("inline w-10 h-10 cursor-pointer", _.head)}
               content={<AvatarMenu user={user} />}
             >
               <img
                 onContextMenu={handleMenu}
-                src={CST.static_url + user?.user_head}
+                src={CST.fill(user?.user_head || "/res/images/nohead.jpg")}
                 alt=""
                 onDoubleClick={(e) => touch(e)}
                 onAnimationEnd={(e: any) =>
@@ -140,13 +154,13 @@ const MsgItem: React.FC<IMsgItemParam> = ({
               <Popover
                 trigger="click"
                 destroyTooltipOnHide
-                color="var(--bg-light)"
+                color="var(--bg-float)"
                 placement="bottom"
                 className={classNames(_.msg_item_main_info)}
                 content={
                   <div>
                     <div
-                      className="cursor-pointer text-icon-normal"
+                      className="cursor-pointer text-normal"
                       onClick={handleBack}
                     >
                       撤回
@@ -163,7 +177,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({
                   )}
                   <div
                     className={classNames(
-                      "max-w-sm px-3 py-2 bg-bgc relative rounded-sm",
+                      "max-w-sm px-3 py-2 bg-chat relative rounded",
                       _.content,
                       loading ? _.loading : ""
                     )}
@@ -190,7 +204,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({
                 )}
                 <div
                   className={classNames(
-                    "max-w-sm px-3 py-2 bg-bgc relative rounded-sm",
+                    "max-w-sm px-3 py-2 bg-main relative rounded",
                     _.content,
                     loading ? _.loading : ""
                   )}
@@ -315,7 +329,7 @@ const NoticeMsg = ({
     }
   }, []);
   return (
-    <div className="pb-5 text-center text-xxs" style={{ color: "#999" }}>
+    <div className="pb-5 text-center text-xxs text-light">
       {showTime ? (
         <div className="pb-5 text-center time" style={{ fontSize: 12 }}>
           {timeago(noticeItem?.timestamp)}
@@ -417,11 +431,11 @@ export const MessageList: React.FC = () => {
           onClick={() =>
             boxRef.current.scrollTo(0, boxRef.current.scrollHeight + 1000)
           }
-          className="absolute p-4 shadow-md cursor-pointer right-3"
+          className="absolute p-4 rounded shadow-md cursor-pointer right-3"
           style={{
             bottom: 10,
-            background: "var(--bg-revers)",
-            color: "var(--txt-revers)",
+            background: "var(--bg-float)",
+            color: "var(--font-light2)",
           }}
         >
           <SvgIcon name="arrow-down" />

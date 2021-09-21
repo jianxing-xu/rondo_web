@@ -239,3 +239,11 @@ export const copy = (sometext: string) => {
   document.execCommand("copy");
   document.body.removeChild(hiddenInput);
 };
+
+export const hoc = (fn: Function, callback: () => Promise<any>) => {
+  return () => {
+    callback().then(() => {
+      fn();
+    });
+  };
+};

@@ -131,7 +131,7 @@ import {
   aQ as st,
   aR as ct,
   aS as ut,
-} from "./index.2974fcfe.js";
+} from "./index.f6e0add2.js";
 import {
   r as ft,
   _ as pt,
@@ -142,7 +142,7 @@ import {
   f as gt,
   h as yt,
 } from "./vendor.a6a4925f.js";
-import "./index.5fe6a9c3.js";
+import "./index.62254d56.js";
 var xt = Object.freeze({
     __proto__: null,
     [Symbol.toStringTag]: "Module",
@@ -18072,7 +18072,7 @@ const kp = ({ title: e = "", onSave: t = () => {}, loading: n = !1 }) =>
                     Qf,
                     {
                       onChange: (e) =>
-                        n((t) => s(i({}, t), { rputlic: 4 == e })),
+                        n((t) => s(i({}, t), { dtmode: 4 == e })),
                     },
                     dt.createElement(Qf.Option, { value: 0 }, "文字聊天房"),
                     dt.createElement(Qf.Option, { value: 1 }, "音乐点歌房"),

@@ -4,7 +4,6 @@ import { MInput } from "components/MInput";
 import { useFetch } from "hooks/useFetch";
 import { useCoreModel } from "models/coreModule";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { classNames } from "utils";
 import CST from "utils/CST";
 
@@ -19,7 +18,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -75,23 +74,23 @@ export const AddSongPanel: React.FC<IAddSongPanel> = () => {
     <RightPanelWrapper>
       {at && at.type == 0 ? (
         <div
-          className="absolute bottom-0 z-10 flex flex-1 px-2 py-2 m-2 rounded-sm shadow-md left-3 right-3"
-          style={{ background: "var(--font-normal)" }}
+          className="absolute bottom-0 z-10 flex flex-1 px-2 py-2 m-2 rounded shadow-md left-3 right-3"
+          style={{ background: "var(--bg-float)" }}
         >
           <img
-            className="w-12 h-12 rounded-sm"
+            className="w-12 h-12 rounded"
             src={CST.static_url + at?.user_head}
             alt=""
           />
           <div className="w-2/3 pl-2">
-            <div className="truncate text-light">{at?.user_name}</div>
-            <div className="pt-2 truncate text-xxs text-light">
+            <div className="truncate text-normal">{at?.user_name}</div>
+            <div className="pt-2 truncate text-xxs text-normal">
               你正在为TA挑选一首歌
             </div>
           </div>
           <div
             onClick={() => setAt(null)}
-            className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none text-light right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
+            className="absolute w-10 px-1 text-center transition border rounded cursor-pointer select-none text-normal right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
             style={{ borderColor: "var(--font-normal)" }}
           >
             取消
@@ -125,9 +124,9 @@ export const AddSongPanel: React.FC<IAddSongPanel> = () => {
             <Spin spinning={item?.loading ?? false} key={index}>
               <div
                 key={index}
-                className="relative flex flex-1 px-2 py-2 m-2 rounded-sm bg-bg-light"
+                className="relative flex flex-1 px-2 py-2 m-2 transition rounded hover:bg-select"
               >
-                <img className="w-12 h-12 rounded-sm" src={item?.pic} alt="" />
+                <img className="w-12 h-12 rounded" src={item?.pic} alt="" />
                 <div className="w-2/3 pl-2">
                   <div className="truncate">
                     {!!item?.week ? (
@@ -141,7 +140,7 @@ export const AddSongPanel: React.FC<IAddSongPanel> = () => {
                 </div>
                 <div
                   onClick={() => addSongHandle(item.mid, index)}
-                  className="absolute w-10 px-1 text-center transition border rounded-sm cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
+                  className="absolute w-10 px-1 text-center transition border rounded cursor-pointer select-none right-2 text-xxs active:text-gray-900 dark:active:text-gray-100 active:bg-opacity-60"
                   style={{ borderColor: "var(--font-normal)" }}
                 >
                   点歌

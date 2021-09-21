@@ -1,4 +1,4 @@
-import React, { forwardRef, KeyboardEventHandler, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { classNames } from "utils";
 import _ from "./index.module.css";
 interface IMInput {
@@ -22,7 +22,7 @@ export const MInput: React.FC<IMInput> = forwardRef(
     return (
       <div
         className={classNames(
-          "flex rounded-sm overflow-hidden ring-0",
+          "flex rounded overflow-hidden ring-0",
           _.minput_w
         )}
       >
@@ -32,7 +32,7 @@ export const MInput: React.FC<IMInput> = forwardRef(
           placeholder={hint}
           type="text"
           className={classNames(
-            "inline flex-grow border-0 outline-none bg-bg-light ring-0",
+            "inline flex-grow border-0 outline-none bg-input ring-0",
             _.minput
           )}
           value={v}

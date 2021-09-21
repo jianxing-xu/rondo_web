@@ -19,7 +19,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-bgc"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
     >
       {children}
     </div>
@@ -52,7 +52,7 @@ export const OnlineListPanel: React.FC<IOnlineListPanel> = () => {
             // 单个
             <div
               key={item?.user_id}
-              className="relative flex flex-1 px-2 py-2 m-2 rounded-sm bg-bg-light"
+              className="relative flex flex-1 px-2 py-2 m-2 transition rounded hover:bg-select"
             >
               <Popover
                 destroyTooltipOnHide
@@ -61,12 +61,12 @@ export const OnlineListPanel: React.FC<IOnlineListPanel> = () => {
               >
                 <img
                   onDoubleClick={(e) => touch(item, e)}
-                  className="w-12 h-12 rounded-sm"
+                  className="w-12 h-12 rounded"
                   src={CST.static_url + item?.user_head}
                   alt=""
                 />
               </Popover>
-              <div className="w-3/5 pl-2">
+              <div className="w-4/5 pl-2 truncate">
                 <div className="truncate">{item?.user_name}</div>
                 <div className="flex items-center pt-2 truncate text-md text-light">
                   <span
@@ -77,7 +77,7 @@ export const OnlineListPanel: React.FC<IOnlineListPanel> = () => {
                   >
                     <SvgIcon name={item.user_sex == 0 ? "boy" : "girl"} />
                   </span>
-                  <span>{item?.user_remark}</span>
+                  <span className="truncate">{item?.user_remark}</span>
                 </div>
               </div>
             </div>

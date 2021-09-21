@@ -466,7 +466,7 @@ function coreModule() {
   async function fetchWebsocketUrl(
     roomId: number,
     messageController: any
-  ): Promise<IConnectParam> {
+  ): Promise<IConnectParam | any> {
     try {
       const data = await getWebsocketUrl(roomId);
       socket.setMsgCtrl(data, messageController); // 连接socket
