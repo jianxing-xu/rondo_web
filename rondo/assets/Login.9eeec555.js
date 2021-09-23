@@ -13,14 +13,14 @@ import {
   p as o,
   n as i,
   R as m,
-  af as d,
-  aT as u,
+  af as u,
   aU as p,
-  aV as f,
+  aV as d,
+  aW as f,
   q as g,
-} from "./index.f6e0add2.js";
-import { r as v, u as y, R as h } from "./vendor.a6a4925f.js";
-import "./index.62254d56.js";
+} from "./index.e5b045f2.js";
+import { r as v, u as h, R as y } from "./vendor.a6a4925f.js";
+import "./index.cdb10a32.js";
 var b = {
     icon: {
       tag: "svg",
@@ -61,17 +61,20 @@ var E = v.exports.forwardRef(x),
     name: "user",
     theme: "outlined",
   },
-  N = function (e, a) {
+  _ = function (e, a) {
     return v.exports.createElement(
       n,
       Object.assign({}, e, { ref: a, icon: w })
     );
   };
-N.displayName = "UserOutlined";
-var j = v.exports.forwardRef(N);
-var _ = { login_panel: "_login_panel_ryq59_1" };
+_.displayName = "UserOutlined";
+var N = v.exports.forwardRef(_);
+var j = {
+  login_panel: "_login_panel_1m4qr_1",
+  "ant-input-group-addon": "_ant-input-group-addon_1m4qr_5",
+};
 function z() {
-  const e = y(),
+  const e = h(),
     [n, b] = v.exports.useState(!1),
     { user: x } = s((e) => [e.user]),
     [w] = c.useForm();
@@ -79,40 +82,40 @@ function z() {
     (null == x ? void 0 : x.user_id) !== o.guestUserInfo.user_id &&
       e.replace("/");
   }, []);
-  return h.createElement(
-    h.Fragment,
+  return y.createElement(
+    y.Fragment,
     null,
-    h.createElement(
+    y.createElement(
       "div",
       {
         className:
-          "z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-bgc",
+          "z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-main",
       },
-      h.createElement("div", {
+      y.createElement("div", {
         style: { backgroundImage: 'url("/public/bg.jpg")' },
         className:
           "fixed top-0 bottom-0 left-0 right-0 w-full h-full dark:opacity-30 opacity-60",
       }),
-      h.createElement(
+      y.createElement(
         "div",
         {
           className: i(
-            "bg-gray-200 dark:bg-gray-700 w-3/5 rounded-lg p-8 divide-gray-700 z-10",
-            null == _ ? void 0 : _.login_panel
+            "bg-main w-3/5 rounded p-8 z-10",
+            null == j ? void 0 : j.login_panel
           ),
         },
-        h.createElement(
+        y.createElement(
           "div",
           {
             className:
               "flex items-center justify-between divide-x-2 divide-gray-400 login_panel_head",
           },
-          h.createElement(
+          y.createElement(
             "h2",
             { className: "text-3xl font-semibold text-current" },
             "先登录后在一起玩耍"
           ),
-          h.createElement(
+          y.createElement(
             "a",
             {
               onClick: () => {
@@ -125,17 +128,17 @@ function z() {
             "游客登录"
           )
         ),
-        h.createElement(
+        y.createElement(
           "div",
           { className: "pt-8 login_panel_form" },
-          h.createElement(
+          y.createElement(
             c,
             {
               form: w,
               onFinish: (n) => {
                 b(!0),
-                  (n.plat = u().name),
-                  p(
+                  (n.plat = p().name),
+                  d(
                     ((e, n) => {
                       for (var s in n || (n = {}))
                         t.call(n, s) && l(e, s, n[s]);
@@ -150,15 +153,15 @@ function z() {
                     .finally(() => b(!1));
               },
             },
-            h.createElement(
+            y.createElement(
               c.Item,
               {
                 name: "account",
                 rules: [{ required: !0, message: "你是谁？" }],
               },
-              h.createElement(m, {
-                addonAfter: h.createElement(
-                  d,
+              y.createElement(m, {
+                addonAfter: y.createElement(
+                  u,
                   {
                     loading: n,
                     type: "link",
@@ -172,43 +175,45 @@ function z() {
                           })
                           .finally(() => b(!1));
                     },
+                    ghost: !0,
                   },
                   "发送邮件"
                 ),
                 size: "large",
-                prefix: h.createElement(j, {
+                prefix: y.createElement(N, {
                   className: "site-form-item-icon",
                 }),
                 placeholder: "账户/邮箱/ID",
               })
             ),
-            h.createElement(
+            y.createElement(
               c.Item,
               {
                 name: "password",
                 rules: [{ required: !0, message: "啊这..." }],
               },
-              h.createElement(m, {
+              y.createElement(m, {
                 size: "large",
-                prefix: h.createElement(E, {
+                prefix: y.createElement(E, {
                   className: "site-form-item-icon",
                 }),
                 type: "password",
                 placeholder: "密码/邮箱验证码",
               })
             ),
-            h.createElement(
+            y.createElement(
               c.Item,
               null,
-              h.createElement(
-                d,
+              y.createElement(
+                u,
                 {
                   loading: n,
-                  style: { width: "100px" },
                   size: "large",
+                  ghost: !0,
                   type: "primary",
                   htmlType: "submit",
                   className: "login-form-button",
+                  style: { color: "var(--font-normal)", width: 100 },
                 },
                 "登录"
               )

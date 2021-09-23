@@ -921,7 +921,7 @@
   :not(.ant-input-affix-wrapper-disabled).ant-input-affix-wrapper:hover,
 .ant-form-item-has-warning :not(.ant-input-disabled).ant-input,
 .ant-form-item-has-warning :not(.ant-input-disabled).ant-input:hover {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #faad14;
 }
 .ant-form-item-has-warning
@@ -962,7 +962,7 @@
 .ant-form-item-has-warning
   .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
   .ant-select-selector {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #faad14 !important;
 }
 .ant-form-item-has-warning
@@ -978,7 +978,7 @@
 }
 .ant-form-item-has-warning .ant-input-number,
 .ant-form-item-has-warning .ant-picker {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #faad14;
 }
 .ant-form-item-has-warning .ant-input-number-focused,
@@ -992,7 +992,7 @@
 }
 .ant-form-item-has-warning .ant-input-number:not([disabled]):hover,
 .ant-form-item-has-warning .ant-picker:not([disabled]):hover {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #faad14;
 }
 .ant-form-item-has-warning .ant-cascader-picker:focus .ant-cascader-input {
@@ -1010,7 +1010,7 @@
   :not(.ant-input-affix-wrapper-disabled).ant-input-affix-wrapper:hover,
 .ant-form-item-has-error :not(.ant-input-disabled).ant-input,
 .ant-form-item-has-error :not(.ant-input-disabled).ant-input:hover {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #ff4d4f;
 }
 .ant-form-item-has-error
@@ -1049,7 +1049,7 @@
 .ant-form-item-has-error
   .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input)
   .ant-select-selector {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #ff4d4f !important;
 }
 .ant-form-item-has-error
@@ -1076,7 +1076,7 @@
 }
 .ant-form-item-has-error .ant-input-number,
 .ant-form-item-has-error .ant-picker {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #ff4d4f;
 }
 .ant-form-item-has-error .ant-input-number-focused,
@@ -1090,14 +1090,14 @@
 }
 .ant-form-item-has-error .ant-input-number:not([disabled]):hover,
 .ant-form-item-has-error .ant-picker:not([disabled]):hover {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #ff4d4f;
 }
 .ant-form-item-has-error .ant-mention-wrapper .ant-mention-editor,
 .ant-form-item-has-error
   .ant-mention-wrapper
   .ant-mention-editor:not([disabled]):hover {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #ff4d4f;
 }
 .ant-form-item-has-error
@@ -1118,7 +1118,7 @@
   border-color: #ff4d4f;
 }
 .ant-form-item-has-error .ant-cascader-picker:focus .ant-cascader-input {
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   border-color: #ff7875;
   border-right-width: 1px !important;
   outline: 0;
@@ -1592,7 +1592,7 @@
   color: var(--font-normal);
   font-size: 14px;
   line-height: 1.5715;
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   background-image: none;
   border: 1px solid #d9d9d9;
   border-radius: 2px;
@@ -1777,7 +1777,7 @@ textarea.ant-input-affix-wrapper {
   color: var(--font-normal);
   font-size: 14px;
   line-height: 1.5715;
-  background-color: var(--bg-bg-light);
+  background-color: var(--bg-main);
   background-image: none;
   border: 1px solid #d9d9d9;
   border-radius: 2px;
