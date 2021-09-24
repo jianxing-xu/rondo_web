@@ -49,7 +49,7 @@ export default function Login(): ReactElement {
     <>
       <div className="z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-main">
         <div
-          style={{ backgroundImage: `url("/public/bg.jpg")` }}
+          style={{ backgroundImage: `url("bg.jpg")` }}
           className="fixed top-0 bottom-0 left-0 right-0 w-full h-full dark:opacity-30 opacity-60"
         ></div>
 
