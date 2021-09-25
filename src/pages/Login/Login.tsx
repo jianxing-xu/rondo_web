@@ -8,12 +8,14 @@ import { login } from "api/user";
 import { sendMail } from "api/common";
 import CST from "utils/CST";
 import { useCoreModel } from "models/coreModule";
+import { useGlobalModel } from "models/globalModel";
 
 export default function Login(): ReactElement {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const { user } = useCoreModel((m) => [m.user]);
   const [form] = Form.useForm();
+  const { dark } = useGlobalModel((m) => [m.dark]);
 
   useEffect(() => {
     if (user?.user_id !== CST.guestUserInfo.user_id) {
@@ -49,7 +51,9 @@ export default function Login(): ReactElement {
     <>
       <div className="z-10 flex items-center justify-center w-full h-full bg-opacity-50 login bg-main">
         <div
-          style={{ backgroundImage: `url("bg.jpg")` }}
+          style={{
+            backgroundImage: `url( ${dark == 1 ? "bg_dark" : "bg_light"}.jpg)`,
+          }}
           className="fixed top-0 bottom-0 left-0 right-0 w-full h-full dark:opacity-30 opacity-60"
         ></div>
 

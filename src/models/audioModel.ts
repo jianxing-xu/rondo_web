@@ -60,9 +60,11 @@ function audioModel() {
     };
     // 元数据加载完成
     player.onloadedmetadata = () => {
+      console.log(useCoreModel?.data?.getNowTime());
       setCurrent(useCoreModel?.data?.getNowTime());
     };
     player.onloadeddata = () => {
+      console.log(useCoreModel?.data?.getNowTime());
       setCurrent(useCoreModel?.data?.getNowTime());
     };
     return () => {

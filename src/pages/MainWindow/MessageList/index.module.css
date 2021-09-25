@@ -39,6 +39,8 @@ img {
 }
 .content {
   @apply bg-chat;
+  min-width: 30px;
+  min-height: 40px;
 }
 .content.loading::after {
   content: " ";

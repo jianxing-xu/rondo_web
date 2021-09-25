@@ -21,12 +21,28 @@ class Socket {
   public account: number | undefined = -1;
   public ticket: string | undefined;
 
+  private messageController: any = null;
+
   constructor(timeOut: number = 3000) {
-    // console.log("Socket INIT");
+    console.log("New Socket Instance!");
+    window.addEventListener("online", () => {
+      if (navigator.onLine) {
+        this.pullPlaysongEvent();
+      }
+    });
     const protocol = window.location.protocol == "http:" ? "ws://" : "wss://";
     this.url = protocol + CST.wsUrl;
     this.connected = false;
     this.timeOut = timeOut;
+  }
+
+  // 断网重连时重新拉去播放事件
+  public pullPlaysongEvent() {
+    setTimeout(() => {
+      if (this.connected && this.ws) {
+        this.ws.send("pullPlaySong");
+      }
+    }, 300);
   }
 
   public changeRoom(roomId: number) {
@@ -46,6 +62,9 @@ class Socket {
   public connect(
     messageController: (data: any) => void = (d: any) => {}
   ): void {
+    if (!!!this.messageController) {
+      this.messageController = messageController;
+    }
     if (this.connected) {
       console.log("Socket connected!");
       return;
@@ -63,8 +82,10 @@ class Socket {
       messageController && messageController(JSON.parse(e.data));
     });
 
-    this.ws.onerror = (e: any) => {
-      this.reconnect();
+    this.ws.onerror = async (e: any) => {
+      if (await this.forceClose()) {
+        this.reconnect();
+      }
     };
 
     this.ws.onclose = (e: any) => {
@@ -95,6 +116,8 @@ class Socket {
     if (this.connected) {
       return;
     }
+    console.warn("Socket断线重连中...");
+    this.connect(this.messageController);
     setTimeout(() => {
       this.reconnect();
     }, 5000);

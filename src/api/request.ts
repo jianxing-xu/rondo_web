@@ -11,15 +11,15 @@ import { local } from "utils";
 import { hashHistory } from "App";
 import React from "react";
 
-const instance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "http://106.15.137.156:8899/api/"
-      : "http://127.0.0.1:8080/api/",
-});
 // const instance = axios.create({
-//   baseURL: "http://49.235.175.45:8899/api/",
+//   baseURL:
+//     process.env.NODE_ENV === "production"
+//       ? "http://106.15.137.156:8899/api/"
+//       : "http://127.0.0.1:8080/api/",
 // });
+const instance = axios.create({
+  baseURL: "http://106.15.137.156:8899/api/",
+});
 // const instance = axios.create({
 //   baseURL: "http://127.0.0.1:8080/api/"
 // });
