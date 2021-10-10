@@ -10,20 +10,17 @@ stages:
         name: ins_dep
         displayName: 安装依赖
         nodeVersion: 15.12.0
-        artifacts:
-          - path: []
-            name: dist_flag
+        artifacts: []
         commands:
           - 'yarn '
       - step: build@nodejs
         name: umi_build
         displayName: umi build
         nodeVersion: 15.12.0
-        artifacts:
-          - name: dist_flag
-            path: []
+        artifacts: []
         commands:
           - yarn build
+        dependsOn: ins_dep
 triggers:
   push:
     branches:
