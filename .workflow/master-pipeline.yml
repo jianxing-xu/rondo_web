@@ -1,0 +1,34 @@
+version: '1.0'
+name: pipeline-20211010
+displayName: pipeline-20211010
+stages:
+  - stage: ''
+    name: install
+    displayName: install
+    steps:
+      - step: build@nodejs
+        name: ins_dep
+        displayName: 安装依赖
+        nodeVersion: 15.12.0
+        artifacts:
+          - path: []
+            name: dist_flag
+        commands:
+          - 'yarn '
+      - step: build@nodejs
+        name: umi_build
+        displayName: umi build
+        nodeVersion: 15.12.0
+        artifacts:
+          - name: dist_flag
+            path: []
+        commands:
+          - yarn build
+triggers:
+  push:
+    branches:
+      include:
+        - master
+    commitMessages:
+      include:
+        - release
