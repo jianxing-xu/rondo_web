@@ -5,13 +5,14 @@ import _ from "./index.module.css";
 import { useCoreModel, UActionType } from "models/coreModule";
 import CST, { MT, POPKEY } from "utils/CST";
 import { backMessage, mo } from "api/message";
-import { Popover, notification, message, Spin } from "antd";
+import { Popover, notification, message, Spin, Badge, Tag, Image } from "antd";
 import { createPortal } from "react-dom";
 import { useGlobalModel } from "models/globalModel";
 import { noticePlayer } from "models/audioModel";
 
 import SvgIcon from "components/SvgIcon";
 
+// @depreat
 export const PortalWidget: React.FC<any> = ({ children, ...props }) => {
   return createPortal(<div {...props}>{children}</div>, document.body);
 };
@@ -99,10 +100,13 @@ const MsgItem: React.FC<IMsgItemParam> = ({
     loading,
     message_id,
   } = msgItem;
+  const isNotice = !Number.isInteger(message_id);
   const handleMenu = () => {};
   // 处理撤回消息
   const handleBack = () => {
-    if (!Number.isInteger(message_id)) return message.error("你不能撤回公告");
+    if (!Number.isInteger(message_id)) {
+      return message.error("你不能撤回公告");
+    }
     backMessage(useCoreModel.data?.roomId, message_id)
       .then(() => {})
       .catch((e) => {});
@@ -118,11 +122,14 @@ const MsgItem: React.FC<IMsgItemParam> = ({
         <div className={classNames("flex", _.msg_item_main)}>
           {!isMe ? (
             <Popover
-              trigger="click"
+              trigger="contextMenu"
               placement="bottom"
               color="var(--bg-float)"
               destroyTooltipOnHide
-              className={classNames("inline w-10 h-10 cursor-pointer", _.head)}
+              className={classNames(
+                "inline w-10 h-10 cursor-pointer overflow-hidden rounded",
+                _.head
+              )}
               content={<AvatarMenu user={user} />}
             >
               <img
@@ -152,7 +159,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({
             // 是我需要显示撤回pop
             isMe ? (
               <Popover
-                trigger="click"
+                trigger="contextMenu"
                 destroyTooltipOnHide
                 color="var(--bg-float)"
                 placement="bottom"
@@ -182,10 +189,15 @@ const MsgItem: React.FC<IMsgItemParam> = ({
                       loading ? _.loading : ""
                     )}
                   >
+                    {isNotice ? (
+                      <span className="px-1 mr-2 border rounded room_name border-primary text-primary">
+                        公告
+                      </span>
+                    ) : null}
                     {type == "text" ? (
                       content
                     ) : type == "img" ? (
-                      <img src={content} />
+                      <Image src={content} preview={{ mask: null }} />
                     ) : null}
                   </div>
                 </div>
@@ -209,10 +221,15 @@ const MsgItem: React.FC<IMsgItemParam> = ({
                     loading ? _.loading : ""
                   )}
                 >
+                  {isNotice ? (
+                    <span className="px-1 mr-2 border rounded room_name border-primary text-primary">
+                      公告
+                    </span>
+                  ) : null}
                   {type == "text" ? (
                     content
                   ) : type == "img" ? (
-                    <img src={content} />
+                    <Image src={content} preview={{ mask: null }} />
                   ) : null}
                 </div>
               </div>

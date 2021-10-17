@@ -1,3 +1,20 @@
 .ant-input {
   color: #000 !important;
 }
+.dropdown {
+  display: none;
+}
+@media (max-width: 640px) {
+  .dropdown {
+    display: block;
+  }
+  .bugIcon {
+    display: none;
+  }
+}
+.hide .ant-menu-vertical {
+  border-right: 0 !important;
+}
+.hide .ant-dropdown-menu {
+  padding: 0 !important;
+}

@@ -58,18 +58,15 @@ export default function Login(): ReactElement {
         ></div>
 
         <div
-          className={classNames(
-            "bg-main w-3/5 rounded p-8 z-10",
-            style?.login_panel
-          )}
+          className={classNames("bg-main rounded p-8 z-10", style?.login_panel)}
         >
-          <div className="flex items-center justify-between divide-x-2 divide-gray-400 login_panel_head">
-            <h2 className="text-3xl font-semibold text-current">
+          <div className="divide-x-2 divide-gray-400 login_panel_head">
+            <span className="inline-block pr-2 text-xl text-current">
               先登录后在一起玩耍
-            </h2>
+            </span>
             <a
               onClick={handleVisitor}
-              className="pl-8 text-lg text-gray-400 cursor-pointer select-none hover:text-gray-500"
+              className="pl-2 text-lg text-gray-400 cursor-pointer select-none hover:text-gray-500"
             >
               游客登录
             </a>

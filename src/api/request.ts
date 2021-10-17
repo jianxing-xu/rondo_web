@@ -1,7 +1,7 @@
 /**
  * 请求封装
  * @auther jason xu
- * @lastUpdate 2020/7/30
+ * @lastUpdate 2021/7/30
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { message, Modal } from "antd";
@@ -48,7 +48,7 @@ instance.interceptors.response.use(
         // 需要提示的成功消息
         case 1001:
           message.success(data["msg"]);
-          return Promise.reject(data["msg"]);
+          return Promise.reject(1001);
         default:
           break;
       }

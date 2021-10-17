@@ -1,12 +1,18 @@
 import { Tooltip, Slider, message, Upload, Modal } from "antd";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import _ from "./index.module.css";
-import { classNames, insertHtml, uuid } from "utils";
+import { classNames, debounce, insertHtml, uuid } from "utils";
 import SvgIcon from "components/SvgIcon";
 import { useGlobalModel } from "models/globalModel";
 import { useAudioModel } from "models/audioModel";
 import { useCoreModel, UActionType } from "models/coreModule";
-import { favSong, passSong } from "api/song";
+import { favSong, passSong, removeFav, reqIsFav } from "api/song";
 import { send } from "api/message";
 import CST, { POPKEY } from "utils/CST";
 import { uploadImg } from "api/attach";
@@ -75,10 +81,12 @@ interface IMessageInput {
 export const MessageInput: React.FC<IMessageInput> = ({
   onEnter = () => {},
 }) => {
+  const [isFav, setFav] = useState(false);
   const { changeSettings, volume } = useGlobalModel((m) => [m.volume]);
-  const { now, at, setAt, setMsgs, showDialog } = useCoreModel((m) => [
+  const { now, at, setAt, setMsgs, showDialog, user } = useCoreModel((m) => [
     m.now,
     m.at,
+    m.user,
   ]);
   const textRef = useRef<HTMLInputElement | any>();
   // ctrl+enter换行 enter发送
@@ -106,10 +114,32 @@ export const MessageInput: React.FC<IMessageInput> = ({
       .then(() => {})
       .catch((e) => {});
   };
-  const handleFav = () => {
-    if (!now?.mid) return message.info("暂无正在播放歌曲");
-    favSong(now.mid, useCoreModel.data?.roomId).catch((e) => {});
-  };
+  const handleFav = useCallback(
+    debounce(
+      () => {
+        if (!now?.mid) return message.info("暂无正在播放歌曲");
+        if (!isFav) {
+          favSong(now.mid, useCoreModel.data?.roomId)
+            .then(() => {})
+            .catch((e) => {
+              if (e === 1001) {
+                setFav(true);
+              }
+            });
+        } else {
+          removeFav(now.mid)
+            .then(() => {
+              setFav(false);
+              message.info("取消收藏成功");
+            })
+            .catch(() => {});
+        }
+      },
+      300,
+      false
+    ),
+    [isFav, now?.mid]
+  );
   const handleSend = (value: string, type = "text") => {
     if (!!!value?.trim()) return;
     const msgParam = {
@@ -146,7 +176,6 @@ export const MessageInput: React.FC<IMessageInput> = ({
   };
 
   useEffect(() => {
-    console.log(!!at && at?.user_name?.trim() && at.type == 1);
     if (!!at && at?.user_name?.trim() && at.type == 1) {
       textRef.current.value += `@${at?.user_name} `;
     }
@@ -168,6 +197,15 @@ export const MessageInput: React.FC<IMessageInput> = ({
     document.body.addEventListener("click", hide, false);
     return () => document.body.removeEventListener("click", hide, false);
   }, []);
+
+  useEffect(() => {
+    if (user?.user_id == -1 || !!!now) return;
+    reqIsFav(now?.mid)
+      .then((res) => {
+        setFav(res);
+      })
+      .catch((e) => {});
+  }, [now, user]);
 
   const handleUpload = (e: any) => {
     const hide = message.loading("上传中...");
@@ -224,7 +262,9 @@ export const MessageInput: React.FC<IMessageInput> = ({
           <SvgIcon
             click={handleFav}
             name="fav"
-            className="cursor-pointer text-icon-normal hover:text-primary"
+            className={`cursor-pointer ${
+              isFav ? "text-primary" : "text-icon-normal"
+            } hover:text-primary`}
           />
 
           <Tooltip

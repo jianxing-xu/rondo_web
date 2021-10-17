@@ -1,5 +1,6 @@
 import { Button, Form, Input, Select, Modal } from "antd";
 import { createRoom } from "api/room";
+import { HideAllIcon } from "components/HideAllIcon";
 import { useFetch } from "hooks/useFetch";
 import { useCoreModel } from "models/coreModule";
 import React from "react";
@@ -12,8 +13,7 @@ export const RightHead = ({
   loading = false,
 }) => {
   return (
-    <div className="flex justify-between px-4 py-3 text-2xl border-b text-normal">
-      <span>{title}</span>
+    <div className="flex items-center justify-between px-4 py-3 text-2xl border-b text-normal">
       <Button
         loading={loading}
         type="ghost"
@@ -23,6 +23,8 @@ export const RightHead = ({
       >
         创建
       </Button>
+      <span>{title}</span>
+      <HideAllIcon />
     </div>
   );
 };
@@ -32,7 +34,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>
@@ -50,6 +52,7 @@ export const CreateRoomPanel: React.FC<ICreateRoomPanel> = () => {
         content: `房间创建成功！房间号为:${res?.room_id}，是否立刻进入？`,
         onOk() {
           useCoreModel.data?.changeRoom(res?.room_id);
+          useCoreModel.data?.hdieAll();
         },
       });
     });

@@ -8,10 +8,11 @@ import { classNames } from "utils";
 import { POPKEY } from "utils/CST";
 
 import _ from "./index.module.css";
+import { HideAllIcon } from "components/HideAllIcon";
 
 export const RightHead = () => {
   return (
-    <div className="flex justify-between py-3 text-2xl ">
+    <div className="flex items-center justify-between py-3 text-2xl">
       <span>等待播放歌曲</span>
       <span
         onClick={() => useCoreModel?.data?.showDialog(POPKEY.SEARCH)}
@@ -20,6 +21,7 @@ export const RightHead = () => {
       >
         我要点歌
       </span>
+      <HideAllIcon />
     </div>
   );
 };

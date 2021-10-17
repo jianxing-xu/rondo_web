@@ -97,3 +97,7 @@ interface IAddNewSong {
 export const addNewSong = (data: IAddNewSong) => {
   return instance.post("/song/addNewSong", data);
 };
+
+export const reqIsFav = (mid: string): Promise<boolean> => {
+  return instance.get("/song/isFav/" + mid);
+};

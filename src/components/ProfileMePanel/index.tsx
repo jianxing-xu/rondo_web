@@ -10,6 +10,7 @@ import {
 } from "antd";
 import { uploadImg } from "api/attach";
 import { updateUser } from "api/user";
+import { HideAllIcon } from "components/HideAllIcon";
 import { useFetch } from "hooks/useFetch";
 import { UActionType, useCoreModel } from "models/coreModule";
 import React from "react";
@@ -23,16 +24,9 @@ export const RightHead = ({
   loading = false,
 }) => {
   return (
-    <div className="flex justify-between px-4 py-3 text-2xl border-b">
+    <div className="flex items-center justify-between px-4 py-3 text-2xl border-b">
       <span>{title}</span>
-      <Button
-        loading={loading}
-        type="ghost"
-        onClick={onSave}
-        style={{ color: "var(--font-normal)" }}
-      >
-        保存
-      </Button>
+      <HideAllIcon />
     </div>
   );
 };
@@ -42,7 +36,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>
@@ -141,14 +135,21 @@ export const ProfileMePanel: React.FC<IProfileMePanel> = ({ children }) => {
           </Form>
         </div>
         <div
-          className="flex justify-end w-full bg-main"
+          className="flex justify-between w-full px-3 bg-main"
           style={{ height: "8%" }}
         >
+          <Button
+            loading={Uloading}
+            type="ghost"
+            onClick={save}
+            style={{ color: "var(--font-normal)" }}
+          >
+            保存
+          </Button>
           <Button
             type="ghost"
             onClick={u?.logout}
             style={{ color: "var(--font-normal)" }}
-            className="mr-2"
           >
             退出登录
           </Button>

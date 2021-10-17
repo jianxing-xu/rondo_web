@@ -13,9 +13,12 @@ import { useGlobalModel } from "models/globalModel";
 import { useCoreModel } from "models/coreModule";
 import { useHistory } from "react-router-dom";
 
-const Btn: React.FC<any> = ({ src, title, ...props }) => {
+export const Btn: React.FC<any> = ({ src, title, ...props }) => {
   return (
-    <div className="text-center cursor-pointer select-none" {...props}>
+    <div
+      className="flex flex-col text-center cursor-pointer select-none"
+      {...props}
+    >
       <img src={src} className="w-5 h-5 mx-auto mb-1 " alt="" />
       <span className="text-xs font-normal text-sidebar active:text-light2">
         {title}
@@ -23,7 +26,7 @@ const Btn: React.FC<any> = ({ src, title, ...props }) => {
     </div>
   );
 };
-const SettingMenu: React.FC = () => {
+export const SettingMenu: React.FC = () => {
   const { notice, dark, sound, changeSettings } = useGlobalModel((model) => [
     model.notice,
     model.dark,
@@ -58,6 +61,33 @@ const SettingMenu: React.FC = () => {
 interface ISideBar {
   click: (type: string, e: any) => void;
 }
+
+("addsong");
+("pointed");
+("songlist");
+("rooms");
+export const menu = [
+  {
+    icon: add_song,
+    label: "点歌",
+    value: "addsong",
+  },
+  {
+    icon: queue,
+    label: "已点",
+    value: "pointed",
+  },
+  {
+    icon: songlist,
+    label: "歌单",
+    value: "songlist",
+  },
+  {
+    icon: room,
+    label: "房间",
+    value: "rooms",
+  },
+];
 export const SideBar: React.FC<ISideBar> = ({
   click = (type: string) => {},
 }) => {
@@ -73,7 +103,7 @@ export const SideBar: React.FC<ISideBar> = ({
   return (
     <>
       <div
-        className="z-10 w-20 bg-sidebar"
+        className={classNames("z-10 w-20 bg-sidebar ", _.bg_sidebar)}
         onClick={(e) => e.stopPropagation()}
       >
         <div
@@ -100,26 +130,14 @@ export const SideBar: React.FC<ISideBar> = ({
                 "flex-1 flex flex-col justify-center space-y-6"
               )}
             >
-              <Btn
-                src={add_song}
-                title="点歌"
-                onClick={click.bind(this, "addsong")}
-              />
-              <Btn
-                src={queue}
-                title="已点"
-                onClick={click.bind(this, "pointed")}
-              />
-              <Btn
-                src={songlist}
-                title="歌单"
-                onClick={click.bind(this, "songlist")}
-              />
-              <Btn
-                src={room}
-                title="房间 "
-                onClick={click.bind(this, "rooms")}
-              />
+              {menu.map((item) => (
+                <Btn
+                  key={item.label}
+                  src={item.icon}
+                  title={item.label}
+                  onClick={click.bind(this, item.value)}
+                />
+              ))}
             </div>
           </div>
           <Popover

@@ -1,5 +1,6 @@
 import { Button, Form, Input, message, Select, Upload } from "antd";
 import { updateRoom } from "api/room";
+import { HideAllIcon } from "components/HideAllIcon";
 import { useFetch } from "hooks/useFetch";
 
 import { useCoreModel } from "models/coreModule";
@@ -14,7 +15,7 @@ export const RightHead = ({
   loading = false,
 }) => {
   return (
-    <div className="flex justify-between px-4 py-3 text-2xl border-b">
+    <div className="flex items-center justify-between px-4 py-3 text-2xl border-b">
       <span>{title}</span>
       <Button
         ghost
@@ -25,6 +26,7 @@ export const RightHead = ({
       >
         保存
       </Button>
+      <HideAllIcon />
     </div>
   );
 };
@@ -34,7 +36,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>
@@ -180,16 +182,36 @@ export const RoomSettingPanel: React.FC<IRoomSettingPanel> = () => {
                 </Select>
               </Form.Item>
               <Form.Item label="点歌间隔" name="room_addsongcd">
-                <Input type="number" />
+                <Input
+                  type="number"
+                  max={60}
+                  min={3}
+                  placeholder="最大60，最小3"
+                />
               </Form.Item>
               <Form.Item label="顶歌间隔" name="room_pushsongcd">
-                <Input type="number" />
+                <Input
+                  type="number"
+                  max={60}
+                  min={3}
+                  placeholder="最大60，最小3"
+                />
               </Form.Item>
               <Form.Item label="日顶次数" name="room_pushdaycount">
-                <Input type="number" />
+                <Input
+                  type="number"
+                  max={10}
+                  min={3}
+                  placeholder="最大10，最小1"
+                />
               </Form.Item>
               <Form.Item label="点歌限额" name="room_addcount">
-                <Input type="number" />
+                <Input
+                  type="number"
+                  max={10}
+                  min={3}
+                  placeholder="最大10，最小1"
+                />
               </Form.Item>
               <Form.Item label="投票切歌" name="room_votepass">
                 <Select>

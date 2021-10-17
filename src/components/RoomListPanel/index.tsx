@@ -17,11 +17,11 @@ import CST, { POPKEY } from "utils/CST";
 
 import _ from "./index.module.css";
 import { MInput } from "components/MInput";
+import { HideAllIcon } from "components/HideAllIcon";
 
 export const RightHead = ({ title = "" }) => {
   return (
-    <div className="flex justify-between py-3 text-2xl">
-      <div>{title}</div>
+    <div className="flex items-center justify-between py-3 text-2xl">
       <div
         onClick={() => useCoreModel.data?.showDialog(POPKEY.ROOM_CREATE)}
         className="px-2 border rounded cursor-pointer"
@@ -29,6 +29,8 @@ export const RightHead = ({ title = "" }) => {
       >
         创建房间
       </div>
+      <div>{title}</div>
+      <HideAllIcon />
     </div>
   );
 };
@@ -38,7 +40,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>
@@ -147,11 +149,9 @@ export const RoomListPanel: React.FC = ({ children }) => {
                   />
                   <div className="w-5/6 pl-2">
                     <div className="truncate">
-                      {!!item?.room_online ? (
-                        <span className="text-primary">
-                          ({item?.room_online})
-                        </span>
-                      ) : null}
+                      <span className="text-primary">
+                        ({item?.room_online + 2})
+                      </span>
                       {item?.user_name}
                     </div>
                     <div className="pt-2 truncate text-xxs text-light">

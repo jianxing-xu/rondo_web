@@ -1,6 +1,8 @@
 .login_panel {
   max-width: 600px;
-  min-width: 450px;
+}
+.login_panel .ant-btn {
+  padding: 0 !important;
 }
 .ant-input-group-addon {
   background: var(--bg) !important;

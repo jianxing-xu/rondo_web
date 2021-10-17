@@ -9,9 +9,15 @@ import { classNames } from "utils";
 import CST from "utils/CST";
 
 import _ from "./index.module.css";
+import { HideAllIcon } from "components/HideAllIcon";
 
 export const RightHead = ({ title = "" }) => {
-  return <div className="py-3 text-2xl">{title}</div>;
+  return (
+    <div className="flex items-center justify-between py-3 text-2xl">
+      <span>{title}</span>
+      <HideAllIcon />
+    </div>
+  );
 };
 
 export const RightPanelWrapper: React.FC = ({ children }) => {
@@ -19,7 +25,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>
@@ -53,6 +59,9 @@ export const ProfilePanel: React.FC<IProfilePanel> = () => {
   return (
     <RightPanelWrapper>
       <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full">
+        <div className="absolute z-10 text-2xl top-2 right-3">
+          <HideAllIcon />
+        </div>
         <Spin spinning={loading}>
           <div
             style={{ height: 220 }}

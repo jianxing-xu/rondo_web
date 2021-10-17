@@ -1,3 +1,4 @@
+import { HideAllIcon } from "components/HideAllIcon";
 import { MInput } from "components/MInput";
 import { useCoreModel } from "models/coreModule";
 import React from "react";
@@ -10,8 +11,9 @@ export const RightHead = ({
   loading = false,
 }) => {
   return (
-    <div className="flex justify-between px-4 py-3 text-2xl border-b">
+    <div className="flex items-center justify-between px-4 py-3 text-2xl border-b">
       <span>{title}</span>
+      <HideAllIcon />
     </div>
   );
 };
@@ -21,7 +23,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>

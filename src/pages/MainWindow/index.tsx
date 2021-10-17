@@ -1,7 +1,7 @@
 import { AddSongPanel } from "components/AddSongPanel";
 import { SideBar } from "components/SideBar";
 import { useCoreModel } from "models/coreModule";
-import React, { ReactElement, useCallback } from "react";
+import React, { ReactElement, useCallback, useEffect } from "react";
 import { classNames } from "utils";
 import CST, { POPKEY } from "utils/CST";
 import { Head } from "./Head";
@@ -17,8 +17,10 @@ import { ProfileMePanel } from "components/ProfileMePanel";
 import { CreateRoomPanel } from "components/CreateRoomPanel";
 import { RoomSettingPanel } from "components/RoomSettingPanel";
 import { RoomPwdPanel } from "components/RoomPwdPanel";
+import { useGlobalModel } from "models/globalModel";
 
 export default function MainWindow(): ReactElement {
+  const { dark } = useGlobalModel((m) => [m.dark]);
   const { dialog, showDialog, hdieAll, room } = useCoreModel((model) => [
     model.dialog,
     model.room,
@@ -43,6 +45,10 @@ export default function MainWindow(): ReactElement {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(dialog);
+  }, [dialog]);
+
   return (
     <>
       <div
@@ -50,7 +56,9 @@ export default function MainWindow(): ReactElement {
         onClick={hdieAll}
         style={{
           backgroundImage: `url(${
-            CST.static_url + room?.room_background || "/public/bg.jpg"
+            room?.room_background
+              ? CST.static_url + room?.room_background
+              : `/public/bg_${dark === 1 ? "dark" : "light"}.jpg`
           })`,
         }}
       >

@@ -22,39 +22,6 @@
   background: transparent;
 }
 
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/inter/v3/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2)
-    format("woff2");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/inter/v3/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2)
-    format("woff2");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/inter/v3/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2)
-    format("woff2");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/inter/v3/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2)
-    format("woff2");
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -163,6 +130,15 @@ input::first-line {
   background-size: cover;
 } */
 
+.MyPanel {
+  width: 400px !important;
+}
+@media (max-width: 640px) {
+  .MyPanel {
+    width: 100% !important;
+  }
+}
+
 /* 摸一摸动画 */
 @keyframes head_bounce {
   0% {
@@ -195,6 +171,38 @@ input::first-line {
   color: var(--font-normal) !important;
 }
 .ant-radio,
-.ant-radio-wrapper {
+.ant-radio-wrapper,
+.ant-modal-confirm-title,
+.ant-btn {
   color: var(--font-normal) !important;
+}
+.ant-btn {
+  background: var(--bg) !important;
+}
+.ant-input::placeholder {
+  color: var(--bg-input) !important;
+}
+.ant-menu,
+.ant-dropdown-menu {
+  background: var(--bg-float) !important;
+  color: var(--font-normal) !important;
+}
+.ant-dropdown-menu * {
+  color: inherit !important;
+}
+.ant-dropdown-menu-item-active {
+  background: var(--bg) !important;
+}
+.ant-menu-item.ant-menu-item-selected {
+  background: var(--bg) !important;
+  color: var(--font-normal) !important;
+}
+.ant-popover-inner-content {
+  background: var(--bg-float) !important;
+  color: var(--font-normal) !important;
+}
+
+.ant-dropdown-menu-item:hover,
+.ant-dropdown-menu-submenu-title:hover {
+  background: var(--bg) !important;
 }

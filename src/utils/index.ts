@@ -97,6 +97,7 @@ export const debounce = (
     if (iImmute) {
       fn.apply(this, args);
       iImmute = false;
+      return;
     }
     if (timer) {
       clearTimeout(timer);

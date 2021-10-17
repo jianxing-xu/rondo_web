@@ -13,8 +13,14 @@
 .msglist::-webkit-scrollbar-track{
   background: transparent;
 } */
+@media (max-width: 640px) {
+  .msglist {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
 img {
-  @apply w-full h-full rounded;
+  display: inline-block;
 }
 .notice {
   @apply bg-gray-50 text-icon;

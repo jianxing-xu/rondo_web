@@ -1,5 +1,6 @@
 import { message, Spin } from "antd";
 import { addSong, ISearchSongParam, searchSong } from "api/song";
+import { HideAllIcon } from "components/HideAllIcon";
 import { MInput } from "components/MInput";
 import { useFetch } from "hooks/useFetch";
 import { useCoreModel } from "models/coreModule";
@@ -10,7 +11,12 @@ import CST from "utils/CST";
 import _ from "./index.module.css";
 
 export const RightHead = ({ title = "" }) => {
-  return <div className="py-3 text-2xl">{title}</div>;
+  return (
+    <div className="flex items-center justify-between py-3 text-2xl">
+      <span>{title}</span>
+      <HideAllIcon />
+    </div>
+  );
 };
 
 export const RightPanelWrapper: React.FC = ({ children }) => {
@@ -18,7 +24,7 @@ export const RightPanelWrapper: React.FC = ({ children }) => {
     <div
       onClick={(e) => e.stopPropagation()}
       style={{ width: 400 }}
-      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl bg-main"
+      className="absolute top-0 bottom-0 right-0 h-full p-2 shadow-2xl MyPanel bg-main"
     >
       {children}
     </div>

@@ -4,3 +4,10 @@
   background-position: center center;
   background-size: 100% 100%;
 }
+.bg_sidebar {
+}
+@media (max-width: 640px) {
+  .bg_sidebar {
+    display: none;
+  }
+}

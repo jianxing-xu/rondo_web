@@ -1,15 +1,27 @@
-import { Form, Input, message, Modal, Tooltip } from "antd";
+import {
+  Form,
+  Input,
+  message,
+  Modal,
+  Tooltip,
+  Menu,
+  Dropdown,
+  Avatar,
+} from "antd";
+import { BarsOutlined } from "@ant-design/icons";
 import FormItem from "antd/lib/form/FormItem";
 import TextArea from "antd/lib/input/TextArea";
 import { sendBugs } from "api/common";
+import { menu, SettingMenu } from "components/SideBar";
 import SvgIcon from "components/SvgIcon";
 import { useCoreModel } from "models/coreModule";
 import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { copy, local } from "utils";
+import { classNames, copy, local } from "utils";
 import CST, { POPKEY } from "utils/CST";
 import _ from "./index.module.css";
+import SubMenu from "antd/lib/menu/SubMenu";
 
 export const Head: React.FC = () => {
   const history = useHistory();
@@ -51,11 +63,66 @@ export const Head: React.FC = () => {
       history.replace("/");
     }
   }, []);
+
+  const siderClick = (type: string) => {
+    console.log(type);
+    switch (type) {
+      case "addsong":
+        showDialog(POPKEY.SEARCH);
+        break;
+      case "pointed":
+        showDialog(POPKEY.WAIT_QUEUE);
+        break;
+      case "songlist":
+        showDialog(POPKEY.MY_SONGS);
+        break;
+      case "rooms":
+        showDialog(POPKEY.ROOM_LIST);
+        break;
+      default:
+        break;
+    }
+  };
+  const handleShow = () => {
+    if (user.user_id == -1) {
+      history.push("/login");
+    } else {
+      showDialog(POPKEY.PROFILE_ME);
+    }
+  };
   return (
     <div
-      className="flex items-center px-4 text-lg"
+      className={classNames("flex items-center px-4 text-lg ", _.head)}
       style={{ backgroundColor: "transparent" }}
     >
+      <Dropdown
+        className={_.dropdown}
+        trigger={["click"]}
+        overlay={
+          <Menu>
+            <Menu.Item onClick={handleShow}>
+              <Avatar src={CST.static_url + user?.user_head} />
+            </Menu.Item>
+            {menu.map((item) => (
+              <Menu.Item
+                onClick={siderClick.bind(this, item.value)}
+                key={item.label}
+                icon={<img width="20px" height="20px" src={item.icon} />}
+              >
+                <span>{item.label}</span>
+              </Menu.Item>
+            ))}
+            <SubMenu title="系统设置">
+              <Menu.Item>
+                <SettingMenu />
+              </Menu.Item>
+            </SubMenu>
+          </Menu>
+        }
+      >
+        <BarsOutlined />
+      </Dropdown>
+      <span style={{ width: 10 }}></span>
       {/* 房间id */}
       <Tooltip title="房间ID(房间号)">
         <span
@@ -99,9 +166,11 @@ export const Head: React.FC = () => {
           onClick={() => setBs(true)}
           className="flex items-center px-1 text-sm text-red-500 cursor-pointer"
         >
-          <svg className="icon" aria-hidden="true">
-            <use xlinkHref="#icon-bug"></use>
-          </svg>
+          <span className={_.bugIcon}>
+            <svg className="icon" aria-hidden="true">
+              <use xlinkHref="#icon-bug"></use>
+            </svg>
+          </span>
           <span className="pl-1">bug反馈</span>
         </div>
         <div className="px-1 cursor-pointer text-primary" onClick={handleShare}>
@@ -141,7 +210,7 @@ export const Head: React.FC = () => {
               { min: 15, message: "最低15个字符" },
             ]}
           >
-            <TextArea placeholder="意见建议，bug反馈" />
+            <TextArea size="large" placeholder="意见建议，bug反馈" />
           </FormItem>
           <FormItem
             name="contact"
