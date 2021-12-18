@@ -1,8 +1,9 @@
 import Head from "components/Head";
 import LoadingOrError from "components/LoadingOrError";
-import React, { lazy, ReactElement, Suspense } from "react";
+import React, { lazy, ReactElement, Suspense, useEffect } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import { createHashHistory } from "history";
+import { getConfig } from "api/common";
 
 const MainWindow = lazy(() => import("./pages/MainWindow"));
 const Login = lazy(() => import("./pages/Login/Login"));

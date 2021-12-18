@@ -15,3 +15,7 @@ export const sendMail = (mail: string) => {
 export const sendBugs = (params: { content: string; contact: string }) => {
   return instance.get(`/common/sendBugs`, { params });
 };
+
+export const getConfig = (key: string): Promise<string> => {
+  return instance.get(`/conf/conf/${key}`);
+};
