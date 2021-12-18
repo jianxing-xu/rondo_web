@@ -89,7 +89,6 @@ export const CreateRoomPanel: React.FC<ICreateRoomPanel> = () => {
               rules={[{ required: true, message: "房间类型？" }]}
             >
               <Select>
-                <Select.Option value={0}>文字聊天房</Select.Option>
                 <Select.Option value={1}>音乐点歌房</Select.Option>
                 <Select.Option value={4}>房主电台房</Select.Option>
               </Select>

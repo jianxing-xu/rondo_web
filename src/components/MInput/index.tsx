@@ -5,10 +5,16 @@ interface IMInput {
   btnTxt?: string;
   onSearch?: (v: string) => void;
   hint?: string;
+  type?: string;
 }
 export const MInput: React.FC<IMInput> = forwardRef(
   (
-    { btnTxt = "搜索", hint = "搜索歌手/歌曲", onSearch = () => {} },
+    {
+      btnTxt = "搜索",
+      hint = "搜索歌手/歌曲",
+      onSearch = () => {},
+      type = "text",
+    },
     ref: any
   ) => {
     const [v, setV] = useState<any>("");
@@ -30,7 +36,7 @@ export const MInput: React.FC<IMInput> = forwardRef(
           ref={ref}
           onKeyDown={handleInputKeyDown}
           placeholder={hint}
-          type="text"
+          type={type}
           className={classNames(
             "inline flex-grow border-0 outline-none bg-input ring-0",
             _.minput

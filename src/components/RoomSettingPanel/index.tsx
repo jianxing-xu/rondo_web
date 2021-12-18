@@ -102,7 +102,6 @@ export const RoomSettingPanel: React.FC<IRoomSettingPanel> = () => {
                     setFields((val) => ({ ...val, dtmode: v == 4 }))
                   }
                 >
-                  <Select.Option value={0}>文字聊天房</Select.Option>
                   <Select.Option value={1}>音乐点歌房</Select.Option>
                   <Select.Option value={4}>房主电台房</Select.Option>
                 </Select>

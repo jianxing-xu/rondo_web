@@ -171,7 +171,7 @@ export const Head: React.FC = () => {
               <use xlinkHref="#icon-bug"></use>
             </svg>
           </span>
-          <span className="pl-1">bug反馈</span>
+          <span className={`pl-1 ${_.bugIcon}`}>bug反馈</span>
         </div>
         <div className="px-1 cursor-pointer text-primary" onClick={handleShare}>
           分享

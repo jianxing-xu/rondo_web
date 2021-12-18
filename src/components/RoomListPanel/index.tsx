@@ -51,9 +51,8 @@ export const RoomListPanel: React.FC = ({ children }) => {
   const [roomHis, setRoomHis] = useState(local.get(ROOM_HIS_KEY, []));
   // 搜索处理
   const onSearch = async (v: any) => {
-    fetching().catch((e) => {
-      message.error("搜索失败");
-    });
+    if (!v) return;
+    joinRoom(v);
   };
   // 加入房间
   const joinRoom = (roomId: any, index?: number) => {
@@ -83,7 +82,12 @@ export const RoomListPanel: React.FC = ({ children }) => {
           joinRoom(opt.id);
         }}
         children={
-          <MInput hint="输入房间号" btnTxt="进入" onSearch={joinRoom} />
+          <MInput
+            hint="输入房间号"
+            btnTxt="进入"
+            onSearch={onSearch}
+            type="number"
+          />
         }
       />
 
