@@ -92,7 +92,7 @@ export const Head: React.FC = () => {
   };
   return (
     <div
-      className={classNames("flex items-center px-4 text-lg ", _.head)}
+      className={classNames("flex items-center px-4 text-lg w-full", _.head)}
       style={{ backgroundColor: "transparent" }}
     >
       <Dropdown
@@ -161,36 +161,32 @@ export const Head: React.FC = () => {
         </span>
       ) : null}
       {/* bug反馈登右侧按钮 */}
-      <div className="absolute flex items-center text-sm right-3">
-        <div
-          onClick={() => setBs(true)}
-          className="flex items-center px-1 text-sm text-red-500 cursor-pointer"
-        >
-          <span className={_.bugIcon}>
-            <svg className="icon" aria-hidden="true">
-              <use xlinkHref="#icon-bug"></use>
-            </svg>
-          </span>
-          <span className={`pl-1 ${_.bugIcon}`}>bug反馈</span>
-        </div>
-        <div className="px-1 cursor-pointer text-primary" onClick={handleShare}>
-          分享
-        </div>
+      <div
+        onClick={() => setBs(true)}
+        className="flex items-center px-1 text-sm text-red-500 cursor-pointer ml-auto"
+      >
+        <span className={_.bugIcon}>
+          <svg className="icon" aria-hidden="true">
+            <use xlinkHref="#icon-bug"></use>
+          </svg>
+        </span>
+        <span className={`pl-1 ${_.bugIcon}`}>bug反馈</span>
+      </div>
+      <div className="px-1 cursor-pointer text-primary" onClick={handleShare}>
+        分享
+      </div>
 
-        <div className="px-1 text-sm font-bold ">
-          <Tooltip title="在线人数">
-            <span
-              onClick={() => showDialog(POPKEY.ONLINE_LIST)}
-              style={{ color: "var(--primary)" }}
-              className="cursor-pointer"
-            >
-              <span className="text-current">
-                {(now?.onlineCount || 0) + 2}
-              </span>
-              在线
-            </span>
-          </Tooltip>
-        </div>
+      <div className="px-1 text-sm font-bold ">
+        <Tooltip title="在线人数">
+          <span
+            onClick={() => showDialog(POPKEY.ONLINE_LIST)}
+            style={{ color: "var(--primary)" }}
+            className="cursor-pointer"
+          >
+            <span className="text-current">{(now?.onlineCount || 0) + 2}</span>
+            在线
+          </span>
+        </Tooltip>
       </div>
       <Modal
         confirmLoading={loading}

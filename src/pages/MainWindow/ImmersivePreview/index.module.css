@@ -1,0 +1,60 @@
+.immersive {
+  @apply absolute left-0 right-0 top-0 bottom-0 m-auto flex items-center justify-center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s;
+}
+.immersive.show {
+  opacity: 1;
+  pointer-events: unset;
+}
+.immersive_box {
+  width: 55vw;
+  max-height: 90vh;
+  overflow: hidden;
+  justify-content: space-between;
+  text-align: center;
+}
+.immersive_box_left {
+  font-size: 16px;
+}
+.immersive_box_left p {
+  padding: 6px 0;
+}
+.immersive_box_left .pic {
+  width: 20vw;
+  height: 20vw;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.immersive_box .lyric {
+  font-size: 20px;
+  font-family: Verdana, Geneva, Tahoma;
+  max-height: 50vw;
+  max-width: 50%;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+.immersive_box .lyric_item {
+  line-height: 50px;
+}
+.immersive_box .lyric_item.active {
+  @apply text-primary;
+  transition: all 0.5s;
+}
+
+@media screen and (max-width: 768px) {
+  .immersive_box {
+    flex-direction: column;
+    width: 80%;
+  }
+  .immersive_box_left p {
+    font-size: 14px;
+  }
+  .immersive_box .lyric {
+    font-size: 18px;
+    max-width: 100%;
+  }
+}

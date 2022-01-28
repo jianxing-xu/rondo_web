@@ -15,6 +15,7 @@ player.autoplay = true;
 player.volume = parseInt(localStorage.getItem("volume") || "50") / 100;
 function audioModel() {
   const [percent, setPercent] = useState(0);
+  const [curIndex, setCurIndex] = useState(0);
   const [lrc, setLrc] = useState<ILyric[]>([]);
 
   // 当前播放歌词行
@@ -34,6 +35,7 @@ function audioModel() {
         idxLine = lrc.length - 1;
       }
     });
+    setCurIndex(idxLine);
     return lrc[idxLine]?.lineLyric;
   }, [lrc, percent]);
 
@@ -44,9 +46,9 @@ function audioModel() {
   }
   useEffect(() => {
     player.addEventListener("timeupdate", throttle(handlePlay, 1000), false);
-    player.onplaying = () => {
-      console.log("playing");
-    };
+    // player.onplaying = () => {
+    //   console.log("playing");
+    // };
     // 可以播放了
     // player.oncanplay = () => {
     //   // player.play();
@@ -60,11 +62,11 @@ function audioModel() {
     };
     // 元数据加载完成
     player.onloadedmetadata = () => {
-      console.log(useCoreModel?.data?.getNowTime());
+      // console.log(useCoreModel?.data?.getNowTime());
       setCurrent(useCoreModel?.data?.getNowTime());
     };
     player.onloadeddata = () => {
-      console.log(useCoreModel?.data?.getNowTime());
+      // console.log(useCoreModel?.data?.getNowTime());
       setCurrent(useCoreModel?.data?.getNowTime());
     };
     return () => {
@@ -76,7 +78,7 @@ function audioModel() {
     player.currentTime = time;
   }
 
-  return { setCurrent, percent, setLrc, currLineLyric };
+  return { setCurrent, percent, setLrc, currLineLyric, lrc, curIndex };
 }
 
 export const useAudioModel = createModel(audioModel);

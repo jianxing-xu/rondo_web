@@ -1,8 +1,14 @@
 import { AddSongPanel } from "components/AddSongPanel";
 import { SideBar } from "components/SideBar";
 import { useCoreModel } from "models/coreModule";
-import React, { ReactElement, useCallback, useEffect } from "react";
-import { classNames } from "utils";
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { classNames, debounce, throttle } from "utils";
 import CST, { POPKEY } from "utils/CST";
 import { Head } from "./Head";
 import _ from "./index.module.css";
@@ -18,8 +24,12 @@ import { CreateRoomPanel } from "components/CreateRoomPanel";
 import { RoomSettingPanel } from "components/RoomSettingPanel";
 import { RoomPwdPanel } from "components/RoomPwdPanel";
 import { useGlobalModel } from "models/globalModel";
+import { ContactList } from "./ContactList";
+import { ImmersivePreview } from "./ImmersivePreview";
 
 export default function MainWindow(): ReactElement {
+  const [immersive, setImmersive] = useState(false);
+  const timer = useRef<any>();
   const { dark } = useGlobalModel((m) => [m.dark]);
   const { dialog, showDialog, hdieAll, room } = useCoreModel((model) => [
     model.dialog,
@@ -45,9 +55,20 @@ export default function MainWindow(): ReactElement {
     }
   }, []);
 
+  function handleMove() {
+    clearTimeout(timer.current);
+    setImmersive(false);
+    timer.current = setTimeout(() => {
+      setImmersive(true);
+    }, 30000);
+  }
   useEffect(() => {
-    console.log(dialog);
-  }, [dialog]);
+    handleMove();
+    document.body.onmousemove = throttle(handleMove, 500);
+    return () => {
+      document.body.onmousemove = null;
+    };
+  }, []);
 
   return (
     <>
@@ -62,26 +83,32 @@ export default function MainWindow(): ReactElement {
           })`,
         }}
       >
-        <div className={classNames("flex h-full mx-auto ", _.main_inner)}>
+        <div
+          style={{ opacity: immersive ? 0 : 1 }}
+          className={classNames("flex h-full mx-auto", _.main_inner)}
+        >
+          {/* 侧边栏 */}
           <SideBar click={siderClick} /> {/** Head组件初始化userModel */}
+          {/* 联系人列表 */}
+          {/* <ContactList /> */}
+          {/* 消息区域 */}
           <div
             className={classNames(
               "relative flex-1 flex flex-col justify-between bg-opa-80",
               _.right_content
             )}
           >
-            <div
-              style={{ height: "5%" }}
-              className="flex border-b border-gray-300 dark:border-gray-600"
-            >
-              <Head /> {/** Head组件初始化socketModel */}
+            <div className={_.head} style={{ height: "5%" }}>
+              <Head />
             </div>
-            <div className="" style={{ height: "75%" }}>
+            <div className="box-border" style={{ height: "75%" }}>
               <MessageList />
             </div>
-            <div style={{ height: "20%" }}>
+            <div className="box-border" style={{ height: "20%" }}>
               <MessageInput />
             </div>
+
+            {/* 操作窗口 */}
             {dialog.SEARCH ? <AddSongPanel /> : null}
             {dialog.WAIT_QUEUE ? <WaitQueuePanel /> : null}
             {dialog.MY_SONGS ? <MySongsPanel /> : null}
@@ -94,6 +121,9 @@ export default function MainWindow(): ReactElement {
             {dialog.ROOM_PWD ? <RoomPwdPanel /> : null}
           </div>
         </div>
+
+        {/* 沉浸展示 */}
+        <ImmersivePreview show={immersive} />
       </div>
     </>
   );

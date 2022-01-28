@@ -8,11 +8,13 @@ import queue from "../../../assets/queue.svg";
 import room from "../../../assets/room.svg";
 import settings from "../../../assets/settings.svg";
 import songlist from "../../../assets/songlist.svg";
+import message from "../../../assets/message.svg";
 import { Popover, Switch } from "antd";
 import { useGlobalModel } from "models/globalModel";
 import { useCoreModel } from "models/coreModule";
 import { useHistory } from "react-router-dom";
 
+// 菜单按钮组件
 export const Btn: React.FC<any> = ({ src, title, ...props }) => {
   return (
     <div
@@ -26,6 +28,7 @@ export const Btn: React.FC<any> = ({ src, title, ...props }) => {
     </div>
   );
 };
+// 设置菜单Popup组件
 export const SettingMenu: React.FC = () => {
   const { notice, dark, sound, changeSettings } = useGlobalModel((model) => [
     model.notice,
@@ -61,12 +64,13 @@ export const SettingMenu: React.FC = () => {
 interface ISideBar {
   click: (type: string, e: any) => void;
 }
-
-("addsong");
-("pointed");
-("songlist");
-("rooms");
+// 菜单选项
 export const menu = [
+  {
+    icon: message,
+    label: "消息",
+    value: "message",
+  },
   {
     icon: add_song,
     label: "点歌",
@@ -112,34 +116,35 @@ export const SideBar: React.FC<ISideBar> = ({
             "h-full w-14 mx-auto flex flex-col justify-between"
           )}
         >
-          <div className="flex flex-col justify-between flex-grow">
-            <div
-              onClick={handleShow}
-              style={{
-                backgroundImage: `url('${CST.static_url}/${user?.user_head}')`,
-                borderRadius: "50%",
-              }}
-              className={classNames(
-                "h-12 w-12 rounded-full mx-auto mt-6 cursor-pointer",
-                _.head
-              )}
-            ></div>
-            <div
-              className={classNames(
-                _.btns,
-                "flex-1 flex flex-col justify-center space-y-6"
-              )}
-            >
-              {menu.map((item) => (
-                <Btn
-                  key={item.label}
-                  src={item.icon}
-                  title={item.label}
-                  onClick={click.bind(this, item.value)}
-                />
-              ))}
-            </div>
+          {/* 头像 */}
+          <div
+            onClick={handleShow}
+            style={{
+              backgroundImage: `url('${CST.static_url}/${user?.user_head}')`,
+              borderRadius: "50%",
+            }}
+            className={classNames(
+              "h-12 w-12 rounded-full mx-auto mt-6 cursor-pointer",
+              _.head
+            )}
+          ></div>
+          {/* 菜单 */}
+          <div
+            className={classNames(
+              _.btns,
+              "flex-1 flex flex-col justify-center space-y-6"
+            )}
+          >
+            {menu.map((item) => (
+              <Btn
+                key={item.label}
+                src={item.icon}
+                title={item.label}
+                onClick={click.bind(this, item.value)}
+              />
+            ))}
           </div>
+          {/* 设置 */}
           <Popover
             placement="topRight"
             content={SettingMenu}

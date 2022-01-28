@@ -133,6 +133,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({
               content={<AvatarMenu user={user} />}
             >
               <img
+                className="inline w-10 h-10 cursor-pointer rounded"
                 onContextMenu={handleMenu}
                 src={CST.fill(user?.user_head || "/res/images/nohead.jpg")}
                 alt=""
@@ -146,7 +147,10 @@ const MsgItem: React.FC<IMsgItemParam> = ({
           ) : (
             <img
               onContextMenu={handleMenu}
-              className={classNames("inline w-10 h-10 cursor-pointer", _.head)}
+              className={classNames(
+                "inline w-10 h-10 cursor-pointer rounded",
+                _.head
+              )}
               src={CST.static_url + user?.user_head}
               alt=""
               onDoubleClick={(e) => touch(e)}

@@ -23,7 +23,7 @@ const MProgress: React.FC = () => {
   return (
     <Tooltip title="进度">
       <div
-        className="absolute left-0 right-0 top-8 w-ful"
+        className="absolute left-0 right-0 bottom-0 w-ful"
         style={{ height: 1 }}
       >
         <div
@@ -41,7 +41,7 @@ const Lyricline: React.FC = () => {
   return (
     <span
       className="absolute cursor-pointer bottom-1 left-2"
-      style={{ fontSize: 12 }}
+      style={{ fontSize: 14 }}
     >
       {currLineLyric ?? ""}
     </span>
@@ -209,8 +209,9 @@ export const MessageInput: React.FC<IMessageInput> = ({
 
   const handleUpload = (e: any) => {
     const hide = message.loading("上传中...");
-    if (["image/jpeg", "image/png", "image/gif"].includes(e?.file?.type)) {
-      uploadImg({ file: e.file, type: "1" })
+    const file = e.target.files[0];
+    if (["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+      uploadImg({ file, type: "1" })
         .then((res: any) => {
           const path = CST.static_url + res.attach_path;
           Modal.confirm({
@@ -227,23 +228,32 @@ export const MessageInput: React.FC<IMessageInput> = ({
     }
   };
   return (
-    <div className="h-32 bg-transparent">
-      <div className="relative flex items-center h-8 px-2">
+    <div className="flex flex-col bg-transparent h-full">
+      {/* action bar */}
+      <div className="relative flex items-center p-2">
+        {/* 表情popup */}
         {pshow ? <Phiz putChar={(v: any) => handleSend(v, "img")} /> : null}
+        {/* 表情图片btn */}
         <div className="flex gap-2">
-          <SvgIcon
-            stop={true}
-            click={() => setPshow((p) => !p)}
-            name="biaoqing"
-            className="text-2xl text-icon hover:text-primary"
-          />
-          <Upload showUploadList={false} customRequest={handleUpload}>
+          <div className="relative">
             <SvgIcon
-              name="tupian"
-              className="text-2xl text-icon hover:text-primary"
+              stop={true}
+              click={() => setPshow((p) => !p)}
+              name="emoji"
+              className=" text-xl"
             />
-          </Upload>
+          </div>
+          <div className="relative overflow-hidden">
+            <SvgIcon name="picture_fill" className=" text-xl" />
+            <input
+              type="file"
+              style={{ opacity: 0 }}
+              onChange={handleUpload}
+              className="absolute left-0 right-0 top-0 bottom-0 w-full"
+            />
+          </div>
         </div>
+        {/* song name */}
         <div className="flex items-center ml-auto space-x-2">
           <span className="text-sm">
             {now?.name ?? "--"}({now?.singer ?? "--"})
@@ -296,14 +306,16 @@ export const MessageInput: React.FC<IMessageInput> = ({
             </span>
           </Tooltip>
         </div>
+        {/* 进度条 */}
         <MProgress />
       </div>
-      <div className="relative h-24">
+      {/* 歌词/input/发送 */}
+      <div className="relative flex-1 flex box-border">
         <textarea
           ref={textRef}
           onKeyDown={(e) => handleInputKeyDown(e)}
           className={classNames(
-            "w-full bg-transparent border-0 outline-none resize-none h-18 box-border pl-2 pt-2 overflow-y-scroll m_scroll",
+            "flex-1 w-full bg-transparent border-0 outline-none resize-none h-18 box-border pl-2 pt-2 overflow-y-scroll m_scroll",
             _.input
           )}
         ></textarea>
