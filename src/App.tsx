@@ -11,7 +11,11 @@ const Login = lazy(() => import("./pages/Login/Login"));
 export const hashHistory = createHashHistory();
 
 export default function App(): ReactElement {
-  console.log("APP RENDER");
+  useEffect(() => {
+    window.navigator.geolocation.getCurrentPosition((pos) => {
+      // alert(`wei: ${pos.coords.latitude}, jin: ${pos.coords.longitude}`)
+    });
+  }, []);
   return (
     <>
       <Router history={hashHistory}>

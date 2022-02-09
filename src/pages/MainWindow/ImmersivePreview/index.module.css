@@ -1,5 +1,5 @@
 .immersive {
-  @apply absolute left-0 right-0 top-0 bottom-0 m-auto flex items-center justify-center;
+  @apply absolute left-0 right-0 top-0 bottom-0 m-auto flex items-center justify-center text-white;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(20px);
   opacity: 0;
@@ -12,8 +12,8 @@
 }
 .immersive_box {
   width: 55vw;
-  max-height: 90vh;
-  overflow: hidden;
+  height: 60vh;
+  /* overflow: hidden; */
   justify-content: space-between;
   text-align: center;
 }
@@ -32,17 +32,24 @@
 .immersive_box .lyric {
   font-size: 20px;
   font-family: Verdana, Geneva, Tahoma;
-  max-height: 50vw;
-  max-width: 50%;
+  flex: 1;
+  height: 100%;
   overflow: auto;
   scroll-behavior: smooth;
+}
+.immersive_box .lyric ul {
+  transition: all 0.3s ease;
+}
+.immersive_box .lyric::-webkit-scrollbar {
+  width: 2px;
+  color: #333;
 }
 .immersive_box .lyric_item {
   line-height: 50px;
 }
 .immersive_box .lyric_item.active {
   @apply text-primary;
-  transition: all 0.5s;
+  transition: all 0.2s;
 }
 
 @media screen and (max-width: 768px) {
@@ -50,10 +57,14 @@
     flex-direction: column;
     width: 80%;
   }
+
   .immersive_box_left p {
     font-size: 14px;
+    padding: 4px;
   }
+  /* 歌词ul */
   .immersive_box .lyric {
+    margin-top: 12px;
     font-size: 18px;
     max-width: 100%;
   }

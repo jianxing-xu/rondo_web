@@ -187,8 +187,9 @@ const MsgItem: React.FC<IMsgItemParam> = ({
                     </div>
                   )}
                   <div
+                    style={{ lineHeight: 1 }}
                     className={classNames(
-                      "max-w-sm px-3 py-2 bg-chat relative rounded",
+                      "max-w-sm px-3 py-2 bg-chat relative rounded flex items-center",
                       _.content,
                       loading ? _.loading : ""
                     )}

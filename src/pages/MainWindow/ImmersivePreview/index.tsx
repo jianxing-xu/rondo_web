@@ -16,7 +16,9 @@ export const ImmersivePreview: React.FC<IProps> = ({
   const { now } = useCoreModel((m) => [m.now]);
   const lyricRef = useRef<HTMLUListElement | any>();
   useEffect(() => {
-    lyricRef.current?.children[curIndex]?.scrollIntoView();
+    const height = curIndex * 50;
+    lyricRef.current?.scrollTo(0, height - 50);
+    // lyricRef.current && (lyricRef.current.style.transform = `translateY(${0 - height + 50}px)`)
   }, [curIndex]);
   return (
     <div
@@ -30,8 +32,8 @@ export const ImmersivePreview: React.FC<IProps> = ({
           <p className="singer">歌手: {now?.singer}</p>
           <p className="addname">点歌人: {now?.uname}</p>
         </div>
-        <div className={_.lyric}>
-          <ul ref={lyricRef}>
+        <div className={_.lyric} ref={lyricRef}>
+          <ul>
             {lrc.map((it, index) => (
               <li
                 key={index}
