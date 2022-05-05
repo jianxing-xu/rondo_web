@@ -1,6 +1,10 @@
 import React from "react";
 import { classNames } from "utils";
 import CST, { POPKEY } from "utils/CST";
+import { Popover, Switch } from "antd";
+import { useGlobalModel } from "models/globalModel";
+import { useCoreModel } from "models/coreModule";
+import { useHistory } from "react-router-dom";
 import _ from "./index.module.css";
 
 import add_song from "../../../assets/addsong.svg";
@@ -9,25 +13,19 @@ import room from "../../../assets/room.svg";
 import settings from "../../../assets/settings.svg";
 import songlist from "../../../assets/songlist.svg";
 import message from "../../../assets/message.svg";
-import { Popover, Switch } from "antd";
-import { useGlobalModel } from "models/globalModel";
-import { useCoreModel } from "models/coreModule";
-import { useHistory } from "react-router-dom";
 
 // 菜单按钮组件
-export const Btn: React.FC<any> = ({ src, title, ...props }) => {
-  return (
-    <div
-      className="flex flex-col text-center cursor-pointer select-none"
-      {...props}
-    >
-      <img src={src} className="w-5 h-5 mx-auto mb-1 " alt="" />
-      <span className="text-xs font-normal text-sidebar active:text-light2">
-        {title}
-      </span>
-    </div>
-  );
-};
+export const Btn: React.FC<any> = ({ src, title, ...properties }) => (
+  <div
+    className="flex flex-col text-center cursor-pointer select-none"
+    {...properties}
+  >
+    <img src={src} className="w-5 h-5 mx-auto mb-1 " alt="" />
+    <span className="text-xs font-normal text-sidebar active:text-light2">
+      {title}
+    </span>
+  </div>
+);
 // 设置菜单Popup组件
 export const SettingMenu: React.FC = () => {
   const { notice, dark, sound, changeSettings } = useGlobalModel((model) => [
@@ -66,11 +64,6 @@ interface ISideBar {
 }
 // 菜单选项
 export const menu = [
-  {
-    icon: message,
-    label: "消息",
-    value: "message",
-  },
   {
     icon: add_song,
     label: "点歌",
@@ -127,7 +120,7 @@ export const SideBar: React.FC<ISideBar> = ({
               "h-12 w-12 rounded-full mx-auto mt-6 cursor-pointer",
               _.head
             )}
-          ></div>
+          />
           {/* 菜单 */}
           <div
             className={classNames(
