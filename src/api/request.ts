@@ -26,36 +26,36 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    config.headers["token"] = local.get(TOKEN_KEY.ACCESS, CST.visitorToken);
+    config.headers.token = local.get(TOKEN_KEY.ACCESS, CST.visitorToken);
     return config;
   },
-  (err) => {
-    log.err("Request.ts:==INFO==: Request Error!", err);
+  (error) => {
+    log.err("Request.ts:==INFO==: Request Error!", error);
   }
 );
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     if (response.status == 200) {
-      const data = response.data;
-      switch (data["code"]) {
+      const { data } = response;
+      switch (data.code) {
         case 5005:
-          message.info(data["msg"]);
+          message.info(data.msg);
           return Promise.reject();
         case 1020:
-          message.info(data["msg"] || "歌曲已经在队列中了！");
-          return Promise.reject(data["msg"]);
+          message.info(data.msg || "歌曲已经在队列中了！");
+          return Promise.reject(data.msg);
         // 需要提示的成功消息
         case 1001:
-          message.success(data["msg"]);
+          message.success(data.msg);
           return Promise.reject(1001);
         default:
           break;
       }
-      if (response.status == 200 && response.data["code"] == 1000) {
-        const data = response.data["data"];
-        if (data && data["token"]) {
-          local.set(TOKEN_KEY.ACCESS, data["token"]);
+      if (response.status == 200 && response.data.code == 1000) {
+        const { data } = response.data;
+        if (data && data.token) {
+          local.set(TOKEN_KEY.ACCESS, data.token);
         }
         return data;
       }
@@ -63,12 +63,12 @@ instance.interceptors.response.use(
 
     return response.data;
   },
-  (err) => {
+  (error) => {
     log.err("Response.ts:==INFO==: Response Error!");
-    if (err && err.response && err.response.data) {
-      const status = err.response.status;
-      const myStatus = err.response.data["code"];
-      const msg = err.response.data["msg"];
+    if (error && error.response && error.response.data) {
+      const { status } = error.response;
+      const myStatus = error.response.data.code;
+      const { msg } = error.response.data;
       // console.log(status, myStatus, msg);
       switch (status) {
         case 400:
@@ -78,9 +78,9 @@ instance.interceptors.response.use(
             case 1012:
               return Promise.reject(msg);
             case 1039:
-              return Promise.reject(myStatus); //需要输入房间密码
+              return Promise.reject(myStatus); // 需要输入房间密码
             case 1139:
-              return Promise.reject(myStatus); //房间密码错误
+              return Promise.reject(myStatus); // 房间密码错误
             case 1004:
               localStorage.removeItem(TOKEN_KEY.ACCESS);
               return Promise.reject(myStatus);
@@ -100,7 +100,7 @@ instance.interceptors.response.use(
               return Promise.reject(myStatus); // 对游客禁止的操作
             case 1008:
               message.error("游客禁止访问");
-              return Promise.reject(myStatus); //游客不允许获取加密房间信息
+              return Promise.reject(myStatus); // 游客不允许获取加密房间信息
             default:
               message.error(msg || "响应错误");
               return Promise.reject(msg);

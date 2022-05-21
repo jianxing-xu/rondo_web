@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { classNames, debounce, hoc, timeago } from "utils";
 
-import _ from "./index.module.css";
 import { useCoreModel, UActionType } from "models/coreModule";
 import CST, { MT, POPKEY } from "utils/CST";
 import { backMessage, mo } from "api/message";
@@ -11,16 +10,16 @@ import { useGlobalModel } from "models/globalModel";
 import { noticePlayer } from "models/audioModel";
 
 import SvgIcon from "components/SvgIcon";
+import _ from "./index.module.css";
 
 // @depreat
-export const PortalWidget: React.FC<any> = ({ children, ...props }) => {
-  return createPortal(<div {...props}>{children}</div>, document.body);
-};
+export const PortalWidget: React.FC<any> = ({ children, ...properties }) =>
+  createPortal(<div {...properties}>{children}</div>, document.body);
 
-interface IMsgItemParam {
+interface IMessageItemParameter {
   isMe?: boolean;
   showTime: boolean;
-  msgItem: IMsgItme;
+  msgItem: IMessageItme;
 }
 
 // 头像下拉次啊单
@@ -29,9 +28,10 @@ export const AvatarMenu = ({ user }: any = { user: { user_id: 0 } }) => {
   const user_id = user?.user_id || 0;
   const user_name = user?.user_name || "--";
   const user_head = user?.user_head || CST.fill("/res/images/nohead.jpg");
+  const user_account = user?.user_account;
 
   const chekcUser = () => {
-    if (!!!user?.user_id) {
+    if (!user?.user_id) {
       message.warn("用户不存在");
       return Promise.reject("");
     }
@@ -40,7 +40,7 @@ export const AvatarMenu = ({ user }: any = { user: { user_id: 0 } }) => {
 
   const handleSendsong = hoc(() => {
     const core = useCoreModel.data;
-    core?.setAt({ user_id, user_name, type: 0, user_head }); // 送歌@
+    core?.setAt({ user_id, user_name, type: 0, user_head, user_account }); // 送歌@
     core?.showDialog(POPKEY.SEARCH);
   }, chekcUser);
   const showHome = hoc(() => {
@@ -48,7 +48,7 @@ export const AvatarMenu = ({ user }: any = { user: { user_id: 0 } }) => {
     useCoreModel.data?.showDialog(POPKEY.PROFILE);
   }, chekcUser);
   const atTa = hoc(() => {
-    const atUser = { user_id, user_name, user_head, type: 1 };
+    const atUser = { user_id, user_name, user_head, type: 1, user_account };
     useCoreModel.data?.setAt(atUser);
   }, chekcUser);
   return (
@@ -75,22 +75,23 @@ export const AvatarMenu = ({ user }: any = { user: { user_id: 0 } }) => {
   );
 };
 // 消息项
-const MsgItem: React.FC<IMsgItemParam> = ({
+const MessageItem: React.FC<IMessageItemParameter> = ({
   isMe = false,
   msgItem,
   showTime,
 }) => {
-  //消息时间格式化
-  const time = useMemo(() => {
-    return timeago(msgItem.message_createtime * 1000);
-  }, [msgItem.message_createtime]);
+  // 消息时间格式化
+  const time = useMemo(
+    () => timeago(msgItem.message_createtime * 1000),
+    [msgItem.message_createtime]
+  );
   // 摸一摸处理
   const touch = (e: any) => {
     if (!e.target.classList.contains("head_bounce")) {
       e.target.classList.add("head_bounce");
     }
     mo({ room_id: useCoreModel.data?.roomId, at: user?.user_id }).catch(
-      (e) => {}
+      (error) => {}
     );
   };
   const {
@@ -109,7 +110,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({
     }
     backMessage(useCoreModel.data?.roomId, message_id)
       .then(() => {})
-      .catch((e) => {});
+      .catch((error) => {});
   };
   return (
     <>
@@ -246,7 +247,7 @@ const MsgItem: React.FC<IMsgItemParam> = ({
   );
 };
 // 通知消息
-const NoticeMsg = ({
+const NoticeMessage = ({
   noticeItem,
   showTime = false,
 }: {
@@ -260,11 +261,11 @@ const NoticeMsg = ({
     const data = noticeItem?.data;
     switch (noticeItem?.type) {
       case MT.TOUCH:
-        const tFromName = data["user"]?.user_name;
-        const tAtName = data["at"]?.user_name;
-        const tTip = data["at"]?.user_touchtip;
+        const tFromName = data.user?.user_name;
+        const tAtName = data.at?.user_name;
+        const tTip = data.at?.user_touchtip;
         setContent(`${tFromName} 摸了摸 ${tAtName} ${tTip}`);
-        if (data["at"].user_id == u?.user_id) {
+        if (data.at.user_id == u?.user_id) {
           if (g?.notice) {
             notification.info({
               message: "摸一摸",
@@ -277,34 +278,34 @@ const NoticeMsg = ({
         }
         break;
       case MT.ADD_SONG:
-        const fromName = data["user"]?.user_name;
-        const atName = data["at"]?.user_name;
-        const songName = data["song"]?.name;
+        const fromName = data.user?.user_name;
+        const atName = data.at?.user_name;
+        const songName = data.song?.name;
         setContent(
           `${fromName} ${
-            !!atName ? `害羞的为 ${atName} ` : ""
+            atName ? `害羞的为 ${atName} ` : ""
           }点了一首 ${songName}`
         );
         // 通知在上一层处理了
         break;
       case MT.PUSH:
-        setContent(`${data["user"]?.user_name}顶了一下${data["song"]?.name}`);
+        setContent(`${data.user?.user_name}顶了一下${data.song?.name}`);
         break;
       case MT.PASS:
-        setContent(`呀，${data["content"]}`);
+        setContent(`呀，${data.content}`);
         break;
       case MT.SYSTEM:
-        setContent(`${data["content"]?.replace("@all", "@全体成员")}`);
+        setContent(`${data.content?.replace("@all", "@全体成员")}`);
         break;
       case MT.BACK:
-        setContent(`${data["user"]?.user_name}撤回了一条消息！`);
+        setContent(`${data.user?.user_name}撤回了一条消息！`);
         break;
       case MT.CLEAR:
-        setContent(`${data["user"]?.user_name}清除了聊天消息！`);
+        setContent(`${data.user?.user_name}清除了聊天消息！`);
         break;
       case MT.JOIN:
-        const userType = data["userType"];
-        const where = data["where"];
+        const { userType } = data;
+        const { where } = data;
         const sufix = (
           <span>
             {userType == 0 ? (
@@ -312,7 +313,7 @@ const NoticeMsg = ({
                 onClick={() => {
                   useCoreModel.data?.udsp({
                     type: UActionType.SU,
-                    data: data["user"]?.user_id,
+                    data: data.user?.user_id,
                   });
                   useCoreModel.data?.showDialog(POPKEY.PROFILE);
                 }}
@@ -322,7 +323,7 @@ const NoticeMsg = ({
                 {data?.name}{" "}
               </span>
             ) : userType == 1 ? (
-              data["plat"]
+              data.plat
             ) : (
               "临时"
             )}
@@ -338,14 +339,14 @@ const NoticeMsg = ({
         break;
       case MT.SHUT_DOWN:
       case MT.REMOVE_BAN:
-        const banFromName = data["user"]?.user_name;
-        const banName = data["ban"]?.user_name;
-        const msg = data["msg"];
-        setContent(`${banName} 被 ${msg}，操作人 ${banFromName}`);
+        const banFromName = data.user?.user_name;
+        const banName = data.ban?.user_name;
+        const message_ = data.msg;
+        setContent(`${banName} 被 ${message_}，操作人 ${banFromName}`);
         break;
       case MT.REMOVE_SONG:
-        const rsName = data["user"]?.user_name;
-        const rsSong = data["song"]?.song?.name;
+        const rsName = data.user?.user_name;
+        const rsSong = data.song?.song?.name;
         setContent(`${rsName} 将歌曲 ${rsSong} 从队列中移除了！`);
         break;
     }
@@ -362,7 +363,7 @@ const NoticeMsg = ({
   );
 };
 
-interface IMsgItme {
+interface IMessageItme {
   // 聊天消息
   message_content: string; // "hello alert('Xss来了')"
   message_createtime: number; // 1627455528
@@ -382,18 +383,18 @@ interface IMsgItme {
   id: string;
 }
 export const MessageList: React.FC = () => {
-  const boxRef = useRef<any>();
+  const boxReference = useRef<any>();
   const [toTop, setTotop] = useState(false);
   const { msgs, globalLoading, user } = useCoreModel((m) => [
     m.msgs,
     m.globalLoading,
   ]);
   useEffect(() => {
-    if (!!!msgs || msgs?.length == 0) return;
-    const height = boxRef.current?.scrollHeight;
+    if (!msgs || msgs?.length == 0) return;
+    const height = boxReference.current?.scrollHeight;
     if (toTop) return;
     setTimeout(() => {
-      boxRef.current.scrollTop = height + 1000000000000;
+      boxReference.current.scrollTop = height + 1_000_000_000_000;
     }, 200);
   }, [msgs]);
   const onScroll = (e: any) => {
@@ -410,14 +411,14 @@ export const MessageList: React.FC = () => {
   return (
     <div className="relative w-full h-full">
       <div
-        ref={boxRef}
+        ref={boxReference}
         onScroll={debounce(onScroll, 50)}
         className={classNames(
           "relative w-full h-full px-6 pt-3 overflow-y-scroll bg-transparent m_scroll overscroll-none",
           _.msglist
         )}
       >
-        {msgs?.map((item: IMsgItme, index: number) => {
+        {msgs?.map((item: IMessageItme, index: number) => {
           let showTime = true;
           if (index >= 1) {
             showTime =
@@ -426,17 +427,21 @@ export const MessageList: React.FC = () => {
           }
           if (item?.type) {
             return (
-              <NoticeMsg key={item?.id} noticeItem={item} showTime={showTime} />
+              <NoticeMessage
+                key={item?.id}
+                noticeItem={item}
+                showTime={showTime}
+              />
             );
           }
           const isMe = item.message_user == user.user_id;
           return (
-            <MsgItem
+            <MessageItem
               key={item?.message_id}
               isMe={isMe}
               msgItem={item}
               showTime={showTime}
-            ></MsgItem>
+            />
           );
         })}
       </div>
@@ -445,13 +450,16 @@ export const MessageList: React.FC = () => {
           className="absolute top-0 bottom-0 left-0 z-10 flex items-center justify-center w-full h-full"
           style={{ backgroundColor: "var(--bg-loading)" }}
         >
-          <Spin spinning={true}></Spin>
+          <Spin spinning />
         </div>
       ) : null}
       {toTop ? (
         <div
           onClick={() =>
-            boxRef.current.scrollTo(0, boxRef.current.scrollHeight + 1000)
+            boxReference.current.scrollTo(
+              0,
+              boxReference.current.scrollHeight + 1000
+            )
           }
           className="absolute p-4 rounded shadow-md cursor-pointer right-3"
           style={{
